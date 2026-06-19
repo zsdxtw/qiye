@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>企管通 - AI驱动的业财税法一体化战略管理平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366F1;
+            --primary-light: #818CF8;
+            --primary-dark: #4F46E5;
+            --secondary: #F59E0B;
+            --secondary-light: #FBBF24;
+            --accent: #10B981;
+            --danger: #EF4444;
+            --warning: #F97316;
+
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-card: #1E293B;
+            --bg-elevated: #334155;
+            --bg-hover: #3E4C63;
+
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+
+            --border: #334155;
+            --border-light: #475569;
+
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.3);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+            --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            overscroll-behavior: none;
+        }
+
+        .app-container {
+            max-width: 428px;
+            margin: 0 auto;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: var(--bg-primary);
+        }
+
+        /* Header */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 428px;
+            z-index: 100;
+            padding: calc(var(--safe-top) + 12px) 16px 12px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(15, 23, 42, 0.95) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .logo-icon svg {
+            width: 22px;
+            height: 22px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .header-btn:active {
+            transform: scale(0.95);
+            background: var(--bg-elevated);
+        }
+
+        .header-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            border: 2px solid var(--bg-primary);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--bg-primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: calc(var(--safe-top) + 72px) 16px calc(var(--safe-bottom) + 80px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Tab Views */
+        .tab-view {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        /* Health Score Card */
+        .health-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .health-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .health-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .health-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .health-title svg {
+            width: 20px;
+            height: 20px;
+            color: var(--primary-light);
+        }
+
+        .health-title span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .health-badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent);
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .health-content {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .health-ring {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        .health-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .health-ring-bg {
+            fill: none;
+            stroke: var(--border);
+            stroke-width: 8;
+        }
+
+        .health-ring-progress {
+            fill: none;
+            stroke: url(#healthGradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 251.2;
+            stroke-dashoffset: 251.2;
+            animation: healthRing 1.5s ease-out forwards;
+        }
+
+        @keyframes healthRing {
+            to { stroke-dashoffset: 55.26; }
+        }
+
+        .health-ring-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .health-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .health-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .health-details {
+            flex: 1;
+        }
+
+        .health-summary {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .health-metrics {
+            display: flex;
+            gap: 16px;
+        }
+
+        .health-metric {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .health-metric-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .health-metric-dot.warning { background: var(--warning); }
+        .health-metric-dot.danger { background: var(--danger); }
+
+        .health-metric span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Quick Actions Grid */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .quick-action {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-action:active {
+            transform: scale(0.96);
+            background: var(--bg-elevated);
+        }
+
+        .quick-action-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-action-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .quick-action-icon.purple { background: rgba(99, 102, 241, 0.15); color: var(--primary-light); }
+        .quick-action-icon.gold { background: rgba(245, 158, 11, 0.15); color: var(--secondary); }
+        .quick-action-icon.green { background: rgba(16, 185, 129, 0.15); color: var(--accent); }
+        .quick-action-icon.red { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .quick-action-icon.orange { background: rgba(249, 115, 22, 0.15); color: var(--warning); }
+        .quick-action-icon.blue { background: rgba(59, 130, 246, 0.15); color: #3B82F6; }
+
+        .quick-action span {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Alert Cards */
+        .alert-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid;
+        }
+
+        .alert-card:active {
+            transform: scale(0.99);
+        }
+
+        .alert-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .alert-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .alert-card.info {
+            border-left-color: var(--primary);
+        }
+
+        .alert-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alert-icon.warning { background: rgba(249, 115, 22, 0.15); color: var(--warning); }
+        .alert-icon.danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .alert-icon.info { background: rgba(99, 102, 241, 0.15); color: var(--primary-light); }
+
+        .alert-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .alert-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .alert-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .alert-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .alert-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* Metric Cards */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .metric-trend {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .metric-trend.up { color: var(--accent); }
+        .metric-trend.down { color: var(--danger); }
+
+        .metric-trend svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .metric-compare {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Chart Container */
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .chart-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-elevated);
+            padding: 3px;
+            border-radius: var(--radius-sm);
+        }
+
+        .chart-tab {
+            padding: 6px 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chart-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .chart-area {
+            height: 160px;
+            position: relative;
+        }
+
+        /* Mini Line Chart */
+        .mini-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 60px;
+            padding-top: 20px;
+        }
+
+        .mini-chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--primary) 0%, rgba(99, 102, 241, 0.3) 100%);
+            border-radius: 4px 4px 0 0;
+            min-height: 8px;
+            transition: height 0.3s ease;
+        }
+
+        /* Accounts List */
+        .account-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .account-item:last-child {
+            border-bottom: none;
+        }
+
+        .account-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .account-icon.bank { background: rgba(59, 130, 246, 0.15); color: #3B82F6; }
+        .account-icon.alipay { background: rgba(59, 130, 246, 0.15); color: #3B82F6; }
+        .account-icon.wechat { background: rgba(16, 185, 129, 0.15); color: var(--accent); }
+        .account-icon.cash { background: rgba(245, 158, 11, 0.15); color: var(--secondary); }
+
+        .account-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .account-info {
+            flex: 1;
+        }
+
+        .account-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .account-number {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .account-balance {
+            text-align: right;
+        }
+
+        .account-balance-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .account-balance-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Transaction List */
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transaction-icon.income { background: rgba(16, 185, 129, 0.15); color: var(--accent); }
+        .transaction-icon.expense { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+
+        .transaction-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .transaction-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .transaction-amount.income { color: var(--accent); }
+        .transaction-amount.expense { color: var(--text-primary); }
+
+        /* Customer List */
+        .customer-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .customer-item:active {
+            transform: scale(0.98);
+            background: var(--bg-elevated);
+        }
+
+        .customer-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .customer-info {
+            flex: 1;
+        }
+
+        .customer-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .customer-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .customer-status {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .customer-status.active {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent);
+        }
+
+        .customer-status.pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--secondary);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 428px;
+            padding: 8px 16px calc(var(--safe-bottom) + 8px);
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, var(--bg-primary) 20%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: space-around;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 8px 4px;
+        }
+
+        .nav-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-tab:active {
+            transform: scale(0.95);
+        }
+
+        .nav-tab svg {
+            width: 24px;
+            height: 24px;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .nav-tab span {
+            font-size: 10px;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .nav-tab.active svg {
+            color: var(--primary);
+        }
+
+        .nav-tab.active span {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Settings List */
+        .settings-group {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item:active {
+            background: var(--bg-elevated);
+        }
+
+        .settings-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-icon svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        .settings-content {
+            flex: 1;
+        }
+
+        .settings-label {
+            font-size: 14px;
+        }
+
+        .settings-value {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .settings-arrow {
+            color: var(--text-muted);
+        }
+
+        .settings-arrow svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--bg-primary);
+            margin-bottom: 12px;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-company {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .profile-stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Subscription Badge */
+        .subscription-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 12px;
+        }
+
+        .subscription-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat-card-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .stat-card-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Invoice Timeline */
+        .invoice-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 0;
+            position: relative;
+        }
+
+        .invoice-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 46px;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .invoice-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .invoice-dot.pending { background: rgba(245, 158, 11, 0.15); color: var(--secondary); }
+        .invoice-dot.done { background: rgba(16, 185, 129, 0.15); color: var(--accent); }
+        .invoice-dot.processing { background: rgba(99, 102, 241, 0.15); color: var(--primary-light); }
+
+        .invoice-dot svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .invoice-content {
+            flex: 1;
+        }
+
+        .invoice-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .invoice-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .invoice-time {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* AI Chat Button */
+        .ai-chat-btn {
+            position: fixed;
+            bottom: calc(var(--safe-bottom) + 90px);
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 90;
+        }
+
+        .ai-chat-btn:active {
+            transform: scale(0.9);
+        }
+
+        .ai-chat-btn svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .ai-chat-btn::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            opacity: 0.3;
+            animation: pulse 2s ease-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+
+        /* Loading skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-hover) 50%, var(--bg-elevated) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: var(--radius-sm);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Notification Panel */
+        .notification-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 380px;
+            height: 100%;
+            background: var(--bg-secondary);
+            z-index: 200;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notification-panel.open {
+            transform: translateX(0);
+        }
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: calc(var(--safe-top) + 16px) 16px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .notification-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .notification-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .notification-close svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        .notification-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .notification-item {
+            display: flex;
+            gap: 12px;
+            padding: 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+        }
+
+        .notification-item.unread {
+            border-color: var(--primary);
+            border-left-width: 3px;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 150;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+        }
+
+        .search-bar input {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .search-bar input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 10px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .quick-actions {
+                grid-template-columns: repeat(6, 1fr);
+            }
+
+            .metrics-row {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- SVG Defs -->
+        <svg width="0" height="0" style="position: absolute;">
+            <defs>
+                <linearGradient id="healthGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#6366F1" />
+                    <stop offset="100%" style="stop-color:#10B981" />
+                </linearGradient>
+            </defs>
+        </svg>
+
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <span class="logo-text">企管通</span>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn" onclick="toggleNotifications()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span class="notification-badge"></span>
+                </button>
+                <div class="avatar">张</div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Tab -->
+            <div id="tab-home" class="tab-view active">
+                <!-- Health Score Card -->
+                <div class="health-card">
+                    <div class="health-header">
+                        <div class="health-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2a10 10 0 1 0 10 10H12V2z"/>
+                                <path d="M12 2a10 10 0 0 1 10 10"/>
+                            </svg>
+                            <span>AI企业健康度</span>
+                        </div>
+                        <span class="health-badge">优秀</span>
+                    </div>
+                    <div class="health-content">
+                        <div class="health-ring">
+                            <svg width="100" height="100" viewBox="0 0 100 100">
+                                <circle class="health-ring-bg" cx="50" cy="50" r="40"/>
+                                <circle class="health-ring-progress" cx="50" cy="50" r="40"/>
+                            </svg>
+                            <div class="health-ring-value">
+                                <div class="health-number">78</div>
+                                <div class="health-label">健康分</div>
+                            </div>
+                        </div>
+                        <div class="health-details">
+                            <div class="health-summary">企业整体运营良好，建议关注华东区销售策略调整及应收账款催收</div>
+                            <div class="health-metrics">
+                                <div class="health-metric">
+                                    <span class="health-metric-dot warning"></span>
+                                    <span>2项待办</span>
+                                </div>
+                                <div class="health-metric">
+                                    <span class="health-metric-dot danger"></span>
+                                    <span>1项预警</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <p class="section-title">快捷服务</p>
+                <div class="quick-actions">
+                    <div class="quick-action">
+                        <div class="quick-action-icon purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                        </div>
+                        <span>AI记账</span>
+                    </div>
+                    <div class="quick-action">
+                        <div class="quick-action-icon gold">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <span>发票管理</span>
+                    </div>
+                    <div class="quick-action">
+                        <div class="quick-action-icon green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                                <rect x="8" y="2" width="8" height="4" rx="1"/>
+                            </svg>
+                        </div>
+                        <span>报销审批</span>
+                    </div>
+                    <div class="quick-action">
+                        <div class="quick-action-icon orange">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <span>申报日历</span>
+                    </div>
+                    <div class="quick-action">
+                        <div class="quick-action-icon red">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <span>风险预警</span>
+                    </div>
+                    <div class="quick-action">
+                        <div class="quick-action-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <span>客户管理</span>
+                    </div>
+                </div>
+
+                <!-- Alerts -->
+                <p class="section-title">待处理事项</p>
+                <div class="alert-card warning">
+                    <div class="alert-icon warning">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">华东区销售额下滑15%</div>
+                        <div class="alert-desc">情报显示竞品在该区加大推广力度，建议调整销售策略</div>
+                        <div class="alert-time">刚刚 · AI情报分析</div>
+                    </div>
+                </div>
+                <div class="alert-card danger">
+                    <div class="alert-icon danger">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">应收账款逾期提醒</div>
+                        <div class="alert-desc">3家客户超期未付款，合计约45.8万元</div>
+                        <div class="alert-time">今天 09:30 · 财务模块</div>
+                    </div>
+                </div>
+                <div class="alert-card info">
+                    <div class="alert-icon info">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/>
+                            <line x1="8" y1="21" x2="16" y2="21"/>
+                            <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">进项发票缺口约10万</div>
+                        <div class="alert-desc">建议本周五前补充进项发票，优化税负</div>
+                        <div class="alert-time">今天 10:00 · 税务模块</div>
+                    </div>
+                </div>
+
+                <!-- Key Metrics -->
+                <p class="section-title" style="margin-top: 24px;">本周关键指标</p>
+                <div class="metrics-row">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-label">营业收入</span>
+                            <span class="metric-trend up">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="18 15 12 9 6 15"/>
+                                </svg>
+                                12.5%
+                            </span>
+                        </div>
+                        <div class="metric-value">¥328.5万</div>
+                        <div class="metric-compare">环比上周</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-label">净利润</span>
+                            <span class="metric-trend down">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                                3.2%
+                            </span>
+                        </div>
+                        <div class="metric-value">¥48.2万</div>
+                        <div class="metric-compare">环比上周</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-label">应收账款</span>
+                        </div>
+                        <div class="metric-value">¥156.8万</div>
+                        <div class="metric-compare">待回收</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-label">发票开具</span>
+                        </div>
+                        <div class="metric-value">¥89.3万</div>
+                        <div class="metric-compare">本月已开</div>
+                    </div>
+                </div>
+
+                <!-- Revenue Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <span class="chart-title">营收趋势</span>
+                        <div class="chart-tabs">
+                            <span class="chart-tab active">本周</span>
+                            <span class="chart-tab">本月</span>
+                            <span class="chart-tab">本季</span>
+                        </div>
+                    </div>
+                    <div class="chart-area">
+                        <div class="mini-chart">
+                            <div class="mini-chart-bar" style="height: 45px;"></div>
+                            <div class="mini-chart-bar" style="height: 60px;"></div>
+                            <div class="mini-chart-bar" style="height: 35px;"></div>
+                            <div class="mini-chart-bar" style="height: 80px;"></div>
+                            <div class="mini-chart-bar" style="height: 55px;"></div>
+                            <div class="mini-chart-bar" style="height: 70px;"></div>
+                            <div class="mini-chart-bar" style="height: 90px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Finance Tab -->
+            <div id="tab-finance" class="tab-view">
+                <div class="page-header">
+                    <h1 class="page-title">智能财务</h1>
+                    <p class="page-subtitle">实时掌握企业资金状况</p>
+                </div>
+
+                <div class="search-bar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input type="text" placeholder="搜索账户、交易记录...">
+                </div>
+
+                <!-- Accounts -->
+                <p class="section-title">账户总览</p>
+                <div class="chart-card" style="padding: 8px 16px;">
+                    <div class="account-item">
+                        <div class="account-icon bank">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="3" y1="22" x2="21" y2="22"/>
+                                <line x1="6" y1="18" x2="6" y2="11"/>
+                                <line x1="10" y1="18" x2="10" y2="11"/>
+                                <line x1="14" y1="18" x2="14" y2="11"/>
+                                <line x1="18" y1="18" x2="18" y2="11"/>
+                                <polygon points="12 2 20 7 4 7"/>
+                            </svg>
+                        </div>
+                        <div class="account-info">
+                            <div class="account-name">工商银行基本户</div>
+                            <div class="account-number">6222 **** **** 8842</div>
+                        </div>
+                        <div class="account-balance">
+                            <div class="account-balance-value">¥1,285,630</div>
+                            <div class="account-balance-label">可用余额</div>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-icon alipay">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                <path d="M2 10h20"/>
+                            </svg>
+                        </div>
+                        <div class="account-info">
+                            <div class="account-name">支付宝Business</div>
+                            <div class="account-number">2088 **** 1234</div>
+                        </div>
+                        <div class="account-balance">
+                            <div class="account-balance-value">¥358,420</div>
+                            <div class="account-balance-label">可用余额</div>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-icon wechat">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 10h.01M12 10h.01M16 10h.01"/>
+                                <path d="M9 16c0 1.5.5 2 2 2h2c1.5 0 2-.5 2-2v-4c0-1.5-.5-2-2-2h-2c-1.5 0-2 .5-2 2v4z"/>
+                                <path d="M6 8c-1 0-2 .5-2 2v4c0 1.5.5 2 2 2"/>
+                            </svg>
+                        </div>
+                        <div class="account-info">
+                            <div class="account-name">微信商户号</div>
+                            <div class="account-number">15位商户号</div>
+                        </div>
+                        <div class="account-balance">
+                            <div class="account-balance-value">¥126,580</div>
+                            <div class="account-balance-label">可用余额</div>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-icon cash">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="6" width="20" height="12" rx="2"/>
+                                <circle cx="12" cy="12" r="2"/>
+                                <path d="M6 12h.01M18 12h.01"/>
+                            </svg>
+                        </div>
+                        <div class="account-info">
+                            <div class="account-name">现金</div>
+                            <div class="account-number">日常备用金</div>
+                        </div>
+                        <div class="account-balance">
+                            <div class="account-balance-value">¥15,000</div>
+                            <div class="account-balance-label">可用余额</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Timeline -->
+                <p class="section-title" style="margin-top: 24px;">发票动态</p>
+                <div class="chart-card" style="padding: 8px 16px;">
+                    <div class="invoice-item">
+                        <div class="invoice-dot processing">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div class="invoice-content">
+                            <div class="invoice-title">待认证进项发票</div>
+                            <div class="invoice-desc">杭州供应商 · 5张发票待处理</div>
+                            <div class="invoice-time">今天 14:00 到期</div>
+                        </div>
+                    </div>
+                    <div class="invoice-item">
+                        <div class="invoice-dot pending">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                        </div>
+                        <div class="invoice-content">
+                            <div class="invoice-title">待开具销项发票</div>
+                            <div class="invoice-desc">上海客户 · 抬头审核中</div>
+                            <div class="invoice-time">明天 18:00 前</div>
+                        </div>
+                    </div>
+                    <div class="invoice-item">
+                        <div class="invoice-dot done">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <div class="invoice-content">
+                            <div class="invoice-title">发票认证完成</div>
+                            <div class="invoice-desc">北京分公司 · 3张专票已认证</div>
+                            <div class="invoice-time">今天 10:30</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <p class="section-title" style="margin-top: 24px;">近期交易</p>
+                <div class="chart-card" style="padding: 8px 16px;">
+                    <div class="transaction-item">
+                        <div class="transaction-icon expense">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <polyline points="19 12 12 19 5 12"/>
+                            </svg>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-title">支付杭州办公室租金</div>
+                            <div class="transaction-date">今天 09:15</div>
+                        </div>
+                        <div class="transaction-amount expense">-¥32,000</div>
+                    </div>
+                    <div class="transaction-item">
+                        <div class="transaction-icon income">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="19" x2="12" y2="5"/>
+                                <polyline points="5 12 12 5 19 12"/>
+                            </svg>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-title">收到上海客户货款</div>
+                            <div class="transaction-date">昨天 16:42</div>
+                        </div>
+                        <div class="transaction-amount income">+¥128,500</div>
+                    </div>
+                    <div class="transaction-item">
+                        <div class="transaction-icon expense">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <polyline points="19 12 12 19 5 12"/>
+                            </svg>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-title">采购办公设备</div>
+                            <div class="transaction-date">昨天 14:20</div>
+                        </div>
+                        <div class="transaction-amount expense">-¥8,560</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Tab -->
+            <div id="tab-business" class="tab-view">
+                <div class="page-header">
+                    <h1 class="page-title">业务运营</h1>
+                    <p class="page-subtitle">进销存与客户一体化管理</p>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-value">¥328.5万</div>
+                        <div class="stat-card-label">本月销售</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value">156</div>
+                        <div class="stat-card-label">活跃客户</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value">89</div>
+                        <div class="stat-card-label">在途订单</div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <div class="tab active">全部客户</div>
+                    <div class="tab">重点客户</div>
+                    <div class="tab">待跟进</div>
+                </div>
+
+                <!-- Customer List -->
+                <div class="customer-item">
+                    <div class="customer-avatar">上</div>
+                    <div class="customer-info">
+                        <div class="customer-name">上海启航科技有限公司</div>
+                        <div class="customer-meta">累计交易 ¥128.5万 · 最后下单 3天前</div>
+                    </div>
+                    <span class="customer-status active">活跃</span>
+                </div>
+                <div class="customer-item">
+                    <div class="customer-avatar">杭</div>
+                    <div class="customer-info">
+                        <div class="customer-name">杭州创新智造有限公司</div>
+                        <div class="customer-meta">累计交易 ¥89.2万 · 最后下单 5天前</div>
+                    </div>
+                    <span class="customer-status active">活跃</span>
+                </div>
+                <div class="customer-item">
+                    <div class="customer-avatar">北</div>
+                    <div class="customer-info">
+                        <div class="customer-name">北京云端数据服务有限公司</div>
+                        <div class="customer-meta">累计交易 ¥56.8万 · 最后下单 1周前</div>
+                    </div>
+                    <span class="customer-status pending">待跟进</span>
+                </div>
+                <div class="customer-item">
+                    <div class="customer-avatar">深</div>
+                    <div class="customer-info">
+                        <div class="customer-name">深圳未来网络科技公司</div>
+                        <div class="customer-meta">累计交易 ¥45.3万 · 最后下单 2周前</div>
+                    </div>
+                    <span class="customer-status pending">待跟进</span>
+                </div>
+                <div class="customer-item">
+                    <div class="customer-avatar">南</div>
+                    <div class="customer-info">
+                        <div class="customer-name">南京华创信息技术有限公司</div>
+                        <div class="customer-meta">累计交易 ¥38.6万 · 最后下单 3天前</div>
+                    </div>
+                    <span class="customer-status active">活跃</span>
+                </div>
+
+                <!-- Chart -->
+                <p class="section-title" style="margin-top: 24px;">销售趋势</p>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <span class="chart-title">月度销售额对比</span>
+                    </div>
+                    <div class="chart-area">
+                        <div class="mini-chart">
+                            <div class="mini-chart-bar" style="height: 40px;"></div>
+                            <div class="mini-chart-bar" style="height: 55px;"></div>
+                            <div class="mini-chart-bar" style="height: 45px;"></div>
+                            <div class="mini-chart-bar" style="height: 70px;"></div>
+                            <div class="mini-chart-bar" style="height: 60px;"></div>
+                            <div class="mini-chart-bar" style="height: 85px;"></div>
+                            <div class="mini-chart-bar" style="height: 95px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Tab -->
+            <div id="tab-my" class="tab-view">
+                <div class="page-header">
+                    <h1 class="page-title">我的</h1>
+                </div>
+
+                <!-- Profile -->
+                <div class="profile-header">
+                    <div class="profile-avatar">张</div>
+                    <div class="profile-name">张明远</div>
+                    <div class="profile-company">杭州启明科技有限公司</div>
+                    <div class="subscription-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        专业版会员
+                    </div>
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">12</div>
+                            <div class="profile-stat-label">团队成员</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">3</div>
+                            <div class="profile-stat-label">子公司</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">2年</div>
+                            <div class="profile-stat-label">使用时长</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Groups -->
+                <div class="settings-group">
+                    <div class="settings-item">
+                        <div class="settings-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div class="settings-content">
+                            <div class="settings-label">企业信息</div>
+                            <div class="settings-value">杭州启明科技 · 一般纳税人</div>
+                        </div>
+                        <div class="settings-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="settings-content">
+                            <div class="settings-label">团队管理</div>
+                            <div class="settings-value">12名成员 · 3个角色</div>
+                        </div>
+                        <div class="settings-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                        </div>
+                        <div class="settings-content">
+                            <div class="settings-label">AI设置</div>
+                            <div class="settings-value">智谱AI · 企业版</div>
+                        </div>
+                        <div class="settings-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <div class="settings-item">
+                        <div class="settings-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                        </div>
+                        <div class="settings-content">
+                            <div class="settings-label">订阅套餐</div>
+                            <div class="settings-value">专业版 · 2025年到期</div>
+                        </div>
+                        <div class="settings-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                            </svg>
+                        </div>
+                        <div class="settings-content">
+                            <div class="settings-label">消息通知</div>
+                            <div class="settings-value">预警通知已开启</div>
+                        </div>
+                        <div class="settings-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                        </div>
+                        <div class="settings-content">
+                            <div class="settings-label">帮助中心</div>
+                            <div class="settings-value">使用教程 · 常见问题</div>
+                        </div>
+                        <div class="settings-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- AI Chat Button -->
+        <div class="ai-chat-btn" onclick="showToast('AI助手功能开发中...')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2a10 10 0 1 0 10 10H12V2z"/>
+                <path d="M12 2a10 10 0 0 1 10 10"/>
+            </svg>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-tabs">
+                <div class="nav-tab active" data-tab="home">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    <span>首页</span>
+                </div>
+                <div class="nav-tab" data-tab="finance">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    <span>财务</span>
+                </div>
+                <div class="nav-tab" data-tab="business">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                    <span>业务</span>
+                </div>
+                <div class="nav-tab" data-tab="my">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <span>我的</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Notification Panel -->
+        <div class="overlay" onclick="toggleNotifications()"></div>
+        <div class="notification-panel">
+            <div class="notification-header">
+                <h3>通知中心</h3>
+                <button class="notification-close" onclick="toggleNotifications()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="notification-list">
+                <div class="notification-item unread">
+                    <div class="alert-icon danger" style="width: 36px; height: 36px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">供应商风险预警</div>
+                        <div class="alert-desc">核心供应商A存在法律风险，建议立即停止打款</div>
+                        <div class="alert-time">10分钟前</div>
+                    </div>
+                </div>
+                <div class="notification-item unread">
+                    <div class="alert-icon warning" style="width: 36px; height: 36px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">税务申报提醒</div>
+                        <div class="alert-desc">本月增值税申报截止日期为25日</div>
+                        <div class="alert-time">1小时前</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="alert-icon info" style="width: 36px; height: 36px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">发票认证完成</div>
+                        <div class="alert-desc">3张进项发票已成功认证</div>
+                        <div class="alert-time">今天 10:30</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="alert-icon info" style="width: 36px; height: 36px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">客户付款到账</div>
+                        <div class="alert-desc">上海启航科技付款 ¥128,500</div>
+                        <div class="alert-time">昨天 16:42</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+
+                // Update nav tabs
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Update tab views
+                document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+                document.getElementById(`tab-${tabName}`).classList.add('active');
+
+                // Scroll to top
+                document.querySelector('.main-content').scrollTop = 0;
+            });
+        });
+
+        // Notification Panel
+        function toggleNotifications() {
+            document.querySelector('.notification-panel').classList.toggle('open');
+            document.querySelector('.overlay').classList.toggle('show');
+        }
+
+        // Chart Tab Switching
+        document.querySelectorAll('.chart-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const parent = tab.closest('.chart-tabs');
+                parent.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+        // Quick Action Feedback
+        document.querySelectorAll('.quick-action').forEach(action => {
+            action.addEventListener('click', () => {
+                const label = action.querySelector('span').textContent;
+                showToast(`正在打开${label}...`);
+            });
+        });
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--bg-elevated);
+                color: var(--text-primary);
+                padding: 12px 24px;
+                border-radius: var(--radius-md);
+                font-size: 14px;
+                z-index: 300;
+                animation: toastIn 0.3s ease;
+                border: 1px solid var(--border);
+                box-shadow: var(--shadow-md);
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'toastOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // Add toast animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes toastIn {
+                from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+            @keyframes toastOut {
+                from { opacity: 1; transform: translateX(-50%) translateY(0); }
+                to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Search bar functionality
+        const searchInput = document.querySelector('.search-bar input');
+        if (searchInput) {
+            searchInput.addEventListener('focus', () => {
+                searchInput.closest('.search-bar').style.borderColor = 'var(--primary)';
+            });
+            searchInput.addEventListener('blur', () => {
+                searchInput.closest('.search-bar').style.borderColor = 'var(--border)';
+            });
+        }
+
+        // Customer item interaction
+        document.querySelectorAll('.customer-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const name = item.querySelector('.customer-name').textContent;
+                showToast(`查看 ${name} 详情`);
+            });
+        });
+
+        // Alert card interaction
+        document.querySelectorAll('.alert-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.querySelector('.alert-title').textContent;
+                showToast(`查看: ${title}`);
+            });
+        });
+    </script>
+</body>
+</html>
