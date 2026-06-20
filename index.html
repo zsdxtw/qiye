@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>睿企 RuiQi · AI 驱动的中小企业经营操作系统</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0B0E16;
+    --ink-2:#11151F;
+    --ink-3:#1A1F2E;
+    --line:rgba(255,255,255,.08);
+    --line-strong:rgba(255,255,255,.16);
+    --cream:#F4EFE6;
+    --cream-2:#EBE4D6;
+    --paper:#FBF8F2;
+    --amber:#C9A24B;
+    --amber-soft:#E3C27E;
+    --moss:#6B8E6A;
+    --rust:#B5683E;
+    --muted:rgba(244,239,230,.62);
+    --muted-dark:rgba(11,14,22,.6);
+    --serif:"Fraunces","Noto Serif SC",Georgia,serif;
+    --sans:"Inter","Noto Sans SC",-apple-system,sans-serif;
+    --mono:"JetBrains Mono",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:var(--ink);
+    color:var(--cream);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--amber);color:var(--ink)}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 5vw;
+    backdrop-filter:blur(14px);
+    background:linear-gradient(180deg,rgba(11,14,22,.72),rgba(11,14,22,.28));
+    border-bottom:1px solid var(--line);
+    transition:padding .4s ease;
+  }
+  .brand{display:flex;align-items:baseline;gap:10px}
+  .brand .mark{
+    font-family:var(--serif);font-weight:500;font-size:24px;letter-spacing:.5px;
+    color:var(--cream);
+  }
+  .brand .mark em{font-style:normal;color:var(--amber)}
+  .brand .sub{
+    font-family:var(--mono);font-size:10px;letter-spacing:2px;
+    color:var(--muted);text-transform:uppercase;
+  }
+  .nav-links{display:flex;gap:34px;align-items:center}
+  .nav-links a{
+    font-size:13px;color:var(--muted);transition:color .3s;
+    font-weight:400;
+  }
+  .nav-links a:hover{color:var(--cream)}
+  .nav-cta{
+    font-size:13px;padding:9px 18px;border:1px solid var(--line-strong);
+    border-radius:2px;color:var(--cream);transition:all .3s;
+    font-weight:500;
+  }
+  .nav-cta:hover{background:var(--amber);color:var(--ink);border-color:var(--amber)}
+  @media(max-width:820px){.nav-links{display:none}}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;min-height:100svh;
+    display:flex;align-items:flex-end;
+    padding:0 5vw 7vh;
+    overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute;inset:0;z-index:0;
+    background:
+      linear-gradient(180deg,rgba(11,14,22,.55) 0%,rgba(11,14,22,.35) 40%,rgba(11,14,22,.92) 100%),
+      url("https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=an%20aerial%20dusk%20photograph%20of%20a%20modern%20financial%20district%20skyline%2C%20glass%20towers%20with%20warm%20interior%20lights%2C%20soft%20blue%20hour%20sky%2C%20calm%20reflective%20river%2C%20cinematic%2C%20muted%20amber%20tones%2C%20premium%20editorial%20photography&image_size=landscape_16_9") center/cover no-repeat;
+  }
+  .hero-grain{
+    position:absolute;inset:0;z-index:1;opacity:.4;mix-blend-mode:overlay;pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+  .hero-inner{position:relative;z-index:2;max-width:920px}
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:11px;letter-spacing:3px;
+    color:var(--amber-soft);text-transform:uppercase;
+    margin-bottom:32px;
+    opacity:0;transform:translateY(12px);
+    animation:rise .9s .2s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .hero-eyebrow .dot{width:6px;height:6px;background:var(--amber);border-radius:50%;box-shadow:0 0 12px var(--amber)}
+  .hero h1{
+    font-family:var(--serif);font-weight:400;
+    font-size:clamp(44px,7.2vw,108px);
+    line-height:.98;letter-spacing:-1.5px;
+    color:var(--cream);
+    margin-bottom:28px;
+  }
+  .hero h1 .line{display:block;overflow:hidden}
+  .hero h1 .line span{
+    display:inline-block;transform:translateY(110%);
+    animation:rise 1.1s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .hero h1 .line:nth-child(1) span{animation-delay:.35s}
+  .hero h1 .line:nth-child(2) span{animation-delay:.5s}
+  .hero h1 em{font-style:italic;color:var(--amber-soft);font-weight:300}
+  .hero p.lead{
+    font-size:clamp(15px,1.4vw,19px);color:var(--muted);
+    max-width:560px;margin-bottom:44px;font-weight:300;line-height:1.6;
+    opacity:0;transform:translateY(12px);
+    animation:rise .9s .8s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .hero-cta{display:flex;gap:18px;flex-wrap:wrap;align-items:center;
+    opacity:0;transform:translateY(12px);
+    animation:rise .9s 1s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .btn-primary{
+    display:inline-flex;align-items:center;gap:12px;
+    padding:16px 28px;background:var(--amber);color:var(--ink);
+    font-size:14px;font-weight:600;letter-spacing:.3px;
+    border-radius:2px;transition:all .35s;
+  }
+  .btn-primary:hover{background:var(--amber-soft);transform:translateY(-2px)}
+  .btn-primary svg{transition:transform .35s}
+  .btn-primary:hover svg{transform:translateX(4px)}
+  .btn-ghost{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:16px 4px;color:var(--cream);font-size:14px;font-weight:500;
+    border-bottom:1px solid var(--line-strong);transition:border-color .3s;
+  }
+  .btn-ghost:hover{border-color:var(--amber)}
+  .hero-meta{
+    position:absolute;bottom:7vh;right:5vw;z-index:2;
+    text-align:right;font-family:var(--mono);font-size:11px;
+    color:var(--muted);letter-spacing:1.5px;line-height:2;
+    opacity:0;animation:rise 1s 1.3s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .hero-meta b{color:var(--cream);font-weight:500}
+  @media(max-width:720px){.hero-meta{display:none}}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{position:relative}
+  .sec{padding:14vh 5vw}
+  .sec-label{
+    display:flex;align-items:center;gap:14px;
+    font-family:var(--mono);font-size:11px;letter-spacing:3px;
+    text-transform:uppercase;color:var(--amber);margin-bottom:28px;
+  }
+  .sec-label .num{color:var(--muted)}
+  .sec-label .bar{width:42px;height:1px;background:var(--amber)}
+  .sec-title{
+    font-family:var(--serif);font-weight:400;
+    font-size:clamp(32px,4.4vw,60px);line-height:1.05;letter-spacing:-.8px;
+    margin-bottom:24px;max-width:14ch;
+  }
+  .sec-title em{font-style:italic;color:var(--amber)}
+  .sec-intro{
+    font-size:16px;color:var(--muted);max-width:54ch;font-weight:300;line-height:1.7;
+  }
+
+  /* ---------- AI ENGINE ---------- */
+  .ai-engine{background:var(--ink-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .ai-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:8vh;align-items:center;
+    margin-top:8vh;
+  }
+  .ai-visual{
+    position:relative;aspect-ratio:4/5;border:1px solid var(--line);
+    overflow:hidden;border-radius:2px;
+  }
+  .ai-visual img{
+    width:100%;height:100%;object-fit:cover;
+    filter:grayscale(.3) contrast(1.05);
+  }
+  .ai-visual::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,transparent 40%,rgba(11,14,22,.85));
+  }
+  .ai-visual .caption{
+    position:absolute;left:24px;bottom:24px;z-index:2;
+    font-family:var(--mono);font-size:11px;letter-spacing:2px;
+    color:var(--amber-soft);text-transform:uppercase;
+  }
+  .ai-visual .caption b{display:block;color:var(--cream);font-family:var(--serif);
+    font-size:22px;letter-spacing:0;text-transform:none;margin-top:6px;font-weight:500}
+  .ai-points{display:flex;flex-direction:column;gap:0}
+  .ai-point{
+    display:grid;grid-template-columns:auto 1fr;gap:24px;
+    padding:30px 0;border-top:1px solid var(--line);
+  }
+  .ai-point:last-child{border-bottom:1px solid var(--line)}
+  .ai-point .idx{font-family:var(--mono);font-size:12px;color:var(--amber);padding-top:4px}
+  .ai-point h3{font-family:var(--serif);font-size:24px;font-weight:500;margin-bottom:10px;color:var(--cream)}
+  .ai-point p{font-size:14.5px;color:var(--muted);line-height:1.7;font-weight:300}
+  @media(max-width:880px){.ai-grid{grid-template-columns:1fr;gap:5vh}}
+
+  /* ---------- PILLARS (财税法) ---------- */
+  .pillars{background:var(--paper);color:var(--ink)}
+  .pillars .sec-label{color:var(--rust)}
+  .pillars .sec-label .bar{background:var(--rust)}
+  .pillars .sec-label .num{color:var(--muted-dark)}
+  .pillars .sec-title{color:var(--ink)}
+  .pillars .sec-title em{color:var(--rust)}
+  .pillars .sec-intro{color:var(--muted-dark)}
+  .pillar-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+    margin-top:9vh;border-top:1px solid rgba(11,14,22,.12);
+  }
+  .pillar{
+    padding:48px 36px 56px;border-right:1px solid rgba(11,14,22,.12);
+    position:relative;transition:background .4s;
+  }
+  .pillar:last-child{border-right:none}
+  .pillar:hover{background:var(--cream-2)}
+  .pillar .glyph{
+    font-family:var(--serif);font-size:54px;font-weight:400;
+    color:var(--rust);line-height:1;margin-bottom:32px;
+    font-style:italic;
+  }
+  .pillar h3{font-family:var(--serif);font-size:30px;font-weight:500;margin-bottom:8px;color:var(--ink)}
+  .pillar .en{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted-dark);text-transform:uppercase;margin-bottom:22px}
+  .pillar p{font-size:14.5px;color:var(--muted-dark);line-height:1.75;margin-bottom:24px;font-weight:300}
+  .pillar ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+  .pillar li{
+    font-size:13.5px;color:var(--ink);display:flex;gap:12px;align-items:flex-start;
+    font-weight:400;
+  }
+  .pillar li::before{content:"—";color:var(--rust);flex-shrink:0}
+  @media(max-width:880px){.pillar-grid{grid-template-columns:1fr}.pillar{border-right:none;border-bottom:1px solid rgba(11,14,22,.12)}}
+
+  /* ---------- COCKPIT (经营全览) ---------- */
+  .cockpit{background:var(--ink);overflow:hidden}
+  .cockpit-head{display:grid;grid-template-columns:1fr 1fr;gap:8vh;align-items:end;margin-bottom:7vh}
+  .cockpit-mock{
+    position:relative;border:1px solid var(--line);border-radius:4px;
+    background:linear-gradient(180deg,var(--ink-3),var(--ink-2));
+    overflow:hidden;
+    box-shadow:0 60px 120px -40px rgba(0,0,0,.6);
+  }
+  .mock-bar{
+    display:flex;align-items:center;gap:8px;padding:14px 18px;
+    border-bottom:1px solid var(--line);background:rgba(0,0,0,.2);
+  }
+  .mock-bar .d{width:10px;height:10px;border-radius:50%;background:var(--line-strong)}
+  .mock-bar .url{margin-left:14px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .mock-body{display:grid;grid-template-columns:200px 1fr;min-height:480px}
+  .mock-side{
+    border-right:1px solid var(--line);padding:24px 18px;
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .mock-side .group{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:18px 0 8px}
+  .mock-side .group:first-child{margin-top:0}
+  .mock-side a{font-size:12.5px;color:var(--muted);padding:7px 10px;border-radius:2px;display:flex;gap:10px;align-items:center;transition:all .25s}
+  .mock-side a.active{background:rgba(201,162,75,.12);color:var(--amber-soft)}
+  .mock-side a .ic{width:14px;height:14px;opacity:.7}
+  .mock-main{padding:28px}
+  .mock-main h4{font-family:var(--serif);font-size:22px;font-weight:500;margin-bottom:4px}
+  .mock-main .sub{font-size:12px;color:var(--muted);margin-bottom:26px}
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+  .kpi{padding:16px;border:1px solid var(--line);border-radius:2px;background:rgba(255,255,255,.02)}
+  .kpi .lab{font-size:10.5px;color:var(--muted);letter-spacing:.5px;margin-bottom:8px}
+  .kpi .val{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--cream)}
+  .kpi .val small{font-size:11px;color:var(--moss);font-family:var(--sans);margin-left:6px}
+  .kpi .val small.down{color:var(--rust)}
+  .chart-box{border:1px solid var(--line);border-radius:2px;padding:18px;background:rgba(255,255,255,.02)}
+  .chart-box .ct{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .chart-box .ct h5{font-size:13px;font-weight:500}
+  .chart-box .ct span{font-size:11px;color:var(--muted);font-family:var(--mono)}
+  .chart{display:flex;align-items:flex-end;gap:6px;height:120px}
+  .chart .b{flex:1;background:linear-gradient(180deg,var(--amber),rgba(201,162,75,.2));border-radius:1px;transition:opacity .3s}
+  .chart .b:hover{opacity:.7}
+  .feed{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+  .feed .row{display:flex;gap:12px;align-items:center;font-size:12px;color:var(--muted);padding:8px 0;border-top:1px solid var(--line)}
+  .feed .row .tag{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:1px;letter-spacing:1px}
+  .feed .row .tag.ok{background:rgba(107,142,106,.2);color:var(--moss)}
+  .feed .row .tag.warn{background:rgba(181,104,62,.2);color:var(--rust)}
+  .feed .row .tag.ai{background:rgba(201,162,75,.2);color:var(--amber-soft)}
+  .feed .row b{color:var(--cream);font-weight:500}
+  @media(max-width:880px){.cockpit-head{grid-template-columns:1fr}.mock-body{grid-template-columns:1fr}.mock-side{display:none}.kpi-row{grid-template-columns:repeat(2,1fr)}}
+
+  /* ---------- MANAGEMENT SUITE ---------- */
+  .suite{background:var(--cream);color:var(--ink)}
+  .suite .sec-label{color:var(--rust)}
+  .suite .sec-label .bar{background:var(--rust)}
+  .suite .sec-label .num{color:var(--muted-dark)}
+  .suite .sec-title{color:var(--ink)}
+  .suite .sec-title em{color:var(--rust)}
+  .suite .sec-intro{color:var(--muted-dark)}
+  .suite-list{margin-top:8vh;border-top:1px solid rgba(11,14,22,.14)}
+  .suite-row{
+    display:grid;grid-template-columns:80px 1fr 1.4fr 120px;gap:32px;
+    padding:38px 0;border-bottom:1px solid rgba(11,14,22,.14);
+    align-items:center;transition:padding .4s;
+  }
+  .suite-row:hover{padding-left:18px}
+  .suite-row .n{font-family:var(--mono);font-size:12px;color:var(--rust)}
+  .suite-row h3{font-family:var(--serif);font-size:28px;font-weight:500;color:var(--ink)}
+  .suite-row h3 .en{display:block;font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted-dark);text-transform:uppercase;margin-top:6px;font-weight:400}
+  .suite-row p{font-size:14px;color:var(--muted-dark);line-height:1.7;font-weight:300}
+  .suite-row .arrow{justify-self:end;font-family:var(--serif);font-size:22px;color:var(--rust);transition:transform .4s}
+  .suite-row:hover .arrow{transform:translateX(8px)}
+  @media(max-width:880px){.suite-row{grid-template-columns:1fr;gap:10px}.suite-row .arrow{display:none}}
+
+  /* ---------- CAPITAL & POLICY ---------- */
+  .capital{background:var(--ink-2);border-top:1px solid var(--line)}
+  .cap-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:8vh;margin-top:8vh;align-items:start}
+  .cap-feature{position:relative;aspect-ratio:5/6;overflow:hidden;border-radius:2px}
+  .cap-feature img{width:100%;height:100%;object-fit:cover;filter:grayscale(.2)}
+  .cap-feature::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,14,22,.1),rgba(11,14,22,.85))}
+  .cap-feature .ov{position:absolute;left:32px;right:32px;bottom:32px;z-index:2}
+  .cap-feature .ov .t{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--amber-soft);text-transform:uppercase;margin-bottom:10px}
+  .cap-feature .ov h3{font-family:var(--serif);font-size:32px;font-weight:500;line-height:1.1;color:var(--cream)}
+  .cap-items{display:flex;flex-direction:column}
+  .cap-item{padding:34px 0;border-top:1px solid var(--line)}
+  .cap-item:last-child{border-bottom:1px solid var(--line)}
+  .cap-item .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+  .cap-item h4{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--cream)}
+  .cap-item .freq{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:1.5px}
+  .cap-item p{font-size:14px;color:var(--muted);line-height:1.7;font-weight:300}
+  @media(max-width:880px){.cap-grid{grid-template-columns:1fr;gap:5vh}}
+
+  /* ---------- EXTENDED SERVICES ---------- */
+  .extend{background:var(--paper);color:var(--ink);border-top:1px solid var(--line)}
+  .extend .sec-label{color:var(--rust)}
+  .extend .sec-label .bar{background:var(--rust)}
+  .extend .sec-label .num{color:var(--muted-dark)}
+  .extend .sec-title{color:var(--ink)}
+  .extend .sec-title em{color:var(--rust)}
+  .extend .sec-intro{color:var(--muted-dark)}
+  .ext-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+    margin-top:8vh;border-top:1px solid rgba(11,14,22,.14);
+  }
+  .ext-cell{
+    padding:36px 28px 40px;border-right:1px solid rgba(11,14,22,.14);
+    border-bottom:1px solid rgba(11,14,22,.14);
+    transition:background .35s;position:relative;
+  }
+  .ext-cell:hover{background:var(--cream-2)}
+  .ext-cell .ic{
+    width:34px;height:34px;border:1px solid var(--rust);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-size:15px;color:var(--rust);
+    margin-bottom:22px;font-style:italic;
+  }
+  .ext-cell h4{font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:10px;color:var(--ink);line-height:1.2}
+  .ext-cell p{font-size:12.5px;color:var(--muted-dark);line-height:1.65;font-weight:300}
+  @media(max-width:1080px){.ext-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.ext-grid{grid-template-columns:1fr}.ext-cell{border-right:none}}
+
+  /* ---------- SCENARIOS ---------- */
+  .scenarios{background:var(--ink);border-top:1px solid var(--line)}
+  .scen-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5vh;margin-top:8vh}
+  .scen{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:2px}
+  .scen img{width:100%;height:100%;object-fit:cover;filter:grayscale(.4) contrast(1.05);transition:transform .8s,filter .8s}
+  .scen:hover img{transform:scale(1.05);filter:grayscale(0) contrast(1)}
+  .scen::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,14,22,.2) 30%,rgba(11,14,22,.9))}
+  .scen .ov{position:absolute;left:28px;right:28px;bottom:28px;z-index:2}
+  .scen .ov .t{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--amber-soft);text-transform:uppercase;margin-bottom:10px}
+  .scen .ov h3{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--cream);line-height:1.15;margin-bottom:10px}
+  .scen .ov p{font-size:12.5px;color:var(--muted);line-height:1.6;font-weight:300}
+  @media(max-width:880px){.scen-grid{grid-template-columns:1fr}}
+
+  /* ---------- FINAL CTA ---------- */
+  .final{
+    position:relative;min-height:80vh;display:flex;align-items:center;
+    padding:14vh 5vw;overflow:hidden;
+  }
+  .final-bg{
+    position:absolute;inset:0;z-index:0;
+    background:
+      linear-gradient(180deg,rgba(11,14,22,.7),rgba(11,14,22,.92)),
+      url("https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=a%20minimal%20still%20life%20of%20a%20single%20amber%20colored%20geode%20on%20dark%20stone%2C%20soft%20directional%20light%2C%20fine%20art%20photography%2C%20deep%20shadows%2C%20warm%20metallic%20tones&image_size=landscape_16_9") center/cover;
+  }
+  .final-inner{position:relative;z-index:2;max-width:760px}
+  .final h2{
+    font-family:var(--serif);font-weight:400;
+    font-size:clamp(36px,5.5vw,76px);line-height:1.02;letter-spacing:-1px;
+    margin-bottom:28px;
+  }
+  .final h2 em{font-style:italic;color:var(--amber-soft)}
+  .final p{font-size:17px;color:var(--muted);margin-bottom:44px;max-width:48ch;font-weight:300;line-height:1.7}
+  .final-cta{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--ink);border-top:1px solid var(--line);
+    padding:8vh 5vw 4vh;
+  }
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:6vh;margin-bottom:8vh}
+  .foot-brand .mark{font-family:var(--serif);font-size:28px;font-weight:500;margin-bottom:14px}
+  .foot-brand .mark em{color:var(--amber);font-style:normal}
+  .foot-brand p{font-size:13px;color:var(--muted);max-width:34ch;line-height:1.7;font-weight:300}
+  .foot-col h5{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:20px}
+  .foot-col a{display:block;font-size:13px;color:var(--muted);margin-bottom:12px;transition:color .3s}
+  .foot-col a:hover{color:var(--cream)}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:32px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px}
+  @media(max-width:880px){.foot-grid{grid-template-columns:1fr 1fr}.foot-bottom{flex-direction:column;gap:12px}}
+
+  /* ---------- ANIMATIONS ---------- */
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:translateY(0)}
+  .reveal.d1{transition-delay:.1s}
+  .reveal.d2{transition-delay:.2s}
+  .reveal.d3{transition-delay:.3s}
+
+  /* marquee ticker */
+  .ticker{
+    background:var(--ink);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    overflow:hidden;padding:18px 0;
+  }
+  .ticker-track{display:flex;gap:60px;white-space:nowrap;animation:scroll 40s linear infinite;width:max-content}
+  .ticker-track span{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:60px}
+  .ticker-track span::after{content:"◆";color:var(--amber);font-size:8px}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="brand">
+    <span class="mark">睿企<em>·</em>RuiQi</span>
+    <span class="sub">SME OS</span>
+  </a>
+  <div class="nav-links">
+    <a href="#engine">智能引擎</a>
+    <a href="#pillars">财税法</a>
+    <a href="#cockpit">经营全览</a>
+    <a href="#suite">管理套件</a>
+    <a href="#capital">资本与政策</a>
+    <a href="#extend">延伸服务</a>
+  </div>
+  <a href="#final" class="nav-cta">预约演示</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="dot"></span> AI · 中小企业经营操作系统</div>
+    <h1>
+      <span class="line"><span>让每一家中小企业，</span></span>
+      <span class="line"><span>都拥有一位 <em>AI 经营主理人</em>。</span></span>
+    </h1>
+    <p class="lead">睿企把财务、税务、法务、人事、业务与资本信息汇入同一张决策视图。AI 持续解读数据、预警风险、给出可执行的建议——让经营从凭经验，走向凭判断。</p>
+    <div class="hero-cta">
+      <a href="#final" class="btn-primary">
+        开启 30 天体验
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#engine" class="btn-ghost">了解 AI 决策引擎 →</a>
+    </div>
+  </div>
+  <div class="hero-meta">
+    <div><b>12,400+</b> 家中小企业在用</div>
+    <div><b>37</b> 个行业模板</div>
+    <div>已接入 <b>26</b> 类政策库</div>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span>财务健康诊断</span><span>税务筹划与申报</span><span>合同智能审查</span><span>用工合规预警</span><span>经营驾驶舱</span><span>融资产品匹配</span><span>政策红利直达</span><span>行业情报速递</span><span>供应链协同</span><span>风险早预警</span>
+    <span>财务健康诊断</span><span>税务筹划与申报</span><span>合同智能审查</span><span>用工合规预警</span><span>经营驾驶舱</span><span>融资产品匹配</span><span>政策红利直达</span><span>行业情报速递</span><span>供应链协同</span><span>风险早预警</span>
+  </div>
+</div>
+
+<!-- AI ENGINE -->
+<section class="sec ai-engine" id="engine">
+  <div class="sec-label reveal"><span class="num">01 /</span> 智能引擎 <span class="bar"></span></div>
+  <h2 class="sec-title reveal">不是工具的堆叠，<br/>而是 <em>会思考</em> 的经营伙伴。</h2>
+  <p class="sec-intro reveal">睿企 AI 引擎以企业经营数据为输入，以可执行建议为输出。它读懂报表、读懂政策、读懂行业，把分散的信息收敛成一句话：现在，你该做什么。</p>
+
+  <div class="ai-grid">
+    <div class="ai-visual reveal">
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=a%20close%20up%20photograph%20of%20a%20single%20human%20hand%20placing%20a%20warm%20amber%20chess%20piece%20on%20a%20dark%20marble%20board%2C%20soft%20window%20light%2C%20shallow%20depth%20of%20field%2C%20fine%20art%20still%20life%2C%20muted%20tones&image_size=portrait_4_3" alt="AI 决策" />
+      <div class="caption">RuiQi Engine<b>决策，而非展示</b></div>
+    </div>
+    <div class="ai-points">
+      <div class="ai-point reveal">
+        <div class="idx">A1</div>
+        <div>
+          <h3>多源数据融合</h3>
+          <p>打通财务系统、银行流水、发票、合同、人事、业务订单与外部政策库，构建企业专属的经营知识图谱，AI 在统一语境下理解全局。</p>
+        </div>
+      </div>
+      <div class="ai-point reveal d1">
+        <div class="idx">A2</div>
+        <div>
+          <h3>情景化推理</h3>
+          <p>不是泛泛问答。引擎结合企业所处行业、规模、生命周期阶段，给出"如果……那么……"的可执行推演，并标注依据与置信度。</p>
+        </div>
+      </div>
+      <div class="ai-point reveal d2">
+        <div class="idx">A3</div>
+        <div>
+          <h3>主动预警与建议</h3>
+          <p>现金流吃紧前 14 天预警、税负偏离同业时提示、合同条款存疑时拦截。AI 不等你问，先开口。</p>
+        </div>
+      </div>
+      <div class="ai-point reveal d3">
+        <div class="idx">A4</div>
+        <div>
+          <h3>专家回路校准</h3>
+          <p>注册会计师、税务师、律师组成的专家网络在后台持续校准模型输出，关键决策可一键转人工复核，AI 与专业判断并行。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS 财税法 -->
+<section class="sec pillars" id="pillars">
+  <div class="sec-label reveal"><span class="num">02 /</span> 三大支柱 <span class="bar"></span></div>
+  <h2 class="sec-title reveal">财务 · 税务 · 法务，<br/><em>三位一体</em> 的专业咨询。</h2>
+  <p class="sec-intro reveal">中小企业最难获取的，是稳定、即时、可负担的专业服务。睿企把三类专家的判断力封装进 AI，再以人工兜底，让每一次决策都有专业背书。</p>
+
+  <div class="pillar-grid">
+    <div class="pillar reveal">
+      <div class="glyph">财</div>
+      <h3>财务咨询管理</h3>
+      <div class="en">Financial Advisory</div>
+      <p>从记账到分析，从报表到决策。AI 自动生成经营分析报告，识别异常波动，给出优化路径。</p>
+      <ul>
+        <li>智能记账与报表自动生成</li>
+        <li>现金流预测与缺口预警</li>
+        <li>多维度经营分析（毛利/周转/杜邦）</li>
+        <li>预算编制与执行差异追踪</li>
+        <li>应收应付账龄与催收建议</li>
+        <li>财务健康度评分与同业对标</li>
+      </ul>
+    </div>
+    <div class="pillar reveal d1">
+      <div class="glyph">税</div>
+      <h3>税务咨询管理</h3>
+      <div class="en">Tax Advisory</div>
+      <p>政策天天变，税负年年算。睿企实时跟踪税收政策，结合企业实际给出合规且优化的税务方案。</p>
+      <ul>
+        <li>增值税 / 企业所得税智能申报</li>
+        <li>税收优惠与减免自动匹配</li>
+        <li>税务风险评估与自查清单</li>
+        <li>个税代扣代算与年终汇算</li>
+        <li>发票智能查验与归档</li>
+        <li>税务筹划方案与专家复核</li>
+      </ul>
+    </div>
+    <div class="pillar reveal d2">
+      <div class="glyph">法</div>
+      <h3>法务咨询管理</h3>
+      <div class="en">Legal Advisory</div>
+      <p>合同、用工、知识产权、股权。AI 审查风险条款，律师在线兜底，让企业少踩坑、少花钱。</p>
+      <ul>
+        <li>合同智能审查与风险标注</li>
+        <li>标准合同模板库（200+ 场景）</li>
+        <li>用工合规与劳动风险预警</li>
+        <li>商标 / 专利 / 著作权管理</li>
+        <li>股权结构与章程设计建议</li>
+        <li>律师在线咨询与文书代拟</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- COCKPIT 经营全览 -->
+<section class="sec cockpit" id="cockpit">
+  <div class="cockpit-head">
+    <div>
+      <div class="sec-label reveal"><span class="num">03 /</span> 经营驾驶舱 <span class="bar"></span></div>
+      <h2 class="sec-title reveal">一屏，<br/>看懂 <em>整个企业</em>。</h2>
+    </div>
+    <p class="sec-intro reveal">把财务、业务、人事、合规、资本的关键指标收敛到一张驾驶舱。AI 每日生成经营简报，异常自动置顶，决策不再依赖零散表格与会议。</p>
+  </div>
+
+  <div class="cockpit-mock reveal">
+    <div class="mock-bar">
+      <span class="d"></span><span class="d"></span><span class="d"></span>
+      <span class="url">ruiqi.app / cockpit / 今日经营</span>
+    </div>
+    <div class="mock-body">
+      <div class="mock-side">
+        <div class="group">经营</div>
+        <a class="active"><span class="ic">◆</span> 经营驾驶舱</a>
+        <a><span class="ic">◇</span> 经营简报</a>
+        <a><span class="ic">◇</span> 风险预警</a>
+        <div class="group">管理</div>
+        <a><span class="ic">◇</span> 财务</a>
+        <a><span class="ic">◇</span> 税务</a>
+        <a><span class="ic">◇</span> 法务</a>
+        <a><span class="ic">◇</span> 人事</a>
+        <a><span class="ic">◇</span> 业务</a>
+        <div class="group">资源</div>
+        <a><span class="ic">◇</span> 融资</a>
+        <a><span class="ic">◇</span> 政策</a>
+        <a><span class="ic">◇</span> 行业</a>
+      </div>
+      <div class="mock-main">
+        <h4>今日经营 · 6 月 20 日</h4>
+        <div class="sub">AI 简报：现金流健康，建议关注应收账款回款节奏 · 1 项政策红利待领取</div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="lab">本月营收</div><div class="val">¥ 4.82M <small>↑ 12.4%</small></div></div>
+          <div class="kpi"><div class="lab">经营现金流</div><div class="val">¥ 1.16M <small>↑ 8.1%</small></div></div>
+          <div class="kpi"><div class="lab">应收账龄</div><div class="val">47 天 <small class="down">↑ 3 天</small></div></div>
+          <div class="kpi"><div class="lab">健康度评分</div><div class="val">86 <small>良好</small></div></div>
+        </div>
+        <div class="chart-box">
+          <div class="ct"><h5>近 12 周营收趋势</h5><span>单位：万元</span></div>
+          <div class="chart">
+            <div class="b" style="height:42%"></div><div class="b" style="height:55%"></div><div class="b" style="height:48%"></div>
+            <div class="b" style="height:62%"></div><div class="b" style="height:58%"></div><div class="b" style="height:70%"></div>
+            <div class="b" style="height:65%"></div><div class="b" style="height:78%"></div><div class="b" style="height:72%"></div>
+            <div class="b" style="height:85%"></div><div class="b" style="height:80%"></div><div class="b" style="height:96%"></div>
+          </div>
+        </div>
+        <div class="feed">
+          <div class="row"><span class="tag ai">AI 建议</span> <b>应收账款回款放缓</b>，建议对账龄 &gt;60 天客户启动分级催收</div>
+          <div class="row"><span class="tag ok">政策</span> <b>研发费用加计扣除</b>新规已匹配，预计可节税 ¥ 18.4 万</div>
+          <div class="row"><span class="tag warn">预警</span> <b>3 份合同</b>将于 7 日内到期，需评估续签或重新议价</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANAGEMENT SUITE -->
+<section class="sec suite" id="suite">
+  <div class="sec-label reveal"><span class="num">04 /</span> 管理套件 <span class="bar"></span></div>
+  <h2 class="sec-title reveal">人事 · 财务 · 业务，<br/><em>日常经营</em> 的全部动作。</h2>
+  <p class="sec-intro reveal">驾驶舱负责"看"，管理套件负责"做"。三大模块覆盖企业每天的高频动作，AI 在每个动作背后提供辅助与校验。</p>
+
+  <div class="suite-list">
+    <div class="suite-row reveal">
+      <div class="n">M1</div>
+      <h3>人事管理<span class="en">Human Resources</span></h3>
+      <p>花名册、考勤排班、薪酬算发、社保公积金、绩效 OKR、培训发展、入离职全流程。AI 辅助算薪、识别用工风险、推荐人才发展路径。</p>
+      <div class="arrow">→</div>
+    </div>
+    <div class="suite-row reveal">
+      <div class="n">M2</div>
+      <h3>财务管理<span class="en">Finance Operations</span></h3>
+      <p>凭证录入、报销审批、资金计划、银企直联、票据管理、固定资产、成本核算。AI 自动识别票据、生成凭证、追踪异常支出。</p>
+      <div class="arrow">→</div>
+    </div>
+    <div class="suite-row reveal">
+      <div class="n">M3</div>
+      <h3>业务管理<span class="en">Business Operations</span></h3>
+      <p>客户与商机、报价与合同、订单与交付、采购与库存、项目与里程碑。AI 预测成单概率、识别交付风险、推荐最优采购时机。</p>
+      <div class="arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPITAL & POLICY -->
+<section class="sec capital" id="capital">
+  <div class="sec-label reveal"><span class="num">05 /</span> 资本与政策 <span class="bar"></span></div>
+  <h2 class="sec-title reveal">把 <em>钱与政策</em>，<br/>送到企业门口。</h2>
+  <p class="sec-intro reveal">中小企业最缺的两样东西：钱，和信息。睿企把金融机构的贷款产品、政府的扶持政策、行业的最新动态，按企业画像精准匹配、及时传达。</p>
+
+  <div class="cap-grid">
+    <div class="cap-feature reveal">
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=an%20architectural%20photograph%20of%20a%20modern%20bank%20building%20facade%20with%20vertical%20bronze%20fins%2C%20warm%20late%20afternoon%20light%2C%20clean%20minimal%20composition%2C%20premium%20financial%20editorial&image_size=portrait_4_3" alt="资本与政策" />
+      <div class="ov">
+        <div class="t">Capital & Policy</div>
+        <h3>融资 · 扶持 · 情报<br/>三流合一</h3>
+      </div>
+    </div>
+    <div class="cap-items">
+      <div class="cap-item reveal">
+        <div class="head"><h4>金融贷款产品</h4><span class="freq">实时更新</span></div>
+        <p>对接银行、担保、保理、融资租赁等多类机构，按企业资质与用款场景智能匹配信用贷、抵押贷、订单贷、税银贷等产品，一键比价与预审。</p>
+      </div>
+      <div class="cap-item reveal d1">
+        <div class="head"><h4>政府扶持政策</h4><span class="freq">每日同步</span></div>
+        <p>覆盖补贴、奖励、税收优惠、资质认定、专项基金等政策库，AI 按企业画像匹配可申报项目，推送申报窗口、材料清单与截止时间。</p>
+      </div>
+      <div class="cap-item reveal d2">
+        <div class="head"><h4>主营行业情报</h4><span class="freq">每周速递</span></div>
+        <p>聚焦企业所处行业的政策风向、价格走势、技术动态、竞品动作与上下游变化，AI 提炼"对你意味着什么"，而非信息堆砌。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXTENDED SERVICES -->
+<section class="sec extend" id="extend">
+  <div class="sec-label reveal"><span class="num">06 /</span> 延伸服务 <span class="bar"></span></div>
+  <h2 class="sec-title reveal">不止于管理，<br/>更覆盖 <em>经营的边角</em>。</h2>
+  <p class="sec-intro reveal">中小企业的事，往往不在"管理"二字之内。睿企把经营中那些零散却关键的需求，一并纳入同一套系统，让 AI 的覆盖面与企业的真实复杂度对齐。</p>
+
+  <div class="ext-grid">
+    <div class="ext-cell reveal">
+      <div class="ic">i</div>
+      <h4>智能风控预警</h4>
+      <p>财务、法律、市场、舆情四维风险雷达，异常自动分级推送。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">ii</div>
+      <h4>合规日历</h4>
+      <p>税务申报、年报、资质续期、社保结算等节点统一排程，到期提醒。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">iii</div>
+      <h4>供应链协同</h4>
+      <p>连接供应商与客户，订单、对账、发货、结算在线协同。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">iv</div>
+      <h4>客户关系管理</h4>
+      <p>商机漏斗、客户画像、跟进记录、复购预测，销售全链路留痕。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">v</div>
+      <h4>项目管理</h4>
+      <p>任务分解、里程碑、工时、成本、交付物，项目健康度一目了然。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">vi</div>
+      <h4>文档与电子签章</h4>
+      <p>企业文档中枢，合同/制度/证照分类归档，合规电子签章。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">vii</div>
+      <h4>市场情报与竞品</h4>
+      <p>竞品动态、价格监测、舆情追踪，AI 提炼可执行的市场动作。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">viii</div>
+      <h4>员工培训与发展</h4>
+      <p>岗位学习路径、在线课程、能力测评，人才梯队可视化。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">ix</div>
+      <h4>数据可视化报表</h4>
+      <p>自定义看板与报表，一键导出，股东会/银行/政府多版本输出。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">x</div>
+      <h4>进出口贸易管理</h4>
+      <p>报关、外汇、信用证、退税、原产地，外贸全流程辅助。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">xi</div>
+      <h4>智能合同审查</h4>
+      <p>上传合同即获风险标注、条款比对与修改建议，律师可介入复核。</p>
+    </div>
+    <div class="ext-cell reveal">
+      <div class="ic">xii</div>
+      <h4>企业知识库</h4>
+      <p>制度、SOP、案例、问答沉淀为专属知识库，新员工即问即答。</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCENARIOS -->
+<section class="sec scenarios">
+  <div class="sec-label reveal"><span class="num">07 /</span> 适用场景 <span class="bar"></span></div>
+  <h2 class="sec-title reveal">无论你处在 <em>哪个阶段</em>，<br/>睿企都在。</h2>
+
+  <div class="scen-grid">
+    <div class="scen reveal">
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=a%20bright%20minimal%20startup%20office%20with%20a%20small%20team%20working%20at%20a%20long%20wooden%20table%2C%20natural%20light%2C%20plants%2C%20warm%20documentary%20photography&image_size=portrait_4_3" alt="初创企业" />
+      <div class="ov">
+        <div class="t">Stage 01</div>
+        <h3>初创与早期</h3>
+        <p>合规起步、股权设计、融资对接、政策申报，把根基搭对。</p>
+      </div>
+    </div>
+    <div class="scen reveal d1">
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=a%20medium%20sized%20manufacturing%20workshop%20with%20workers%20and%20machinery%2C%20clean%20industrial%20photography%2C%20warm%20tones%2C%20documentary%20style&image_size=portrait_4_3" alt="成长型企业" />
+      <div class="ov">
+        <div class="t">Stage 02</div>
+        <h3>成长与扩张</h3>
+        <p>规模化用工、多业务线管理、现金流管控、供应链协同。</p>
+      </div>
+    </div>
+    <div class="scen reveal d2">
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=an%20elegant%20meeting%20room%20with%20executives%20reviewing%20financial%20charts%20on%20a%20large%20screen%2C%20warm%20amber%20lighting%2C%20premium%20corporate%20photography&image_size=portrait_4_3" alt="成熟型企业" />
+      <div class="ov">
+        <div class="t">Stage 03</div>
+        <h3>成熟与转型</h3>
+        <p>集团化财务、税务筹划、数字化转型、资本运作与并购。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final" id="final">
+  <div class="final-bg"></div>
+  <div class="final-inner">
+    <h2 class="reveal">把经营的复杂，<br/>交给 <em>睿企</em>。</h2>
+    <p class="reveal d1">30 天免费体验，无需更换现有财务系统。我们的顾问会陪你完成首次数据接入，让 AI 在第一周就开口说话。</p>
+    <div class="final-cta reveal d2">
+      <a href="#" class="btn-primary">
+        预约 1 对 1 演示
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#" class="btn-ghost">下载产品白皮书 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <div class="mark">睿企<em>·</em>RuiQi</div>
+      <p>AI 驱动的中小企业经营操作系统。让每一家中小企业，都拥有一位随时在线的经营主理人。</p>
+    </div>
+    <div class="foot-col">
+      <h5>产品</h5>
+      <a href="#engine">AI 决策引擎</a>
+      <a href="#pillars">财税法咨询</a>
+      <a href="#cockpit">经营驾驶舱</a>
+      <a href="#suite">管理套件</a>
+    </div>
+    <div class="foot-col">
+      <h5>资源</h5>
+      <a href="#capital">融资产品</a>
+      <a href="#capital">政策库</a>
+      <a href="#capital">行业情报</a>
+      <a href="#extend">延伸服务</a>
+    </div>
+    <div class="foot-col">
+      <h5>公司</h5>
+      <a href="#">关于我们</a>
+      <a href="#">客户案例</a>
+      <a href="#">专家网络</a>
+      <a href="#">联系我们</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 RuiQi Technologies · 睿企科技</span>
+    <span>数据安全等保三级 · ISO 27001 认证</span>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Nav shrink on scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll',()=>{
+    if(window.scrollY > 40) nav.style.padding = '14px 5vw';
+    else nav.style.padding = '22px 5vw';
+  });
+</script>
+</body>
+</html>
