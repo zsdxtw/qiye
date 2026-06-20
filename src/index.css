@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap");
+
+:root {
+  font-family: "Noto Sans SC", "PingFang SC", system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background-color: #f7f8fa;
+  color: #1a202c;
+}
+
+/* 数字等宽对齐 */
+.tnum {
+  font-family: "Inter", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* 深色侧栏滚动条 */
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+@layer components {
+  .qj-card {
+    @apply bg-white rounded-card shadow-card;
+  }
+  .qj-btn-primary {
+    @apply bg-primary text-white rounded-md px-4 py-2 text-body font-medium transition-all hover:bg-primary-light hover:shadow-md active:scale-[0.98];
+  }
+  .qj-btn-ghost {
+    @apply bg-white text-primary border border-primary-100 rounded-md px-4 py-2 text-body font-medium transition-all hover:bg-primary-50 hover:border-primary;
+  }
+  .qj-badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-mini font-medium;
+  }
+}
