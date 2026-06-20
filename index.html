@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三务智能管家 · 中小企业AI合规与决策中枢</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=DM+Sans:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1220;
+    --ink-2:#111A2E;
+    --surface:#16203A;
+    --surface-2:#1E2A47;
+    --line:rgba(232,184,109,.14);
+    --line-soft:rgba(255,255,255,.06);
+    --gold:#E8B86D;
+    --gold-deep:#C9954A;
+    --teal:#4FD1C5;
+    --teal-deep:#2BB5A8;
+    --cream:#F5EFE3;
+    --paper:#FAF6EC;
+    --green:#7BD389;
+    --amber:#F2C94C;
+    --red:#FF7A7A;
+    --text:#F2EEE2;
+    --muted:#8A93A8;
+    --muted-2:#5C6478;
+    --serif:'Fraunces','Noto Serif SC',serif;
+    --serif-cn:'Noto Serif SC',serif;
+    --sans:'DM Sans','Noto Sans SC',sans-serif;
+    --mono:'JetBrains Mono',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  html,body{background:var(--ink);color:var(--text);font-family:var(--sans);overflow-x:hidden}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(232,184,109,.08), transparent 60%),
+      radial-gradient(900px 500px at 10% 110%, rgba(79,209,197,.06), transparent 60%),
+      var(--ink);
+    min-height:100vh;
+  }
+  ::selection{background:var(--gold);color:var(--ink)}
+
+  /* ====== Layout ====== */
+  .stage{
+    max-width:1440px;margin:0 auto;padding:32px 40px 80px;
+    display:grid;grid-template-columns:1fr 420px;gap:56px;align-items:start;
+  }
+  @media (max-width:1100px){.stage{grid-template-columns:1fr;gap:40px;padding:24px}}
+
+  /* ====== Left: Brand & Narrative ====== */
+  .narrative{position:sticky;top:32px}
+  .brand-mark{
+    display:flex;align-items:center;gap:14px;margin-bottom:48px;
+  }
+  .brand-glyph{
+    width:46px;height:46px;border-radius:13px;position:relative;
+    background:linear-gradient(135deg,var(--gold) 0%,var(--gold-deep) 100%);
+    display:grid;place-items:center;
+    box-shadow:0 8px 24px rgba(232,184,109,.25), inset 0 1px 0 rgba(255,255,255,.4);
+  }
+  .brand-glyph svg{width:26px;height:26px}
+  .brand-name{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:-.01em}
+  .brand-name em{font-style:italic;color:var(--gold);font-weight:400}
+  .brand-tag{font-size:11px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin-top:2px}
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:11px;color:var(--teal);
+    letter-spacing:.15em;text-transform:uppercase;margin-bottom:24px;
+  }
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--teal)}
+
+  h1.headline{
+    font-family:var(--serif);font-weight:300;font-size:clamp(40px,5vw,68px);
+    line-height:1.02;letter-spacing:-.025em;margin-bottom:28px;
+  }
+  h1.headline em{font-style:italic;font-weight:400;color:var(--gold)}
+  h1.headline .br{display:block}
+  h1.headline .accent{
+    background:linear-gradient(120deg,var(--gold),var(--teal));
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-weight:500;
+  }
+
+  .lede{
+    font-size:16px;line-height:1.7;color:var(--muted);max-width:480px;margin-bottom:40px;
+  }
+  .lede strong{color:var(--text);font-weight:500}
+
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:14px;overflow:hidden;margin-bottom:40px}
+  .pillar{background:var(--ink-2);padding:18px 16px}
+  .pillar-num{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--gold);margin-bottom:6px}
+  .pillar-title{font-family:var(--serif-cn);font-weight:600;font-size:15px;margin-bottom:4px}
+  .pillar-desc{font-size:11px;color:var(--muted);line-height:1.5}
+
+  .screen-tabs{
+    display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line-soft);padding-top:24px;
+  }
+  .screen-tab{
+    display:flex;align-items:center;gap:16px;padding:14px 4px;cursor:pointer;
+    border-bottom:1px solid var(--line-soft);transition:all .3s ease;
+    position:relative;
+  }
+  .screen-tab:last-child{border-bottom:none}
+  .screen-tab .idx{font-family:var(--mono);font-size:11px;color:var(--muted-2);width:24px;transition:color .3s}
+  .screen-tab .label{font-family:var(--serif-cn);font-size:16px;font-weight:500;color:var(--muted);transition:color .3s;flex:1}
+  .screen-tab .label small{display:block;font-family:var(--sans);font-size:11px;color:var(--muted-2);font-weight:400;margin-top:2px;letter-spacing:.02em}
+  .screen-tab .arrow{color:var(--muted-2);transition:all .3s;opacity:0;transform:translateX(-8px)}
+  .screen-tab:hover .label,.screen-tab.active .label{color:var(--text)}
+  .screen-tab:hover .idx,.screen-tab.active .idx{color:var(--gold)}
+  .screen-tab.active .arrow{opacity:1;transform:translateX(0);color:var(--gold)}
+  .screen-tab.active::before{content:"";position:absolute;left:-40px;top:50%;transform:translateY(-50%);width:3px;height:24px;background:var(--gold);border-radius:2px}
+
+  /* ====== Right: Phone ====== */
+  .phone-wrap{display:flex;flex-direction:column;align-items:center;position:relative}
+  .phone-glow{
+    position:absolute;width:380px;height:380px;border-radius:50%;
+    background:radial-gradient(circle,rgba(232,184,109,.18),transparent 70%);
+    top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;filter:blur(20px);
+    animation:breathe 6s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}}
+
+  .phone{
+    position:relative;z-index:1;width:380px;height:780px;
+    background:#000;border-radius:52px;padding:12px;
+    box-shadow:
+      0 0 0 2px #1a1a1a,
+      0 0 0 3px #2a2a2a,
+      0 40px 80px -20px rgba(0,0,0,.7),
+      0 20px 40px -10px rgba(232,184,109,.1);
+  }
+  .phone-screen{
+    width:100%;height:100%;background:var(--ink);border-radius:42px;
+    overflow:hidden;position:relative;
+  }
+  /* notch */
+  .notch{
+    position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:120px;height:30px;background:#000;border-radius:0 0 18px 18px;z-index:100;
+  }
+  .notch::after{content:"";position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:#1a1a1a;box-shadow:0 0 0 2px #0a0a0a}
+
+  /* status bar */
+  .status-bar{
+    height:44px;display:flex;align-items:flex-end;justify-content:space-between;
+    padding:0 28px 8px;font-size:14px;font-weight:600;color:var(--text);
+    position:relative;z-index:10;
+  }
+  .status-right{display:flex;align-items:center;gap:6px}
+  .status-right svg{width:16px;height:16px}
+
+  /* screen container */
+  .screens{position:relative;height:calc(100% - 44px);overflow:hidden}
+  .screen{
+    position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;
+    opacity:0;transform:translateX(20px);pointer-events:none;
+    transition:opacity .4s ease,transform .4s ease;
+    padding-bottom:90px;
+  }
+  .screen.active{opacity:1;transform:translateX(0);pointer-events:auto}
+  .screen::-webkit-scrollbar{display:none}
+
+  /* bottom nav */
+  .bottom-nav{
+    position:absolute;bottom:0;left:0;right:0;height:78px;
+    background:rgba(11,18,32,.85);backdrop-filter:blur(20px);
+    border-top:1px solid var(--line-soft);
+    display:flex;align-items:flex-start;padding:10px 8px 0;z-index:50;
+  }
+  .nav-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+    cursor:pointer;padding:6px 0;transition:all .3s;
+  }
+  .nav-item svg{width:22px;height:22px;color:var(--muted-2);transition:color .3s}
+  .nav-item span{font-size:10px;color:var(--muted-2);font-weight:500;transition:color .3s}
+  .nav-item.active svg{color:var(--gold)}
+  .nav-item.active span{color:var(--gold)}
+  .nav-item.ai{position:relative}
+  .nav-item.ai .ai-btn{
+    width:44px;height:44px;border-radius:14px;
+    background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+    display:grid;place-items:center;margin-top:-18px;
+    box-shadow:0 8px 20px rgba(232,184,109,.4);
+  }
+  .nav-item.ai .ai-btn svg{color:var(--ink);width:22px;height:22px}
+  .nav-item.ai span{margin-top:2px}
+
+  /* ====== Shared screen styles ====== */
+  .scr-pad{padding:8px 20px 0}
+  .scr-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .scr-greet{font-size:12px;color:var(--muted);letter-spacing:.05em}
+  .scr-greet strong{color:var(--text);font-weight:500}
+  .scr-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-deep));display:grid;place-items:center;font-family:var(--serif);font-weight:600;color:var(--ink);font-size:14px}
+
+  .scr-title{font-family:var(--serif-cn);font-weight:600;font-size:24px;letter-spacing:-.01em;margin-bottom:4px}
+  .scr-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+
+  /* ====== Dashboard ====== */
+  .health-card{
+    background:linear-gradient(135deg,var(--surface) 0%,var(--ink-2) 100%);
+    border:1px solid var(--line);border-radius:24px;padding:22px;margin-bottom:16px;
+    position:relative;overflow:hidden;
+  }
+  .health-card::before{
+    content:"";position:absolute;top:-40px;right:-40px;width:160px;height:160px;
+    background:radial-gradient(circle,rgba(232,184,109,.15),transparent 70%);
+  }
+  .health-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;position:relative}
+  .health-label{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+  .health-name{font-family:var(--serif-cn);font-size:15px;font-weight:500}
+  .health-badge{
+    font-family:var(--mono);font-size:10px;color:var(--teal);
+    background:rgba(79,209,197,.1);padding:4px 10px;border-radius:20px;
+    border:1px solid rgba(79,209,197,.2);
+  }
+  .health-score-wrap{display:flex;align-items:center;gap:20px;position:relative}
+  .gauge{position:relative;width:96px;height:96px;flex-shrink:0}
+  .gauge svg{transform:rotate(-90deg)}
+  .gauge-bg{stroke:rgba(255,255,255,.06);fill:none;stroke-width:8}
+  .gauge-fg{stroke:url(#gaugeGrad);fill:none;stroke-width:8;stroke-linecap:round;stroke-dasharray:251.2;stroke-dashoffset:50.24;transition:stroke-dashoffset 1.2s ease}
+  .gauge-center{position:absolute;inset:0;display:grid;place-items:center;flex-direction:column}
+  .gauge-grade{font-family:var(--serif);font-size:36px;font-weight:600;color:var(--gold);line-height:1}
+  .gauge-grade em{font-style:italic}
+  .gauge-text{font-size:9px;color:var(--muted);letter-spacing:.1em;margin-top:2px}
+  .health-meta{flex:1}
+  .health-meta-row{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px dashed var(--line-soft)}
+  .health-meta-row:last-child{border:none}
+  .health-meta-row span:first-child{color:var(--muted)}
+  .health-meta-row span:last-child{font-family:var(--mono);color:var(--text);font-weight:500}
+  .health-meta-row .up{color:var(--green)}
+  .health-meta-row .down{color:var(--red)}
+
+  .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+  .quick{
+    background:var(--ink-2);border:1px solid var(--line-soft);border-radius:16px;
+    padding:14px 8px;text-align:center;cursor:pointer;transition:all .3s;
+  }
+  .quick:hover{border-color:var(--line);transform:translateY(-2px)}
+  .quick-ico{width:36px;height:36px;border-radius:10px;margin:0 auto 8px;display:grid;place-items:center}
+  .quick-ico svg{width:18px;height:18px}
+  .quick-ico.gold{background:rgba(232,184,109,.12);color:var(--gold)}
+  .quick-ico.teal{background:rgba(79,209,197,.12);color:var(--teal)}
+  .quick-ico.green{background:rgba(123,211,137,.12);color:var(--green)}
+  .quick-ico.red{background:rgba(255,122,122,.12);color:var(--red)}
+  .quick-label{font-size:11px;color:var(--text);font-weight:500}
+
+  .alert-card{
+    background:linear-gradient(135deg,rgba(255,122,122,.08),rgba(242,201,76,.05));
+    border:1px solid rgba(255,122,122,.2);border-radius:18px;padding:14px 16px;
+    margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;
+  }
+  .alert-ico{width:32px;height:32px;border-radius:10px;background:rgba(255,122,122,.15);display:grid;place-items:center;flex-shrink:0}
+  .alert-ico svg{width:16px;height:16px;color:var(--red)}
+  .alert-body{flex:1}
+  .alert-title{font-size:13px;font-weight:600;margin-bottom:3px}
+  .alert-desc{font-size:11px;color:var(--muted);line-height:1.5}
+  .alert-time{font-size:10px;color:var(--muted-2);font-family:var(--mono);margin-top:4px}
+
+  .section-label{
+    display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px;
+  }
+  .section-label h3{font-family:var(--serif-cn);font-size:15px;font-weight:600}
+  .section-label a{font-size:11px;color:var(--gold);text-decoration:none}
+
+  .activity-item{
+    display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-soft);
+  }
+  .activity-item:last-child{border:none}
+  .activity-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0}
+  .activity-dot.gold{background:var(--gold)}
+  .activity-dot.teal{background:var(--teal)}
+  .activity-dot.green{background:var(--green)}
+  .activity-body{flex:1}
+  .activity-title{font-size:13px;font-weight:500;margin-bottom:2px}
+  .activity-meta{font-size:11px;color:var(--muted)}
+  .activity-amt{font-family:var(--mono);font-size:13px;font-weight:600}
+  .activity-amt.in{color:var(--green)}
+  .activity-amt.out{color:var(--red)}
+
+  /* ====== 三务中心 ====== */
+  .tri-tabs{display:flex;gap:6px;background:var(--ink-2);padding:4px;border-radius:14px;margin-bottom:18px}
+  .tri-tab{
+    flex:1;padding:9px;text-align:center;font-size:12px;font-weight:500;
+    color:var(--muted);border-radius:10px;cursor:pointer;transition:all .3s;
+    font-family:var(--serif-cn);
+  }
+  .tri-tab.active{background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:var(--ink)}
+
+  .tri-hero{
+    border-radius:22px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden;
+  }
+  .tri-hero.finance{background:linear-gradient(135deg,#1B3A4B,#0F2530);border:1px solid rgba(79,209,197,.2)}
+  .tri-hero.tax{background:linear-gradient(135deg,#3A2E1B,#241B0F);border:1px solid rgba(232,184,109,.2)}
+  .tri-hero.legal{background:linear-gradient(135deg,#2B1B3A,#1A0F24);border:1px solid rgba(180,140,220,.2)}
+  .tri-hero-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px}
+  .tri-hero.finance .tri-hero-icon{background:rgba(79,209,197,.15);color:var(--teal)}
+  .tri-hero.tax .tri-hero-icon{background:rgba(232,184,109,.15);color:var(--gold)}
+  .tri-hero.legal .tri-hero-icon{background:rgba(180,140,220,.15);color:#B48CDC}
+  .tri-hero-icon svg{width:22px;height:22px}
+  .tri-hero h3{font-family:var(--serif-cn);font-size:18px;font-weight:600;margin-bottom:6px}
+  .tri-hero p{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+  .tri-hero-cta{
+    display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+    padding:8px 14px;border-radius:20px;background:rgba(255,255,255,.08);
+    color:var(--text);cursor:pointer;
+  }
+
+  .service-list{display:flex;flex-direction:column;gap:10px}
+  .service-item{
+    background:var(--ink-2);border:1px solid var(--line-soft);border-radius:16px;
+    padding:14px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:all .3s;
+  }
+  .service-item:hover{border-color:var(--line);background:var(--surface)}
+  .service-ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}
+  .service-ico svg{width:18px;height:18px}
+  .service-body{flex:1}
+  .service-name{font-size:13px;font-weight:600;margin-bottom:2px}
+  .service-desc{font-size:11px;color:var(--muted)}
+  .service-tag{
+    font-size:9px;padding:3px 8px;border-radius:10px;font-weight:600;
+    font-family:var(--mono);letter-spacing:.05em;
+  }
+  .tag-hot{background:rgba(255,122,122,.12);color:var(--red)}
+  .tag-new{background:rgba(79,209,197,.12);color:var(--teal)}
+  .tag-ai{background:rgba(232,184,109,.12);color:var(--gold)}
+
+  /* ====== AI Growth ====== */
+  .ai-banner{
+    background:linear-gradient(135deg,#0F2530 0%,#1B3A4B 50%,#241B0F 100%);
+    border:1px solid var(--line);border-radius:24px;padding:22px;margin-bottom:16px;
+    position:relative;overflow:hidden;
+  }
+  .ai-banner::before{
+    content:"";position:absolute;top:-60px;right:-60px;width:200px;height:200px;
+    background:radial-gradient(circle,rgba(79,209,197,.2),transparent 70%);
+    animation:rotate 20s linear infinite;
+  }
+  @keyframes rotate{to{transform:rotate(360deg)}}
+  .ai-banner-content{position:relative}
+  .ai-banner-tag{
+    display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;
+    color:var(--teal);letter-spacing:.1em;margin-bottom:12px;
+  }
+  .ai-banner-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .ai-banner h3{font-family:var(--serif);font-size:22px;font-weight:400;line-height:1.2;margin-bottom:8px}
+  .ai-banner h3 em{font-style:italic;color:var(--gold)}
+  .ai-banner p{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+  .ai-prediction{
+    background:rgba(0,0,0,.3);border-radius:14px;padding:14px;border:1px solid var(--line-soft);
+  }
+  .ai-prediction-label{font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:8px;text-transform:uppercase}
+  .ai-prediction-text{font-size:13px;line-height:1.6;color:var(--text)}
+  .ai-prediction-text strong{color:var(--gold);font-weight:600}
+
+  .swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+  .swot-cell{
+    border-radius:14px;padding:14px 12px;border:1px solid var(--line-soft);
+  }
+  .swot-cell.s{background:rgba(123,211,137,.06);border-color:rgba(123,211,137,.15)}
+  .swot-cell.w{background:rgba(255,122,122,.06);border-color:rgba(255,122,122,.15)}
+  .swot-cell.o{background:rgba(79,209,197,.06);border-color:rgba(79,209,197,.15)}
+  .swot-cell.t{background:rgba(242,201,76,.06);border-color:rgba(242,201,76,.15)}
+  .swot-letter{font-family:var(--serif);font-size:20px;font-weight:600;margin-bottom:4px}
+  .swot-cell.s .swot-letter{color:var(--green)}
+  .swot-cell.w .swot-letter{color:var(--red)}
+  .swot-cell.o .swot-letter{color:var(--teal)}
+  .swot-cell.t .swot-letter{color:var(--amber)}
+  .swot-name{font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:.05em}
+  .swot-text{font-size:11px;line-height:1.5;color:var(--text)}
+
+  .strategy-card{
+    background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:10px;
+    position:relative;
+  }
+  .strategy-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .strategy-prio{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.05em}
+  .strategy-act{font-size:10px;color:var(--teal);font-weight:600}
+  .strategy-title{font-family:var(--serif-cn);font-size:14px;font-weight:600;margin-bottom:6px}
+  .strategy-desc{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+  .strategy-foot{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px dashed var(--line-soft)}
+  .strategy-impact{font-size:11px;color:var(--muted)}
+  .strategy-impact strong{color:var(--green);font-family:var(--mono)}
+  .strategy-btn{
+    font-size:11px;font-weight:600;color:var(--ink);background:var(--gold);
+    padding:6px 12px;border-radius:16px;cursor:pointer;
+  }
+
+  /* ====== Finance ====== */
+  .cash-chart{
+    background:var(--ink-2);border:1px solid var(--line-soft);border-radius:18px;padding:16px;margin-bottom:16px;
+  }
+  .cash-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+  .cash-amt{font-family:var(--serif);font-size:28px;font-weight:500;letter-spacing:-.02em}
+  .cash-amt em{font-style:italic;color:var(--gold)}
+  .cash-trend{font-size:11px;color:var(--green);font-family:var(--mono)}
+  .cash-label{font-size:11px;color:var(--muted);margin-bottom:2px}
+  .chart-bars{display:flex;align-items:flex-end;gap:4px;height:80px;margin-top:10px}
+  .chart-bar{flex:1;border-radius:4px 4px 0 0;position:relative;transition:all .3s}
+  .chart-bar.pred{opacity:.4;border:1px dashed var(--gold);background:transparent}
+  .chart-bar-val{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--muted);font-family:var(--mono)}
+  .chart-labels{display:flex;gap:4px;margin-top:6px}
+  .chart-labels span{flex:1;text-align:center;font-size:9px;color:var(--muted-2)}
+
+  .loan-card{
+    background:linear-gradient(135deg,var(--surface),var(--ink-2));border:1px solid var(--line);
+    border-radius:18px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;
+  }
+  .loan-bank{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .bank-logo{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-family:var(--serif);font-weight:600;font-size:14px;color:var(--ink)}
+  .bank-name{font-size:13px;font-weight:600}
+  .bank-product{font-size:11px;color:var(--muted)}
+  .loan-rate{display:flex;gap:16px;margin-bottom:12px}
+  .loan-rate-item .v{font-family:var(--serif);font-size:18px;font-weight:500;color:var(--gold)}
+  .loan-rate-item .l{font-size:10px;color:var(--muted)}
+  .loan-match{
+    display:flex;justify-content:space-between;align-items:center;padding-top:12px;
+    border-top:1px solid var(--line-soft);
+  }
+  .match-score{font-size:11px;color:var(--muted)}
+  .match-score strong{color:var(--green);font-family:var(--mono)}
+  .loan-apply{
+    font-size:11px;font-weight:600;color:var(--ink);background:var(--gold);
+    padding:7px 16px;border-radius:16px;cursor:pointer;
+  }
+
+  /* ====== Operations ====== */
+  .ops-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .ops-card{
+    background:var(--ink-2);border:1px solid var(--line-soft);border-radius:16px;padding:14px;
+    position:relative;overflow:hidden;
+  }
+  .ops-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .ops-card-ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center}
+  .ops-card-ico svg{width:15px;height:15px}
+  .ops-card-num{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-.02em;margin-bottom:2px}
+  .ops-card-num em{font-style:italic;color:var(--gold)}
+  .ops-card-label{font-size:11px;color:var(--muted)}
+  .ops-card-trend{font-size:10px;font-family:var(--mono);margin-top:6px}
+  .ops-card-trend.up{color:var(--green)}
+  .ops-card-trend.down{color:var(--red)}
+
+  .subsidy-card{
+    background:linear-gradient(135deg,rgba(232,184,109,.08),rgba(79,209,197,.05));
+    border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:10px;
+  }
+  .subsidy-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+  .subsidy-name{font-family:var(--serif-cn);font-size:14px;font-weight:600;margin-bottom:4px}
+  .subsidy-from{font-size:10px;color:var(--muted)}
+  .subsidy-amt{font-family:var(--serif);font-size:20px;font-weight:500;color:var(--gold)}
+  .subsidy-amt em{font-style:italic}
+  .subsidy-meta{display:flex;gap:12px;font-size:10px;color:var(--muted);margin:10px 0}
+  .subsidy-meta span{display:flex;align-items:center;gap:4px}
+  .subsidy-progress{height:4px;background:var(--line-soft);border-radius:2px;overflow:hidden;margin-bottom:10px}
+  .subsidy-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:2px}
+  .subsidy-cta{font-size:11px;color:var(--gold);font-weight:600;text-align:center;display:block}
+
+  /* AI assistant floating */
+  .ai-float{
+    position:absolute;right:16px;bottom:96px;z-index:40;
+    width:48px;height:48px;border-radius:50%;
+    background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+    display:grid;place-items:center;cursor:pointer;
+    box-shadow:0 8px 24px rgba(232,184,109,.4);
+    animation:floatBob 3s ease-in-out infinite;
+  }
+  @keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .ai-float svg{width:22px;height:22px;color:var(--ink)}
+
+  /* footer note */
+  .foot-note{
+    margin-top:40px;padding-top:24px;border-top:1px solid var(--line-soft);
+    font-size:11px;color:var(--muted-2);font-family:var(--mono);letter-spacing:.05em;
+    display:flex;justify-content:space-between;
+  }
+
+  /* entrance */
+  .fade-up{animation:fadeUp .6s ease both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <!-- ============ LEFT: NARRATIVE ============ -->
+  <aside class="narrative">
+    <div class="brand-mark">
+      <div class="brand-glyph">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0B1220" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">三务<em>·</em>智能管家</div>
+        <div class="brand-tag">SANWU · AI COMPLIANCE HUB</div>
+      </div>
+    </div>
+
+    <div class="eyebrow">中小企业 · 全生命周期护航</div>
+
+    <h1 class="headline">
+      <span class="br">让<em>合规</em>成为底座，</span>
+      <span class="br">让<span class="accent">AI</span>驱动决策。</span>
+    </h1>
+
+    <p class="lede">
+      面向中小企业的<strong>"三务（财税法）合规底座 + AI智能决策中枢 + 一站式资源调度平台"</strong>。
+      将企业生存必需的财务、税务、法务服务与AI智能分析深度融合，从"被动应对"转向"主动预判"。
+    </p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <div class="pillar-title">合规降本</div>
+        <div class="pillar-desc">财税法一体化<br>风险预警</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <div class="pillar-title">数据驱动</div>
+        <div class="pillar-desc">AI健康诊断<br>策略推演</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <div class="pillar-title">资源赋能</div>
+        <div class="pillar-desc">金融匹配<br>政策补贴</div>
+      </div>
+    </div>
+
+    <div class="screen-tabs" id="screenTabs">
+      <div class="screen-tab active" data-screen="dashboard">
+        <span class="idx">01</span>
+        <span class="label">经营全景诊断<small>AI健康评分 · 红绿灯指标</small></span>
+        <span class="arrow">→</span>
+      </div>
+      <div class="screen-tab" data-screen="tri">
+        <span class="idx">02</span>
+        <span class="label">三务合规中心<small>财务 · 税务 · 法务</small></span>
+        <span class="arrow">→</span>
+      </div>
+      <div class="screen-tab" data-screen="ai">
+        <span class="idx">03</span>
+        <span class="label">智能成长中心<small>市场分析 · 策略推演</small></span>
+        <span class="arrow">→</span>
+      </div>
+      <div class="screen-tab" data-screen="finance">
+        <span class="idx">04</span>
+        <span class="label">金融服务<small>贷款匹配 · 现金流预测</small></span>
+        <span class="arrow">→</span>
+      </div>
+      <div class="screen-tab" data-screen="ops">
+        <span class="idx">05</span>
+        <span class="label">综合运营管理<small>进销存 · CRM · 人事</small></span>
+        <span class="arrow">→</span>
+      </div>
+    </div>
+
+    <div class="foot-note">
+      <span>v1.0 · MVP</span>
+      <span>金融级加密 · 数据合规</span>
+    </div>
+  </aside>
+
+  <!-- ============ RIGHT: PHONE ============ -->
+  <div class="phone-wrap">
+    <div class="phone-glow"></div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="notch"></div>
+
+        <!-- status bar -->
+        <div class="status-bar">
+          <span>9:41</span>
+          <div class="status-right">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20V2L2 22z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.95 3 4.21 4.34 1.2 6.6L3 9c2.55-1.91 5.72-3 9-3s6.45 1.09 9 3l1.8-2.4C19.79 4.34 16.05 3 12 3zm0 5c-2.42 0-4.7.7-6.63 1.91L7.2 12.3C8.6 11.5 10.24 11 12 11s3.4.5 4.8 1.3l1.83-2.39C16.7 8.7 14.42 8 12 8zm0 5c-1.38 0-2.63.42-3.7 1.13L12 18l3.7-3.87C14.63 13.42 13.38 13 12 13z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="10" rx="2" opacity=".3"/><rect x="3" y="8" width="14" height="8" rx="1"/></svg>
+          </div>
+        </div>
+
+        <div class="screens">
+
+          <!-- ====== SCREEN 1: DASHBOARD ====== -->
+          <section class="screen active" id="screen-dashboard">
+            <div class="scr-pad">
+              <div class="scr-header">
+                <div>
+                  <div class="scr-greet">早上好，<strong>王总</strong></div>
+                </div>
+                <div class="scr-avatar">王</div>
+              </div>
+              <div class="scr-title">今日经营概览</div>
+              <div class="scr-sub">2026年6月20日 · 周六 · 晴 28°C</div>
+
+              <!-- Health Card -->
+              <div class="health-card fade-up">
+                <div class="health-top">
+                  <div>
+                    <div class="health-label">AI 健康评分</div>
+                    <div class="health-name">鸿图科技有限公司</div>
+                  </div>
+                  <div class="health-badge">● 实时监测中</div>
+                </div>
+                <div class="health-score-wrap">
+                  <div class="gauge">
+                    <svg width="96" height="96" viewBox="0 0 96 96">
+                      <defs>
+                        <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0%" stop-color="#E8B86D"/>
+                          <stop offset="100%" stop-color="#4FD1C5"/>
+                        </linearGradient>
+                      </defs>
+                      <circle class="gauge-bg" cx="48" cy="48" r="40"/>
+                      <circle class="gauge-fg" cx="48" cy="48" r="40"/>
+                    </svg>
+                    <div class="gauge-center">
+                      <div class="gauge-grade">A<em>+</em></div>
+                      <div class="gauge-text">HEALTH</div>
+                    </div>
+                  </div>
+                  <div class="health-meta">
+                    <div class="health-meta-row"><span>本月营收</span><span>¥ 486K <span class="up">↑12%</span></span></div>
+                    <div class="health-meta-row"><span>现金流</span><span>健康</span></div>
+                    <div class="health-meta-row"><span>税务风险</span><span>低</span></div>
+                    <div class="health-meta-row"><span>合规指数</span><span>92 / 100</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Actions -->
+              <div class="quick-grid fade-up d1">
+                <div class="quick">
+                  <div class="quick-ico gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></div>
+                  <div class="quick-label">智能查账</div>
+                </div>
+                <div class="quick">
+                  <div class="quick-ico teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
+                  <div class="quick-label">一键报税</div>
+                </div>
+                <div class="quick">
+                  <div class="quick-ico green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 5-3.5 7.5-8.5 9.5C7.5 19.5 4 17 4 12V6l8-3 8 3z"/></svg></div>
+                  <div class="quick-label">合同审查</div>
+                </div>
+                <div class="quick">
+                  <div class="quick-ico red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+                  <div class="quick-label">问专家</div>
+                </div>
+              </div>
+
+              <!-- Alerts -->
+              <div class="section-label">
+                <h3>智能预警</h3>
+                <a>查看全部 →</a>
+              </div>
+              <div class="alert-card fade-up d2">
+                <div class="alert-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                <div class="alert-body">
+                  <div class="alert-title">增值税申报截止日临近</div>
+                  <div class="alert-desc">距6月15日申报截止仅剩 3 天，AI已预生成申报表，待您确认。</div>
+                  <div class="alert-time">2 小时前 · 税务</div>
+                </div>
+              </div>
+              <div class="alert-card fade-up d2" style="border-color:rgba(242,201,76,.2);background:linear-gradient(135deg,rgba(242,201,76,.08),rgba(232,184,109,.04))">
+                <div class="alert-ico" style="background:rgba(242,201,76,.15)"><svg viewBox="0 0 24 24" fill="none" stroke="#F2C94C" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                <div class="alert-body">
+                  <div class="alert-title">现金流预测：下月或存 8 万缺口</div>
+                  <div class="alert-desc">基于应收账款账期分析，建议提前对接供应链金融产品。</div>
+                  <div class="alert-time">今日 08:30 · AI诊断</div>
+                </div>
+              </div>
+
+              <!-- Activity -->
+              <div class="section-label">
+                <h3>最近动态</h3>
+                <a>账单 →</a>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot green"></div>
+                <div class="activity-body">
+                  <div class="activity-title">收到货款 · 恒达贸易</div>
+                  <div class="activity-meta">银行流水自动入账 · 凭证已生成</div>
+                </div>
+                <div class="activity-amt in">+¥86,400</div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot gold"></div>
+                <div class="activity-body">
+                  <div class="activity-title">研发加计扣除申报成功</div>
+                  <div class="activity-meta">节税 ¥23,500 · 政策精准匹配</div>
+                </div>
+                <div class="activity-amt in">+¥23.5K</div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot teal"></div>
+                <div class="activity-body">
+                  <div class="activity-title">合同审查完成 · 采购协议</div>
+                  <div class="activity-meta">AI识别 2 处风险条款 · 已修订</div>
+                </div>
+                <div class="activity-amt" style="color:var(--teal)">已处理</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ====== SCREEN 2: 三务中心 ====== -->
+          <section class="screen" id="screen-tri">
+            <div class="scr-pad">
+              <div class="scr-header">
+                <div>
+                  <div class="scr-greet">三务合规中心</div>
+                </div>
+                <div class="scr-avatar">王</div>
+              </div>
+              <div class="scr-title">财税法 · 一站护航</div>
+              <div class="scr-sub">AI 24h 在线 + 资深专家一对一</div>
+
+              <div class="tri-tabs">
+                <div class="tri-tab active" data-tri="finance">财务</div>
+                <div class="tri-tab" data-tri="tax">税务</div>
+                <div class="tri-tab" data-tri="legal">法务</div>
+              </div>
+
+              <!-- Finance Hero -->
+              <div class="tri-hero finance fade-up" id="tri-finance">
+                <div class="tri-hero-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                <h3>智能财务服务</h3>
+                <p>票据OCR识别 + 银行流水直连，AI自动生成凭证与财务报表，业财税一体化。</p>
+                <div class="tri-hero-cta">开始记账 →</div>
+              </div>
+
+              <div class="service-list" id="svc-finance">
+                <div class="service-item">
+                  <div class="service-ico" style="background:rgba(79,209,197,.12);color:var(--teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                  <div class="service-body">
+                    <div class="service-name">票据OCR智能识别</div>
+                    <div class="service-desc">拍照即记账，准确率 99.2%</div>
+                  </div>
+                  <div class="service-tag tag-ai">AI</div>
+                </div>
+                <div class="service-item">
+                  <div class="service-ico" style="background:rgba(79,209,197,.12);color:var(--teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg></div>
+                  <div class="service-body">
+                    <div class="service-name">财务报表自动生成</div>
+                    <div class="service-desc">利润表 / 资产负债表 / 现金流量表</div>
+                  </div>
+                  <div class="service-tag tag-new">新</div>
+                </div>
+                <div class="service-item">
+                  <div class="service-ico" style="background:rgba(79,209,197,.12);color:var(--teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+                  <div class="service-body">
+                    <div class="service-name">多公司账套管理</div>
+                    <div class="service-desc">集团化管控 · 成本追踪 · 超支预警</div>
+                  </div>
+                  <div class="service-tag tag-hot">热门</div>
+                </div>
+                <div class="service-item">
+                  <div class="service-ico" style="background:rgba(79,209,197,.12);color:var(--teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+                  <div class="service-body">
+                    <div class="service-name">银行流水直连</div>
+                    <div class="service-desc">自动对账 · 异常交易识别</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ====== SCREEN 3: AI GROWTH ====== -->
+          <section class="screen" id="screen-ai">
+            <div class="scr-pad">
+              <div class="scr-header">
+                <div>
+                  <div class="scr-greet">智能成长中心</div>
+                </div>
+                <div class="scr-avatar">王</div>
+              </div>
+              <div class="scr-title">AI 经营大脑</div>
+              <div class="scr-sub">从被动应对 → 主动预判</div>
+
+              <div class="ai-banner fade-up">
+                <div class="ai-banner-content">
+                  <div class="ai-banner-tag">AI BRAIN · LIVE</div>
+                  <h3>本周诊断：<em>现金流</em>存潜在风险</h3>
+                  <p>AI已追溯数据链，定位问题根因：应收账款账期延长 12 天，叠加下月供应商集中付款。</p>
+                  <div class="ai-prediction">
+                    <div class="ai-prediction-label">▎ 智能预测</div>
+                    <div class="ai-prediction-text">若不干预，下月 15 日现金流缺口约 <strong>¥82,000</strong>。建议：①提前催收 3 笔应收；②申请供应链金融 ¥10万 备用。</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="section-label">
+                <h3>SWOT 竞业分析</h3>
+                <a>查看报告 →</a>
+              </div>
+              <div class="swot-grid fade-up d1">
+                <div class="swot-cell s">
+                  <div class="swot-letter">S</div>
+                  <div class="swot-name">优势</div>
+                  <div class="swot-text">研发投入占比 18%，技术壁垒领先同业</div>
+                </div>
+                <div class="swot-cell w">
+                  <div class="swot-letter">W</div>
+                  <div class="swot-name">劣势</div>
+                  <div class="swot-text">客户集中度高，TOP3 占营收 62%</div>
+                </div>
+                <div class="swot-cell o">
+                  <div class="swot-letter">O</div>
+                  <div class="swot-name">机会</div>
+                  <div class="swot-text">专精特新政策红利，可申报补贴 ¥30万</div>
+                </div>
+                <div class="swot-cell t">
+                  <div class="swot-letter">T</div>
+                  <div class="swot-name">威胁</div>
+                  <div class="swot-text">竞品降价 8%，市场份额承压</div>
+                </div>
+              </div>
+
+              <div class="section-label">
+                <h3>策略优化建议</h3>
+                <a>What-If 推演 →</a>
+              </div>
+              <div class="strategy-card fade-up d2">
+                <div class="strategy-head">
+                  <span class="strategy-prio">▎ 优先级 P0</span>
+                  <span class="strategy-act">● 可执行</span>
+                </div>
+                <div class="strategy-title">账期优化方案</div>
+                <div class="strategy-desc">对 TOP3 客户启动早付折扣（2/10, n/30），预计缩短账期 15 天，释放现金流 ¥24万。</div>
+                <div class="strategy-foot">
+                  <div class="strategy-impact">预期影响 <strong>+¥240K</strong></div>
+                  <div class="strategy-btn">派发工单</div>
+                </div>
+              </div>
+              <div class="strategy-card fade-up d2">
+                <div class="strategy-head">
+                  <span class="strategy-prio">▎ 优先级 P1</span>
+                  <span class="strategy-act">● 待确认</span>
+                </div>
+                <div class="strategy-title">研发加计扣除复核</div>
+                <div class="strategy-desc">AI识别 3 项未申报研发费用，复核后可追加节税 ¥8.6K。</div>
+                <div class="strategy-foot">
+                  <div class="strategy-impact">预期节税 <strong>+¥8.6K</strong></div>
+                  <div class="strategy-btn">查看详情</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ====== SCREEN 4: FINANCE ====== -->
+          <section class="screen" id="screen-finance">
+            <div class="scr-pad">
+              <div class="scr-header">
+                <div>
+                  <div class="scr-greet">金融服务</div>
+                </div>
+                <div class="scr-avatar">王</div>
+              </div>
+              <div class="scr-title">资金 · 融资顾问</div>
+              <div class="scr-sub">智能匹配 · 一键申请 · 提升成功率</div>
+
+              <div class="cash-chart fade-up">
+                <div class="cash-head">
+                  <div>
+                    <div class="cash-label">当前可用资金</div>
+                    <div class="cash-amt">¥ <em>312,400</em></div>
+                    <div class="cash-trend">↑ 较上周 +4.2%</div>
+                  </div>
+                  <div style="text-align:right">
+                    <div class="cash-label">信用评分</div>
+                    <div style="font-family:var(--serif);font-size:22px;color:var(--gold);font-weight:500">78<em style="font-style:italic">0</em></div>
+                    <div style="font-size:10px;color:var(--green)">优秀</div>
+                  </div>
+                </div>
+                <div class="chart-bars">
+                  <div class="chart-bar" style="height:60%;background:linear-gradient(180deg,var(--teal),var(--teal-deep))"><span class="chart-bar-val">312</span></div>
+                  <div class="chart-bar" style="height:45%;background:linear-gradient(180deg,var(--teal),var(--teal-deep))"><span class="chart-bar-val">280</span></div>
+                  <div class="chart-bar" style="height:70%;background:linear-gradient(180deg,var(--gold),var(--gold-deep))"><span class="chart-bar-val">340</span></div>
+                  <div class="chart-bar pred" style="height:30%"><span class="chart-bar-val">230</span></div>
+                  <div class="chart-bar pred" style="height:20%"><span class="chart-bar-val">180</span></div>
+                  <div class="chart-bar pred" style="height:55%"><span class="chart-bar-val">290</span></div>
+                </div>
+                <div class="chart-labels">
+                  <span>本周</span><span>W23</span><span>W24</span><span>W25</span><span>W26</span><span>W27</span>
+                </div>
+                <div style="font-size:10px;color:var(--amber);margin-top:8px;font-family:var(--mono)">▎ 虚线为AI预测 · W25-W26 存资金缺口</div>
+              </div>
+
+              <div class="section-label">
+                <h3>智能贷款匹配</h3>
+                <a>更多产品 →</a>
+              </div>
+
+              <div class="loan-card fade-up d1">
+                <div class="loan-bank">
+                  <div class="bank-logo" style="background:linear-gradient(135deg,#C62828,#8E0000)">工</div>
+                  <div>
+                    <div class="bank-name">工商银行</div>
+                    <div class="bank-product">小微e贷 · 信用贷</div>
+                  </div>
+                </div>
+                <div class="loan-rate">
+                  <div class="loan-rate-item"><div class="v">3.45%</div><div class="l">年化利率</div></div>
+                  <div class="loan-rate-item"><div class="v">¥50万</div><div class="l">最高额度</div></div>
+                  <div class="loan-rate-item"><div class="v">T+1</div><div class="l">放款时效</div></div>
+                </div>
+                <div class="loan-match">
+                  <div class="match-score">AI匹配度 <strong>96%</strong></div>
+                  <div class="loan-apply">一键申请</div>
+                </div>
+              </div>
+
+              <div class="loan-card fade-up d1">
+                <div class="loan-bank">
+                  <div class="bank-logo" style="background:linear-gradient(135deg,#1565C0,#0D47A1)">建</div>
+                  <div>
+                    <div class="bank-name">建设银行</div>
+                    <div class="bank-product">云税贷 · 纳税信用贷</div>
+                  </div>
+                </div>
+                <div class="loan-rate">
+                  <div class="loan-rate-item"><div class="v">3.65%</div><div class="l">年化利率</div></div>
+                  <div class="loan-rate-item"><div class="v">¥80万</div><div class="l">最高额度</div></div>
+                  <div class="loan-rate-item"><div class="v">T+0</div><div class="l">放款时效</div></div>
+                </div>
+                <div class="loan-match">
+                  <div class="match-score">AI匹配度 <strong>92%</strong></div>
+                  <div class="loan-apply">一键申请</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ====== SCREEN 5: OPS ====== -->
+          <section class="screen" id="screen-ops">
+            <div class="scr-pad">
+              <div class="scr-header">
+                <div>
+                  <div class="scr-greet">综合运营管理</div>
+                </div>
+                <div class="scr-avatar">王</div>
+              </div>
+              <div class="scr-title">进销存 · CRM · 人事</div>
+              <div class="scr-sub">全流程追踪 · 资源调度</div>
+
+              <div class="ops-grid fade-up">
+                <div class="ops-card">
+                  <div class="ops-card-head">
+                    <div class="ops-card-ico" style="background:rgba(232,184,109,.12);color:var(--gold)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+                  </div>
+                  <div class="ops-card-num"><em>1,284</em></div>
+                  <div class="ops-card-label">在库商品 SKU</div>
+                  <div class="ops-card-trend up">↑ 本周入库 +86</div>
+                </div>
+                <div class="ops-card">
+                  <div class="ops-card-head">
+                    <div class="ops-card-ico" style="background:rgba(79,209,197,.12);color:var(--teal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                  </div>
+                  <div class="ops-card-num"><em>42</em></div>
+                  <div class="ops-card-label">活跃客户</div>
+                  <div class="ops-card-trend up">↑ 新增 5 家</div>
+                </div>
+                <div class="ops-card">
+                  <div class="ops-card-head">
+                    <div class="ops-card-ico" style="background:rgba(123,211,137,.12);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                  </div>
+                  <div class="ops-card-num"><em>36</em></div>
+                  <div class="ops-card-label">在职员工</div>
+                  <div class="ops-card-trend up">考勤率 98%</div>
+                </div>
+                <div class="ops-card">
+                  <div class="ops-card-head">
+                    <div class="ops-card-ico" style="background:rgba(255,122,122,.12);color:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
+                  </div>
+                  <div class="ops-card-num"><em>186</em></div>
+                  <div class="ops-card-label">本月订单</div>
+                  <div class="ops-card-trend up">↑ 同比 +24%</div>
+                </div>
+              </div>
+
+              <div class="section-label">
+                <h3>政策补贴匹配</h3>
+                <a>全部 →</a>
+              </div>
+
+              <div class="subsidy-card fade-up d1">
+                <div class="subsidy-head">
+                  <div>
+                    <div class="subsidy-name">专精特新中小企业认定</div>
+                    <div class="subsidy-from">市工信局 · 2026年度</div>
+                  </div>
+                  <div class="subsidy-amt">¥<em>30</em>万</div>
+                </div>
+                <div class="subsidy-meta">
+                  <span>● 申报中</span>
+                  <span>● 截止 2026.09.30</span>
+                </div>
+                <div class="subsidy-progress"><div class="subsidy-progress-fill" style="width:65%"></div></div>
+                <a class="subsidy-cta">材料已备齐 65% · 继续完善 →</a>
+              </div>
+
+              <div class="subsidy-card fade-up d1" style="background:linear-gradient(135deg,rgba(79,209,197,.08),rgba(123,211,137,.04));border-color:rgba(79,209,197,.2)">
+                <div class="subsidy-head">
+                  <div>
+                    <div class="subsidy-name">稳岗补贴</div>
+                    <div class="subsidy-from">人社局 · 季度申报</div>
+                  </div>
+                  <div class="subsidy-amt" style="color:var(--teal)">¥<em>4.2</em>万</div>
+                </div>
+                <div class="subsidy-meta">
+                  <span style="color:var(--green)">● 可申报</span>
+                  <span>● AI已生成申报材料</span>
+                </div>
+                <a class="subsidy-cta" style="color:var(--teal)">一键申报 →</a>
+              </div>
+            </div>
+          </section>
+
+        </div><!-- /screens -->
+
+        <!-- AI float button -->
+        <div class="ai-float" title="AI语音助手">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+        </div>
+
+        <!-- bottom nav -->
+        <div class="bottom-nav">
+          <div class="nav-item active" data-nav="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>首页</span>
+          </div>
+          <div class="nav-item" data-nav="tri">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            <span>三务</span>
+          </div>
+          <div class="nav-item ai" data-nav="ai">
+            <div class="ai-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div>
+            <span>AI大脑</span>
+          </div>
+          <div class="nav-item" data-nav="finance">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>金融</span>
+          </div>
+          <div class="nav-item" data-nav="ops">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>运营</span>
+          </div>
+        </div>
+
+      </div><!-- /phone-screen -->
+    </div><!-- /phone -->
+  </div><!-- /phone-wrap -->
+</div><!-- /stage -->
+
+<script>
+  // Screen switching
+  const screens = ['dashboard','tri','ai','finance','ops'];
+  const tabs = document.querySelectorAll('.screen-tab');
+  const navs = document.querySelectorAll('.nav-item');
+  const screenEls = {};
+  screens.forEach(s => screenEls[s] = document.getElementById('screen-'+s));
+
+  function switchScreen(name){
+    screens.forEach(s => screenEls[s].classList.toggle('active', s===name));
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.screen===name));
+    navs.forEach(n => n.classList.toggle('active', n.dataset.nav===name));
+    // re-trigger fade animations
+    const active = screenEls[name];
+    active.querySelectorAll('.fade-up').forEach(el => {
+      el.style.animation = 'none';
+      el.offsetHeight;
+      el.style.animation = '';
+    });
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => switchScreen(t.dataset.screen)));
+  navs.forEach(n => n.addEventListener('click', () => switchScreen(n.dataset.nav)));
+
+  // Tri tabs (finance/tax/legal) - swap hero content
+  const triTabs = document.querySelectorAll('.tri-tab');
+  const triData = {
+    finance: {
+      cls:'finance', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+      title:'智能财务服务', desc:'票据OCR识别 + 银行流水直连，AI自动生成凭证与财务报表，业财税一体化。', cta:'开始记账 →'
+    },
+    tax: {
+      cls:'tax', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>',
+      title:'税务查缴与筹划', desc:'内置全国税收优惠政策库，智能测算税费并一键申报，动态税负优化方案。', cta:'智能算税 →'
+    },
+    legal: {
+      cls:'legal', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 5-3.5 7.5-8.5 9.5C7.5 19.5 4 17 4 12V6l8-3 8 3z"/></svg>',
+      title:'法务合规护航', desc:'AI合同审查秒级识别条款漏洞，动态合规监控，劳动仲裁应急响应。', cta:'合同审查 →'
+    }
+  };
+  triTabs.forEach(t => {
+    t.addEventListener('click', () => {
+      triTabs.forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      const d = triData[t.dataset.tri];
+      const hero = document.querySelector('.tri-hero');
+      hero.className = 'tri-hero ' + d.cls + ' fade-up';
+      hero.innerHTML = `
+        <div class="tri-hero-icon">${d.icon}</div>
+        <h3>${d.title}</h3>
+        <p>${d.desc}</p>
+        <div class="tri-hero-cta">${d.cta}</div>
+      `;
+    });
+  });
+
+  // Animate gauge on load
+  setTimeout(() => {
+    const fg = document.querySelector('.gauge-fg');
+    if(fg) fg.style.strokeDashoffset = '50.24';
+  }, 300);
+</script>
+
+</body>
+</html>
