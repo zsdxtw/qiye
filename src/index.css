@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 主色调 */
+  --accent: #4F46E5;
+  --accent2: #0EA5E9;
+  --accent-soft: #EEF0FE;
+
+  /* 中性色 */
+  --bg: #F5F7FB;
+  --bg2: #FFFFFF;
+  --ink: #0E1525;
+  --muted: #5B6478;
+  --rule: #E3E7F0;
+
+  /* 语义色 */
+  --warn: #E0584C;
+  --warn-soft: #FDECEA;
+  --ok: #16A37B;
+  --ok-soft: #E4F6EF;
+  --amber: #E08A1E;
+  --amber-soft: #FBF0DD;
+
+  /* 暗色模式 */
+  --dark-bg1: #0E1525;
+  --dark-bg2: #161E33;
+  --dark-bg3: #1E2A4A;
+  --dark-ink: #DCE3F1;
+  --dark-muted: #8B95B0;
+
+  font-family: "Work Sans", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.7;
+  font-weight: 400;
+  color: var(--ink);
+  background-color: var(--bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  border-color: var(--rule);
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+}
+
+/* 标题字体 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Outfit", "Noto Sans CJK SC", "PingFang SC", sans-serif;
+}
+
+/* 数字/代码字体 */
+.font-mono, .tabular {
+  font-family: "JetBrains Mono", "Noto Sans CJK SC", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* 深色渐变背景 - AI 摘要卡片 */
+.bg-ai-gradient {
+  background: linear-gradient(135deg, #1E2A4A 0%, #2A1E4A 100%);
+}
+
+.bg-dark-gradient {
+  background: linear-gradient(180deg, #0E1525 0%, #161E33 50%, #1E2A4A 100%);
+}
+
+/* 高危卡片背景 */
+.bg-risk-high {
+  background: linear-gradient(135deg, #2A1A1A 0%, #1F1414 100%);
+  border: 1px solid #5C2A2A;
+}
+
+/* 关注卡片背景 */
+.bg-risk-medium {
+  background: linear-gradient(135deg, #2A241A 0%, #1F1B14 100%);
+  border: 1px solid #5C4A2A;
+}
+
+/* AI 建议箭头 */
+.ai-arrow::before {
+  content: "▸";
+  color: var(--accent);
+  margin-right: 8px;
+  font-weight: 700;
+}
+
+/* 打字机光标 */
+.typing-cursor::after {
+  content: "▋";
+  color: var(--accent);
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* 滑入动画 */
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 300ms ease-out;
+}
+
+/* 淡入动画 */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms ease-out;
+}
+
+/* 按钮点击反馈 */
+button:active {
+  transform: scale(0.97);
+}
+
+/* 卡片 hover */
+.card-hover {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(14,21,37,.10);
+}
+
+/* 隐藏打印元素 */
+@media print {
+  .no-print { display: none !important; }
+}
