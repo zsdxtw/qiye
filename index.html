@@ -3,872 +3,1042 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>睿企 RuiQi · AI 驱动的中小企业经营操作系统</title>
+<title>睿企 RuiQi · 中小企业经营 SaaS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --ink:#0B0E16;
-    --ink-2:#11151F;
-    --ink-3:#1A1F2E;
-    --line:rgba(255,255,255,.08);
-    --line-strong:rgba(255,255,255,.16);
-    --cream:#F4EFE6;
-    --cream-2:#EBE4D6;
-    --paper:#FBF8F2;
-    --amber:#C9A24B;
-    --amber-soft:#E3C27E;
-    --moss:#6B8E6A;
-    --rust:#B5683E;
-    --muted:rgba(244,239,230,.62);
-    --muted-dark:rgba(11,14,22,.6);
-    --serif:"Fraunces","Noto Serif SC",Georgia,serif;
+    --ink:#0E1320;
+    --ink-2:#161C2E;
+    --ink-3:#1F2740;
+    --line-d:rgba(255,255,255,.07);
+    --line-d2:rgba(255,255,255,.13);
+    --paper:#F7F5F0;
+    --surface:#FFFFFF;
+    --surface-2:#FBFAF6;
+    --line:#E8E4DA;
+    --line-2:#EDEAE1;
+    --text:#1A1F2E;
+    --text-2:#5B6478;
+    --text-3:#8A93A6;
+    --amber:#B8893A;
+    --amber-soft:#D4A85A;
+    --amber-bg:#FBF3E0;
+    --moss:#4F7A5C;
+    --moss-bg:#E8F0EA;
+    --rust:#B5603E;
+    --rust-bg:#F7E9E2;
+    --blue:#3D6B9E;
+    --blue-bg:#E6EEF7;
+    --serif:"Fraunces","Noto Sans SC",Georgia,serif;
     --sans:"Inter","Noto Sans SC",-apple-system,sans-serif;
     --mono:"JetBrains Mono",monospace;
+    --radius:6px;
+    --shadow:0 1px 2px rgba(20,24,40,.04),0 4px 16px -8px rgba(20,24,40,.08);
+    --shadow-lg:0 12px 40px -12px rgba(20,24,40,.16);
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  html,body{height:100%}
   body{
     font-family:var(--sans);
-    background:var(--ink);
-    color:var(--cream);
+    background:var(--paper);
+    color:var(--text);
     -webkit-font-smoothing:antialiased;
+    font-size:14px;
     line-height:1.5;
-    overflow-x:hidden;
+    overflow:hidden;
   }
-  img{display:block;max-width:100%}
+  ::selection{background:var(--amber);color:#fff}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  input,textarea{font-family:inherit}
   a{color:inherit;text-decoration:none}
-  ::selection{background:var(--amber);color:var(--ink)}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-thumb{background:rgba(20,24,40,.14);border-radius:4px}
+  ::-webkit-scrollbar-thumb:hover{background:rgba(20,24,40,.24)}
+  ::-webkit-scrollbar-track{background:transparent}
 
-  /* ---------- NAV ---------- */
-  nav{
-    position:fixed;top:0;left:0;right:0;z-index:100;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:22px 5vw;
-    backdrop-filter:blur(14px);
-    background:linear-gradient(180deg,rgba(11,14,22,.72),rgba(11,14,22,.28));
-    border-bottom:1px solid var(--line);
-    transition:padding .4s ease;
-  }
-  .brand{display:flex;align-items:baseline;gap:10px}
-  .brand .mark{
-    font-family:var(--serif);font-weight:500;font-size:24px;letter-spacing:.5px;
-    color:var(--cream);
-  }
-  .brand .mark em{font-style:normal;color:var(--amber)}
-  .brand .sub{
-    font-family:var(--mono);font-size:10px;letter-spacing:2px;
-    color:var(--muted);text-transform:uppercase;
-  }
-  .nav-links{display:flex;gap:34px;align-items:center}
-  .nav-links a{
-    font-size:13px;color:var(--muted);transition:color .3s;
-    font-weight:400;
-  }
-  .nav-links a:hover{color:var(--cream)}
-  .nav-cta{
-    font-size:13px;padding:9px 18px;border:1px solid var(--line-strong);
-    border-radius:2px;color:var(--cream);transition:all .3s;
-    font-weight:500;
-  }
-  .nav-cta:hover{background:var(--amber);color:var(--ink);border-color:var(--amber)}
-  @media(max-width:820px){.nav-links{display:none}}
+  /* ===== APP SHELL ===== */
+  .app{display:grid;grid-template-columns:248px 1fr;height:100vh;overflow:hidden}
 
-  /* ---------- HERO ---------- */
-  .hero{
-    position:relative;min-height:100svh;
-    display:flex;align-items:flex-end;
-    padding:0 5vw 7vh;
-    overflow:hidden;
+  /* ===== SIDEBAR ===== */
+  .sidebar{
+    background:var(--ink);
+    color:rgba(255,255,255,.7);
+    display:flex;flex-direction:column;
+    overflow-y:auto;
+    border-right:1px solid rgba(0,0,0,.2);
   }
-  .hero-bg{
-    position:absolute;inset:0;z-index:0;
-    background:
-      linear-gradient(180deg,rgba(11,14,22,.55) 0%,rgba(11,14,22,.35) 40%,rgba(11,14,22,.92) 100%),
-      url("https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=an%20aerial%20dusk%20photograph%20of%20a%20modern%20financial%20district%20skyline%2C%20glass%20towers%20with%20warm%20interior%20lights%2C%20soft%20blue%20hour%20sky%2C%20calm%20reflective%20river%2C%20cinematic%2C%20muted%20amber%20tones%2C%20premium%20editorial%20photography&image_size=landscape_16_9") center/cover no-repeat;
+  .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1)}
+  .sb-brand{
+    display:flex;align-items:center;gap:11px;
+    padding:20px 22px 22px;
+    border-bottom:1px solid var(--line-d);
+    position:sticky;top:0;background:var(--ink);z-index:2;
   }
-  .hero-grain{
-    position:absolute;inset:0;z-index:1;opacity:.4;mix-blend-mode:overlay;pointer-events:none;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-  }
-  .hero-inner{position:relative;z-index:2;max-width:920px}
-  .hero-eyebrow{
-    display:inline-flex;align-items:center;gap:10px;
-    font-family:var(--mono);font-size:11px;letter-spacing:3px;
-    color:var(--amber-soft);text-transform:uppercase;
-    margin-bottom:32px;
-    opacity:0;transform:translateY(12px);
-    animation:rise .9s .2s cubic-bezier(.2,.7,.2,1) forwards;
-  }
-  .hero-eyebrow .dot{width:6px;height:6px;background:var(--amber);border-radius:50%;box-shadow:0 0 12px var(--amber)}
-  .hero h1{
-    font-family:var(--serif);font-weight:400;
-    font-size:clamp(44px,7.2vw,108px);
-    line-height:.98;letter-spacing:-1.5px;
-    color:var(--cream);
-    margin-bottom:28px;
-  }
-  .hero h1 .line{display:block;overflow:hidden}
-  .hero h1 .line span{
-    display:inline-block;transform:translateY(110%);
-    animation:rise 1.1s cubic-bezier(.2,.7,.2,1) forwards;
-  }
-  .hero h1 .line:nth-child(1) span{animation-delay:.35s}
-  .hero h1 .line:nth-child(2) span{animation-delay:.5s}
-  .hero h1 em{font-style:italic;color:var(--amber-soft);font-weight:300}
-  .hero p.lead{
-    font-size:clamp(15px,1.4vw,19px);color:var(--muted);
-    max-width:560px;margin-bottom:44px;font-weight:300;line-height:1.6;
-    opacity:0;transform:translateY(12px);
-    animation:rise .9s .8s cubic-bezier(.2,.7,.2,1) forwards;
-  }
-  .hero-cta{display:flex;gap:18px;flex-wrap:wrap;align-items:center;
-    opacity:0;transform:translateY(12px);
-    animation:rise .9s 1s cubic-bezier(.2,.7,.2,1) forwards;
-  }
-  .btn-primary{
-    display:inline-flex;align-items:center;gap:12px;
-    padding:16px 28px;background:var(--amber);color:var(--ink);
-    font-size:14px;font-weight:600;letter-spacing:.3px;
-    border-radius:2px;transition:all .35s;
-  }
-  .btn-primary:hover{background:var(--amber-soft);transform:translateY(-2px)}
-  .btn-primary svg{transition:transform .35s}
-  .btn-primary:hover svg{transform:translateX(4px)}
-  .btn-ghost{
-    display:inline-flex;align-items:center;gap:10px;
-    padding:16px 4px;color:var(--cream);font-size:14px;font-weight:500;
-    border-bottom:1px solid var(--line-strong);transition:border-color .3s;
-  }
-  .btn-ghost:hover{border-color:var(--amber)}
-  .hero-meta{
-    position:absolute;bottom:7vh;right:5vw;z-index:2;
-    text-align:right;font-family:var(--mono);font-size:11px;
-    color:var(--muted);letter-spacing:1.5px;line-height:2;
-    opacity:0;animation:rise 1s 1.3s cubic-bezier(.2,.7,.2,1) forwards;
-  }
-  .hero-meta b{color:var(--cream);font-weight:500}
-  @media(max-width:720px){.hero-meta{display:none}}
-
-  /* ---------- SECTION SHELL ---------- */
-  section{position:relative}
-  .sec{padding:14vh 5vw}
-  .sec-label{
-    display:flex;align-items:center;gap:14px;
-    font-family:var(--mono);font-size:11px;letter-spacing:3px;
-    text-transform:uppercase;color:var(--amber);margin-bottom:28px;
-  }
-  .sec-label .num{color:var(--muted)}
-  .sec-label .bar{width:42px;height:1px;background:var(--amber)}
-  .sec-title{
-    font-family:var(--serif);font-weight:400;
-    font-size:clamp(32px,4.4vw,60px);line-height:1.05;letter-spacing:-.8px;
-    margin-bottom:24px;max-width:14ch;
-  }
-  .sec-title em{font-style:italic;color:var(--amber)}
-  .sec-intro{
-    font-size:16px;color:var(--muted);max-width:54ch;font-weight:300;line-height:1.7;
-  }
-
-  /* ---------- AI ENGINE ---------- */
-  .ai-engine{background:var(--ink-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .ai-grid{
-    display:grid;grid-template-columns:1fr 1fr;gap:8vh;align-items:center;
-    margin-top:8vh;
-  }
-  .ai-visual{
-    position:relative;aspect-ratio:4/5;border:1px solid var(--line);
-    overflow:hidden;border-radius:2px;
-  }
-  .ai-visual img{
-    width:100%;height:100%;object-fit:cover;
-    filter:grayscale(.3) contrast(1.05);
-  }
-  .ai-visual::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg,transparent 40%,rgba(11,14,22,.85));
-  }
-  .ai-visual .caption{
-    position:absolute;left:24px;bottom:24px;z-index:2;
-    font-family:var(--mono);font-size:11px;letter-spacing:2px;
-    color:var(--amber-soft);text-transform:uppercase;
-  }
-  .ai-visual .caption b{display:block;color:var(--cream);font-family:var(--serif);
-    font-size:22px;letter-spacing:0;text-transform:none;margin-top:6px;font-weight:500}
-  .ai-points{display:flex;flex-direction:column;gap:0}
-  .ai-point{
-    display:grid;grid-template-columns:auto 1fr;gap:24px;
-    padding:30px 0;border-top:1px solid var(--line);
-  }
-  .ai-point:last-child{border-bottom:1px solid var(--line)}
-  .ai-point .idx{font-family:var(--mono);font-size:12px;color:var(--amber);padding-top:4px}
-  .ai-point h3{font-family:var(--serif);font-size:24px;font-weight:500;margin-bottom:10px;color:var(--cream)}
-  .ai-point p{font-size:14.5px;color:var(--muted);line-height:1.7;font-weight:300}
-  @media(max-width:880px){.ai-grid{grid-template-columns:1fr;gap:5vh}}
-
-  /* ---------- PILLARS (财税法) ---------- */
-  .pillars{background:var(--paper);color:var(--ink)}
-  .pillars .sec-label{color:var(--rust)}
-  .pillars .sec-label .bar{background:var(--rust)}
-  .pillars .sec-label .num{color:var(--muted-dark)}
-  .pillars .sec-title{color:var(--ink)}
-  .pillars .sec-title em{color:var(--rust)}
-  .pillars .sec-intro{color:var(--muted-dark)}
-  .pillar-grid{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:0;
-    margin-top:9vh;border-top:1px solid rgba(11,14,22,.12);
-  }
-  .pillar{
-    padding:48px 36px 56px;border-right:1px solid rgba(11,14,22,.12);
-    position:relative;transition:background .4s;
-  }
-  .pillar:last-child{border-right:none}
-  .pillar:hover{background:var(--cream-2)}
-  .pillar .glyph{
-    font-family:var(--serif);font-size:54px;font-weight:400;
-    color:var(--rust);line-height:1;margin-bottom:32px;
-    font-style:italic;
-  }
-  .pillar h3{font-family:var(--serif);font-size:30px;font-weight:500;margin-bottom:8px;color:var(--ink)}
-  .pillar .en{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted-dark);text-transform:uppercase;margin-bottom:22px}
-  .pillar p{font-size:14.5px;color:var(--muted-dark);line-height:1.75;margin-bottom:24px;font-weight:300}
-  .pillar ul{list-style:none;display:flex;flex-direction:column;gap:11px}
-  .pillar li{
-    font-size:13.5px;color:var(--ink);display:flex;gap:12px;align-items:flex-start;
-    font-weight:400;
-  }
-  .pillar li::before{content:"—";color:var(--rust);flex-shrink:0}
-  @media(max-width:880px){.pillar-grid{grid-template-columns:1fr}.pillar{border-right:none;border-bottom:1px solid rgba(11,14,22,.12)}}
-
-  /* ---------- COCKPIT (经营全览) ---------- */
-  .cockpit{background:var(--ink);overflow:hidden}
-  .cockpit-head{display:grid;grid-template-columns:1fr 1fr;gap:8vh;align-items:end;margin-bottom:7vh}
-  .cockpit-mock{
-    position:relative;border:1px solid var(--line);border-radius:4px;
-    background:linear-gradient(180deg,var(--ink-3),var(--ink-2));
-    overflow:hidden;
-    box-shadow:0 60px 120px -40px rgba(0,0,0,.6);
-  }
-  .mock-bar{
-    display:flex;align-items:center;gap:8px;padding:14px 18px;
-    border-bottom:1px solid var(--line);background:rgba(0,0,0,.2);
-  }
-  .mock-bar .d{width:10px;height:10px;border-radius:50%;background:var(--line-strong)}
-  .mock-bar .url{margin-left:14px;font-family:var(--mono);font-size:11px;color:var(--muted)}
-  .mock-body{display:grid;grid-template-columns:200px 1fr;min-height:480px}
-  .mock-side{
-    border-right:1px solid var(--line);padding:24px 18px;
-    display:flex;flex-direction:column;gap:4px;
-  }
-  .mock-side .group{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:18px 0 8px}
-  .mock-side .group:first-child{margin-top:0}
-  .mock-side a{font-size:12.5px;color:var(--muted);padding:7px 10px;border-radius:2px;display:flex;gap:10px;align-items:center;transition:all .25s}
-  .mock-side a.active{background:rgba(201,162,75,.12);color:var(--amber-soft)}
-  .mock-side a .ic{width:14px;height:14px;opacity:.7}
-  .mock-main{padding:28px}
-  .mock-main h4{font-family:var(--serif);font-size:22px;font-weight:500;margin-bottom:4px}
-  .mock-main .sub{font-size:12px;color:var(--muted);margin-bottom:26px}
-  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
-  .kpi{padding:16px;border:1px solid var(--line);border-radius:2px;background:rgba(255,255,255,.02)}
-  .kpi .lab{font-size:10.5px;color:var(--muted);letter-spacing:.5px;margin-bottom:8px}
-  .kpi .val{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--cream)}
-  .kpi .val small{font-size:11px;color:var(--moss);font-family:var(--sans);margin-left:6px}
-  .kpi .val small.down{color:var(--rust)}
-  .chart-box{border:1px solid var(--line);border-radius:2px;padding:18px;background:rgba(255,255,255,.02)}
-  .chart-box .ct{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-  .chart-box .ct h5{font-size:13px;font-weight:500}
-  .chart-box .ct span{font-size:11px;color:var(--muted);font-family:var(--mono)}
-  .chart{display:flex;align-items:flex-end;gap:6px;height:120px}
-  .chart .b{flex:1;background:linear-gradient(180deg,var(--amber),rgba(201,162,75,.2));border-radius:1px;transition:opacity .3s}
-  .chart .b:hover{opacity:.7}
-  .feed{margin-top:18px;display:flex;flex-direction:column;gap:10px}
-  .feed .row{display:flex;gap:12px;align-items:center;font-size:12px;color:var(--muted);padding:8px 0;border-top:1px solid var(--line)}
-  .feed .row .tag{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:1px;letter-spacing:1px}
-  .feed .row .tag.ok{background:rgba(107,142,106,.2);color:var(--moss)}
-  .feed .row .tag.warn{background:rgba(181,104,62,.2);color:var(--rust)}
-  .feed .row .tag.ai{background:rgba(201,162,75,.2);color:var(--amber-soft)}
-  .feed .row b{color:var(--cream);font-weight:500}
-  @media(max-width:880px){.cockpit-head{grid-template-columns:1fr}.mock-body{grid-template-columns:1fr}.mock-side{display:none}.kpi-row{grid-template-columns:repeat(2,1fr)}}
-
-  /* ---------- MANAGEMENT SUITE ---------- */
-  .suite{background:var(--cream);color:var(--ink)}
-  .suite .sec-label{color:var(--rust)}
-  .suite .sec-label .bar{background:var(--rust)}
-  .suite .sec-label .num{color:var(--muted-dark)}
-  .suite .sec-title{color:var(--ink)}
-  .suite .sec-title em{color:var(--rust)}
-  .suite .sec-intro{color:var(--muted-dark)}
-  .suite-list{margin-top:8vh;border-top:1px solid rgba(11,14,22,.14)}
-  .suite-row{
-    display:grid;grid-template-columns:80px 1fr 1.4fr 120px;gap:32px;
-    padding:38px 0;border-bottom:1px solid rgba(11,14,22,.14);
-    align-items:center;transition:padding .4s;
-  }
-  .suite-row:hover{padding-left:18px}
-  .suite-row .n{font-family:var(--mono);font-size:12px;color:var(--rust)}
-  .suite-row h3{font-family:var(--serif);font-size:28px;font-weight:500;color:var(--ink)}
-  .suite-row h3 .en{display:block;font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted-dark);text-transform:uppercase;margin-top:6px;font-weight:400}
-  .suite-row p{font-size:14px;color:var(--muted-dark);line-height:1.7;font-weight:300}
-  .suite-row .arrow{justify-self:end;font-family:var(--serif);font-size:22px;color:var(--rust);transition:transform .4s}
-  .suite-row:hover .arrow{transform:translateX(8px)}
-  @media(max-width:880px){.suite-row{grid-template-columns:1fr;gap:10px}.suite-row .arrow{display:none}}
-
-  /* ---------- CAPITAL & POLICY ---------- */
-  .capital{background:var(--ink-2);border-top:1px solid var(--line)}
-  .cap-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:8vh;margin-top:8vh;align-items:start}
-  .cap-feature{position:relative;aspect-ratio:5/6;overflow:hidden;border-radius:2px}
-  .cap-feature img{width:100%;height:100%;object-fit:cover;filter:grayscale(.2)}
-  .cap-feature::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,14,22,.1),rgba(11,14,22,.85))}
-  .cap-feature .ov{position:absolute;left:32px;right:32px;bottom:32px;z-index:2}
-  .cap-feature .ov .t{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--amber-soft);text-transform:uppercase;margin-bottom:10px}
-  .cap-feature .ov h3{font-family:var(--serif);font-size:32px;font-weight:500;line-height:1.1;color:var(--cream)}
-  .cap-items{display:flex;flex-direction:column}
-  .cap-item{padding:34px 0;border-top:1px solid var(--line)}
-  .cap-item:last-child{border-bottom:1px solid var(--line)}
-  .cap-item .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
-  .cap-item h4{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--cream)}
-  .cap-item .freq{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:1.5px}
-  .cap-item p{font-size:14px;color:var(--muted);line-height:1.7;font-weight:300}
-  @media(max-width:880px){.cap-grid{grid-template-columns:1fr;gap:5vh}}
-
-  /* ---------- EXTENDED SERVICES ---------- */
-  .extend{background:var(--paper);color:var(--ink);border-top:1px solid var(--line)}
-  .extend .sec-label{color:var(--rust)}
-  .extend .sec-label .bar{background:var(--rust)}
-  .extend .sec-label .num{color:var(--muted-dark)}
-  .extend .sec-title{color:var(--ink)}
-  .extend .sec-title em{color:var(--rust)}
-  .extend .sec-intro{color:var(--muted-dark)}
-  .ext-grid{
-    display:grid;grid-template-columns:repeat(4,1fr);gap:0;
-    margin-top:8vh;border-top:1px solid rgba(11,14,22,.14);
-  }
-  .ext-cell{
-    padding:36px 28px 40px;border-right:1px solid rgba(11,14,22,.14);
-    border-bottom:1px solid rgba(11,14,22,.14);
-    transition:background .35s;position:relative;
-  }
-  .ext-cell:hover{background:var(--cream-2)}
-  .ext-cell .ic{
-    width:34px;height:34px;border:1px solid var(--rust);border-radius:50%;
+  .sb-logo{
+    width:34px;height:34px;border-radius:7px;
+    background:linear-gradient(135deg,var(--amber-soft),var(--amber));
     display:flex;align-items:center;justify-content:center;
-    font-family:var(--serif);font-size:15px;color:var(--rust);
-    margin-bottom:22px;font-style:italic;
+    font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);
   }
-  .ext-cell h4{font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:10px;color:var(--ink);line-height:1.2}
-  .ext-cell p{font-size:12.5px;color:var(--muted-dark);line-height:1.65;font-weight:300}
-  @media(max-width:1080px){.ext-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:560px){.ext-grid{grid-template-columns:1fr}.ext-cell{border-right:none}}
+  .sb-brand .name{font-family:var(--serif);font-size:18px;font-weight:500;color:#fff;line-height:1.1}
+  .sb-brand .name small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,.4);font-weight:400;margin-top:2px}
+  .sb-org{
+    margin:14px 14px 6px;padding:11px 12px;border-radius:6px;
+    background:var(--ink-2);border:1px solid var(--line-d);
+    display:flex;align-items:center;gap:10px;cursor:pointer;transition:.2s;
+  }
+  .sb-org:hover{background:var(--ink-3)}
+  .sb-org .av{width:28px;height:28px;border-radius:5px;background:var(--amber);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;flex-shrink:0}
+  .sb-org .info{flex:1;min-width:0}
+  .sb-org .info b{display:block;color:#fff;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sb-org .info span{font-size:11px;color:rgba(255,255,255,.45)}
+  .sb-org .chev{color:rgba(255,255,255,.4);font-size:11px}
 
-  /* ---------- SCENARIOS ---------- */
-  .scenarios{background:var(--ink);border-top:1px solid var(--line)}
-  .scen-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5vh;margin-top:8vh}
-  .scen{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:2px}
-  .scen img{width:100%;height:100%;object-fit:cover;filter:grayscale(.4) contrast(1.05);transition:transform .8s,filter .8s}
-  .scen:hover img{transform:scale(1.05);filter:grayscale(0) contrast(1)}
-  .scen::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,14,22,.2) 30%,rgba(11,14,22,.9))}
-  .scen .ov{position:absolute;left:28px;right:28px;bottom:28px;z-index:2}
-  .scen .ov .t{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--amber-soft);text-transform:uppercase;margin-bottom:10px}
-  .scen .ov h3{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--cream);line-height:1.15;margin-bottom:10px}
-  .scen .ov p{font-size:12.5px;color:var(--muted);line-height:1.6;font-weight:300}
-  @media(max-width:880px){.scen-grid{grid-template-columns:1fr}}
+  .sb-nav{padding:10px 12px 24px;flex:1}
+  .sb-group{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:rgba(255,255,255,.32);text-transform:uppercase;padding:16px 10px 7px;font-weight:500}
+  .sb-item{
+    display:flex;align-items:center;gap:11px;
+    padding:8px 10px;border-radius:6px;
+    font-size:13.5px;color:rgba(255,255,255,.72);
+    cursor:pointer;transition:.18s;font-weight:400;
+    margin-bottom:1px;width:100%;text-align:left;
+  }
+  .sb-item:hover{background:var(--ink-2);color:#fff}
+  .sb-item.active{background:rgba(184,137,58,.16);color:var(--amber-soft)}
+  .sb-item .ic{width:17px;height:17px;flex-shrink:0;opacity:.85;display:flex;align-items:center;justify-content:center}
+  .sb-item .ic svg{width:17px;height:17px}
+  .sb-item .badge{margin-left:auto;font-size:10px;background:var(--rust);color:#fff;padding:1px 6px;border-radius:9px;font-weight:600}
+  .sb-item .badge.amber{background:var(--amber)}
+  .sb-item .badge.moss{background:var(--moss)}
 
-  /* ---------- FINAL CTA ---------- */
-  .final{
-    position:relative;min-height:80vh;display:flex;align-items:center;
-    padding:14vh 5vw;overflow:hidden;
-  }
-  .final-bg{
-    position:absolute;inset:0;z-index:0;
-    background:
-      linear-gradient(180deg,rgba(11,14,22,.7),rgba(11,14,22,.92)),
-      url("https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=a%20minimal%20still%20life%20of%20a%20single%20amber%20colored%20geode%20on%20dark%20stone%2C%20soft%20directional%20light%2C%20fine%20art%20photography%2C%20deep%20shadows%2C%20warm%20metallic%20tones&image_size=landscape_16_9") center/cover;
-  }
-  .final-inner{position:relative;z-index:2;max-width:760px}
-  .final h2{
-    font-family:var(--serif);font-weight:400;
-    font-size:clamp(36px,5.5vw,76px);line-height:1.02;letter-spacing:-1px;
-    margin-bottom:28px;
-  }
-  .final h2 em{font-style:italic;color:var(--amber-soft)}
-  .final p{font-size:17px;color:var(--muted);margin-bottom:44px;max-width:48ch;font-weight:300;line-height:1.7}
-  .final-cta{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+  .sb-foot{padding:14px 16px;border-top:1px solid var(--line-d);display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,.5)}
+  .sb-foot .dot{width:7px;height:7px;border-radius:50%;background:var(--moss);box-shadow:0 0 8px var(--moss)}
 
-  /* ---------- FOOTER ---------- */
-  footer{
-    background:var(--ink);border-top:1px solid var(--line);
-    padding:8vh 5vw 4vh;
-  }
-  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:6vh;margin-bottom:8vh}
-  .foot-brand .mark{font-family:var(--serif);font-size:28px;font-weight:500;margin-bottom:14px}
-  .foot-brand .mark em{color:var(--amber);font-style:normal}
-  .foot-brand p{font-size:13px;color:var(--muted);max-width:34ch;line-height:1.7;font-weight:300}
-  .foot-col h5{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:20px}
-  .foot-col a{display:block;font-size:13px;color:var(--muted);margin-bottom:12px;transition:color .3s}
-  .foot-col a:hover{color:var(--cream)}
-  .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:32px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px}
-  @media(max-width:880px){.foot-grid{grid-template-columns:1fr 1fr}.foot-bottom{flex-direction:column;gap:12px}}
+  /* ===== MAIN ===== */
+  .main{display:flex;flex-direction:column;overflow:hidden;background:var(--paper)}
 
-  /* ---------- ANIMATIONS ---------- */
-  @keyframes rise{to{opacity:1;transform:translateY(0)}}
-  .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
-  .reveal.in{opacity:1;transform:translateY(0)}
-  .reveal.d1{transition-delay:.1s}
-  .reveal.d2{transition-delay:.2s}
-  .reveal.d3{transition-delay:.3s}
-
-  /* marquee ticker */
-  .ticker{
-    background:var(--ink);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-    overflow:hidden;padding:18px 0;
+  /* TOPBAR */
+  .topbar{
+    height:60px;background:var(--surface);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:18px;padding:0 24px;flex-shrink:0;
   }
-  .ticker-track{display:flex;gap:60px;white-space:nowrap;animation:scroll 40s linear infinite;width:max-content}
-  .ticker-track span{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:60px}
-  .ticker-track span::after{content:"◆";color:var(--amber);font-size:8px}
-  @keyframes scroll{to{transform:translateX(-50%)}}
+  .tb-search{
+    flex:1;max-width:420px;position:relative;
+  }
+  .tb-search input{
+    width:100%;height:36px;border:1px solid var(--line);border-radius:6px;
+    padding:0 12px 0 36px;font-size:13px;background:var(--surface-2);
+    transition:.2s;color:var(--text);
+  }
+  .tb-search input:focus{outline:none;border-color:var(--amber);background:#fff;box-shadow:0 0 0 3px var(--amber-bg)}
+  .tb-search .ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-3)}
+  .tb-search .kbd{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10px;color:var(--text-3);border:1px solid var(--line);padding:1px 5px;border-radius:3px;background:#fff}
+  .tb-actions{display:flex;align-items:center;gap:6px;margin-left:auto}
+  .tb-btn{
+    width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+    color:var(--text-2);transition:.18s;position:relative;
+  }
+  .tb-btn:hover{background:var(--surface-2);color:var(--text)}
+  .tb-btn .nd{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--rust);border:1.5px solid var(--surface)}
+  .tb-date{font-size:12px;color:var(--text-3);font-family:var(--mono);padding:0 8px;border-left:1px solid var(--line);margin-left:4px;height:24px;display:flex;align-items:center}
+  .tb-user{display:flex;align-items:center;gap:9px;padding:5px 8px 5px 5px;border-radius:6px;transition:.18s;cursor:pointer}
+  .tb-user:hover{background:var(--surface-2)}
+  .tb-user .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--rust));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px}
+  .tb-user .nm{font-size:13px;font-weight:500;line-height:1.1}
+  .tb-user .nm small{display:block;font-size:10px;color:var(--text-3);font-weight:400}
+
+  /* CONTENT */
+  .content{flex:1;overflow-y:auto;padding:24px 28px 40px}
+  .view{display:none;animation:fade .35s ease}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px;gap:20px;flex-wrap:wrap}
+  .page-head h1{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-.3px;line-height:1.15}
+  .page-head .sub{font-size:13px;color:var(--text-3);margin-top:4px}
+  .page-head .acts{display:flex;gap:8px;align-items:center}
+
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:6px;font-size:13px;font-weight:500;transition:.18s;border:1px solid transparent}
+  .btn svg{width:15px;height:15px}
+  .btn-primary{background:var(--amber);color:#fff}
+  .btn-primary:hover{background:#a37a31}
+  .btn-ghost{background:var(--surface);border-color:var(--line);color:var(--text-2)}
+  .btn-ghost:hover{background:var(--surface-2);color:var(--text)}
+  .btn-sm{padding:5px 10px;font-size:12px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .card-h{padding:16px 18px;border-bottom:1px solid var(--line-2);display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .card-h h3{font-size:14px;font-weight:600;letter-spacing:-.1px}
+  .card-h .more{font-size:12px;color:var(--text-3);cursor:pointer}
+  .card-h .more:hover{color:var(--amber)}
+  .card-b{padding:18px}
+  .tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;font-family:var(--mono);letter-spacing:.3px}
+  .tag-amber{background:var(--amber-bg);color:var(--amber)}
+  .tag-moss{background:var(--moss-bg);color:var(--moss)}
+  .tag-rust{background:var(--rust-bg);color:var(--rust)}
+  .tag-blue{background:var(--blue-bg);color:var(--blue)}
+  .tag-grey{background:#EFEDE6;color:var(--text-2)}
+
+  /* ===== COCKPIT VIEW ===== */
+  .briefing{
+    background:linear-gradient(120deg,var(--ink),var(--ink-2));
+    color:#fff;border-radius:var(--radius);padding:22px 24px;margin-bottom:20px;
+    display:flex;gap:24px;align-items:center;position:relative;overflow:hidden;
+  }
+  .briefing::before{content:"";position:absolute;right:-40px;top:-40px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(184,137,58,.25),transparent 70%)}
+  .briefing .ai-ic{width:42px;height:42px;border-radius:9px;background:linear-gradient(135deg,var(--amber-soft),var(--amber));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--serif);font-weight:600;color:var(--ink);font-size:20px}
+  .briefing .txt{flex:1;position:relative;z-index:1}
+  .briefing .txt .lab{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--amber-soft);text-transform:uppercase;margin-bottom:5px}
+  .briefing .txt p{font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.92);font-weight:300}
+  .briefing .txt p b{color:#fff;font-weight:500}
+  .briefing .acts{display:flex;flex-direction:column;gap:8px;flex-shrink:0;position:relative;z-index:1}
+  .briefing .acts button{font-size:12px;padding:7px 14px;border:1px solid var(--line-d2);border-radius:5px;color:#fff;transition:.18s;white-space:nowrap}
+  .briefing .acts button:hover{background:var(--amber);border-color:var(--amber);color:var(--ink)}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .kpi .lab{font-size:12px;color:var(--text-3);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .kpi .lab .ic{width:14px;height:14px;opacity:.6}
+  .kpi .val{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-.5px;line-height:1}
+  .kpi .val small{font-size:12px;font-family:var(--sans);font-weight:500;margin-left:6px}
+  .kpi .up{color:var(--moss)}
+  .kpi .down{color:var(--rust)}
+  .kpi .meta{font-size:11px;color:var(--text-3);margin-top:8px}
+  .kpi .spark{position:absolute;right:14px;bottom:14px;opacity:.5}
+
+  .cockpit-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:16px}
+  .chart-card .card-b{padding:20px}
+  .chart-legend{display:flex;gap:16px;font-size:11px;color:var(--text-3);margin-bottom:14px}
+  .chart-legend span{display:flex;align-items:center;gap:6px}
+  .chart-legend .d{width:9px;height:9px;border-radius:2px}
+  .chart-area{height:220px;display:flex;align-items:flex-end;gap:4px;position:relative;padding-bottom:22px;border-bottom:1px solid var(--line-2)}
+  .chart-area .bar{flex:1;background:linear-gradient(180deg,var(--amber-soft),rgba(212,168,90,.15));border-radius:2px 2px 0 0;position:relative;transition:.3s;min-height:4px}
+  .chart-area .bar:hover{background:linear-gradient(180deg,var(--amber),rgba(184,137,58,.3))}
+  .chart-area .bar .line2{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,var(--blue),rgba(61,107,158,.15));border-radius:2px 2px 0 0}
+  .chart-area .xl{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;font-size:10px;color:var(--text-3);font-family:var(--mono);padding-top:6px}
+
+  .alert-list{display:flex;flex-direction:column}
+  .alert{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line-2);align-items:flex-start}
+  .alert:last-child{border-bottom:none}
+  .alert .dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0}
+  .alert .dot.r{background:var(--rust);box-shadow:0 0 0 3px var(--rust-bg)}
+  .alert .dot.a{background:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
+  .alert .dot.m{background:var(--moss);box-shadow:0 0 0 3px var(--moss-bg)}
+  .alert .body{flex:1}
+  .alert .body .t{font-size:13px;font-weight:500;margin-bottom:3px}
+  .alert .body .d{font-size:12px;color:var(--text-3);line-height:1.5}
+  .alert .tm{font-size:11px;color:var(--text-3);font-family:var(--mono);flex-shrink:0}
+
+  .cockpit-row2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+  .progress-row{margin-bottom:14px}
+  .progress-row:last-child{margin-bottom:0}
+  .progress-row .hd{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+  .progress-row .hd b{font-weight:500}
+  .progress-row .hd span{color:var(--text-3);font-family:var(--mono)}
+  .bar-track{height:6px;background:var(--line-2);border-radius:3px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:3px;background:var(--amber)}
+  .bar-fill.moss{background:var(--moss)}
+  .bar-fill.blue{background:var(--blue)}
+  .bar-fill.rust{background:var(--rust)}
+
+  .cal-item{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-2);align-items:center}
+  .cal-item:last-child{border-bottom:none}
+  .cal-item .dt{text-align:center;flex-shrink:0;width:38px}
+  .cal-item .dt .d{font-family:var(--serif);font-size:18px;font-weight:500;line-height:1}
+  .cal-item .dt .m{font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;font-family:var(--mono)}
+  .cal-item .info{flex:1;min-width:0}
+  .cal-item .info .t{font-size:13px;font-weight:500;margin-bottom:2px}
+  .cal-item .info .s{font-size:11px;color:var(--text-3)}
+
+  /* ===== AI ASSISTANT VIEW ===== */
+  .ai-wrap{display:grid;grid-template-columns:1fr 280px;gap:16px;height:calc(100vh - 60px - 48px)}
+  .ai-chat{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+  .ai-chat-h{padding:16px 20px;border-bottom:1px solid var(--line-2);display:flex;align-items:center;gap:12px}
+  .ai-chat-h .av{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--amber-soft),var(--amber));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;color:var(--ink)}
+  .ai-chat-h .ti b{font-size:14px;font-weight:600}
+  .ai-chat-h .ti small{display:block;font-size:11px;color:var(--moss)}
+  .ai-chat-h .ti small .d{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--moss);margin-right:5px}
+  .ai-chat-b{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:18px}
+  .msg{display:flex;gap:12px;max-width:78%}
+  .msg .av{width:30px;height:30px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+  .msg.ai .av{background:linear-gradient(135deg,var(--amber-soft),var(--amber));color:var(--ink);font-family:var(--serif)}
+  .msg.me .av{background:linear-gradient(135deg,var(--blue),#5a82b3);color:#fff}
+  .msg .bubble{background:var(--surface-2);border:1px solid var(--line-2);padding:12px 15px;border-radius:4px 12px 12px 12px;font-size:13.5px;line-height:1.65}
+  .msg.me .bubble{background:var(--ink);color:#fff;border-color:var(--ink);border-radius:12px 4px 12px 12px}
+  .msg .bubble b{font-weight:600}
+  .msg .bubble .actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line-2)}
+  .msg.me .bubble .actions{border-top-color:rgba(255,255,255,.15)}
+  .msg .bubble .actions button{font-size:11px;padding:4px 9px;border-radius:4px;background:var(--surface);border:1px solid var(--line);color:var(--text-2);transition:.15s}
+  .msg .bubble .actions button:hover{border-color:var(--amber);color:var(--amber)}
+  .msg.me .bubble .actions button{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff}
+  .ai-sugg{padding:0 24px 14px;display:flex;gap:8px;flex-wrap:wrap}
+  .ai-sugg button{font-size:12px;padding:7px 13px;border-radius:16px;background:var(--surface-2);border:1px solid var(--line);color:var(--text-2);transition:.15s}
+  .ai-sugg button:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-bg)}
+  .ai-input{padding:14px 18px;border-top:1px solid var(--line-2);display:flex;gap:10px;align-items:flex-end;background:var(--surface)}
+  .ai-input textarea{flex:1;border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:13.5px;resize:none;height:42px;max-height:120px;background:var(--surface-2);transition:.2s}
+  .ai-input textarea:focus{outline:none;border-color:var(--amber);background:#fff;box-shadow:0 0 0 3px var(--amber-bg)}
+  .ai-send{width:42px;height:42px;border-radius:6px;background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;transition:.18s;flex-shrink:0}
+  .ai-send:hover{background:#a37a31}
+  .ai-side{display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+  .ai-side .card-b{padding:14px}
+  .ai-side h4{font-size:12px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;font-family:var(--mono)}
+  .ai-side .topic{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2);font-size:12.5px;cursor:pointer;align-items:center}
+  .ai-side .topic:last-child{border-bottom:none}
+  .ai-side .topic:hover{color:var(--amber)}
+  .ai-side .topic .ic{width:18px;color:var(--text-3);flex-shrink:0}
+  .ai-side .topic .n{flex:1}
+  .ai-side .topic .ct{font-size:10px;color:var(--text-3);font-family:var(--mono)}
+
+  /* ===== GENERIC MODULE GRID ===== */
+  .module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .module-grid.two{grid-template-columns:1fr 1fr}
+  .stat-card{padding:18px}
+  .stat-card .lab{font-size:12px;color:var(--text-3);margin-bottom:8px}
+  .stat-card .val{font-family:var(--serif);font-size:24px;font-weight:500;line-height:1}
+  .stat-card .meta{font-size:11px;color:var(--text-3);margin-top:8px;display:flex;align-items:center;gap:5px}
+
+  /* TABLE */
+  .tbl{width:100%;border-collapse:collapse;font-size:13px}
+  .tbl th{text-align:left;font-size:11px;color:var(--text-3);font-weight:500;text-transform:uppercase;letter-spacing:.5px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+  .tbl td{padding:12px 14px;border-bottom:1px solid var(--line-2)}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl tr:hover td{background:var(--surface-2)}
+  .tbl .nm{font-weight:500}
+  .tbl .num{font-family:var(--mono);font-size:12.5px}
+  .tbl .pos{color:var(--moss)}
+  .tbl .neg{color:var(--rust)}
+
+  /* LIST ITEM */
+  .li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-2);align-items:center}
+  .li:last-child{border-bottom:none}
+  .li .ic{width:40px;height:40px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .li .ic.amber{background:var(--amber-bg);color:var(--amber)}
+  .li .ic.moss{background:var(--moss-bg);color:var(--moss)}
+  .li .ic.blue{background:var(--blue-bg);color:var(--blue)}
+  .li .ic.rust{background:var(--rust-bg);color:var(--rust)}
+  .li .info{flex:1;min-width:0}
+  .li .info .t{font-size:13.5px;font-weight:500;margin-bottom:3px}
+  .li .info .d{font-size:12px;color:var(--text-3);line-height:1.5}
+  .li .rt{text-align:right;flex-shrink:0}
+  .li .rt .v{font-family:var(--serif);font-size:16px;font-weight:500}
+  .li .rt .s{font-size:11px;color:var(--text-3);margin-top:2px}
+
+  /* POLICY / LOAN CARD */
+  .pl-card{padding:18px;display:flex;flex-direction:column;gap:10px}
+  .pl-card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .pl-card h4{font-size:15px;font-weight:600;line-height:1.3}
+  .pl-card .src{font-size:11px;color:var(--text-3);margin-top:3px}
+  .pl-card .desc{font-size:12.5px;color:var(--text-2);line-height:1.6}
+  .pl-card .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .pl-card .ft{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--line-2);margin-top:4px}
+  .pl-card .ft .amt{font-family:var(--serif);font-size:18px;font-weight:500}
+  .pl-card .ft .amt small{font-size:11px;color:var(--text-3);font-family:var(--sans);font-weight:400;margin-left:3px}
+  .pl-card .match{font-size:11px;color:var(--moss);font-weight:600;display:flex;align-items:center;gap:4px}
+
+  /* CHAT in module */
+  .mini-ai{background:linear-gradient(120deg,var(--amber-bg),#fdf8eb);border:1px solid #f0e2bf;border-radius:var(--radius);padding:16px;display:flex;gap:12px;align-items:flex-start}
+  .mini-ai .av{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--amber-soft),var(--amber));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;color:var(--ink);flex-shrink:0}
+  .mini-ai .txt{font-size:13px;line-height:1.6;color:var(--text)}
+  .mini-ai .txt b{font-weight:600}
+  .mini-ai .txt .ask{font-size:11px;color:var(--amber);margin-top:6px;cursor:pointer;font-weight:500}
+
+  .seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:3px;gap:2px}
+  .seg button{padding:5px 12px;font-size:12px;border-radius:4px;color:var(--text-2);transition:.15s;font-weight:500}
+  .seg button.on{background:var(--surface);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+
+  .donut{width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--amber) 0 38%,var(--blue) 38% 64%,var(--moss) 64% 84%,var(--rust) 84% 100%);display:flex;align-items:center;justify-content:center;position:relative}
+  .donut::after{content:"";position:absolute;inset:18px;background:var(--surface);border-radius:50%}
+  .donut .ctr{position:relative;z-index:1;text-align:center}
+  .donut .ctr b{font-family:var(--serif);font-size:22px;font-weight:500;display:block;line-height:1}
+  .donut .ctr small{font-size:10px;color:var(--text-3)}
+
+  .legend-list{display:flex;flex-direction:column;gap:10px;flex:1}
+  .legend-list .row{display:flex;align-items:center;gap:9px;font-size:12.5px}
+  .legend-list .row .d{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+  .legend-list .row .n{flex:1;color:var(--text-2)}
+  .legend-list .row .v{font-family:var(--mono);font-weight:500}
+
+  .emp-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-2)}
+  .emp-row:last-child{border-bottom:none}
+  .emp-row .av{width:34px;height:34px;border-radius:50%;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;flex-shrink:0}
+  .emp-row .info{flex:1;min-width:0}
+  .emp-row .info .n{font-size:13px;font-weight:500}
+  .emp-row .info .d{font-size:11px;color:var(--text-3)}
+  .emp-row .st{font-size:11px}
+
+  .crumb{font-size:12px;color:var(--text-3);margin-bottom:6px}
+  .crumb b{color:var(--text);font-weight:500}
+
+  .empty-hint{padding:40px;text-align:center;color:var(--text-3);font-size:13px}
+
+  @media(max-width:1100px){
+    .app{grid-template-columns:72px 1fr}
+    .sb-brand .name,.sb-org .info,.sb-item span:not(.ic),.sb-group,.sb-foot{display:none}
+    .sb-brand{justify-content:center;padding:18px 0}
+    .sb-org{justify-content:center;padding:11px}
+    .sb-item{justify-content:center}
+    .kpi-grid{grid-template-columns:repeat(2,1fr)}
+    .cockpit-grid,.cockpit-row2,.module-grid,.module-grid.two{grid-template-columns:1fr}
+    .ai-wrap{grid-template-columns:1fr}
+    .ai-side{display:none}
+  }
 </style>
 </head>
 <body>
+<div class="app">
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="brand">
-    <span class="mark">睿企<em>·</em>RuiQi</span>
-    <span class="sub">SME OS</span>
-  </a>
-  <div class="nav-links">
-    <a href="#engine">智能引擎</a>
-    <a href="#pillars">财税法</a>
-    <a href="#cockpit">经营全览</a>
-    <a href="#suite">管理套件</a>
-    <a href="#capital">资本与政策</a>
-    <a href="#extend">延伸服务</a>
-  </div>
-  <a href="#final" class="nav-cta">预约演示</a>
-</nav>
-
-<!-- HERO -->
-<header class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grain"></div>
-  <div class="hero-inner">
-    <div class="hero-eyebrow"><span class="dot"></span> AI · 中小企业经营操作系统</div>
-    <h1>
-      <span class="line"><span>让每一家中小企业，</span></span>
-      <span class="line"><span>都拥有一位 <em>AI 经营主理人</em>。</span></span>
-    </h1>
-    <p class="lead">睿企把财务、税务、法务、人事、业务与资本信息汇入同一张决策视图。AI 持续解读数据、预警风险、给出可执行的建议——让经营从凭经验，走向凭判断。</p>
-    <div class="hero-cta">
-      <a href="#final" class="btn-primary">
-        开启 30 天体验
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#engine" class="btn-ghost">了解 AI 决策引擎 →</a>
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">睿</div>
+      <div class="name">睿企 RuiQi<small>SME OPERATING SYSTEM</small></div>
     </div>
-  </div>
-  <div class="hero-meta">
-    <div><b>12,400+</b> 家中小企业在用</div>
-    <div><b>37</b> 个行业模板</div>
-    <div>已接入 <b>26</b> 类政策库</div>
-  </div>
-</header>
-
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-track">
-    <span>财务健康诊断</span><span>税务筹划与申报</span><span>合同智能审查</span><span>用工合规预警</span><span>经营驾驶舱</span><span>融资产品匹配</span><span>政策红利直达</span><span>行业情报速递</span><span>供应链协同</span><span>风险早预警</span>
-    <span>财务健康诊断</span><span>税务筹划与申报</span><span>合同智能审查</span><span>用工合规预警</span><span>经营驾驶舱</span><span>融资产品匹配</span><span>政策红利直达</span><span>行业情报速递</span><span>供应链协同</span><span>风险早预警</span>
-  </div>
-</div>
-
-<!-- AI ENGINE -->
-<section class="sec ai-engine" id="engine">
-  <div class="sec-label reveal"><span class="num">01 /</span> 智能引擎 <span class="bar"></span></div>
-  <h2 class="sec-title reveal">不是工具的堆叠，<br/>而是 <em>会思考</em> 的经营伙伴。</h2>
-  <p class="sec-intro reveal">睿企 AI 引擎以企业经营数据为输入，以可执行建议为输出。它读懂报表、读懂政策、读懂行业，把分散的信息收敛成一句话：现在，你该做什么。</p>
-
-  <div class="ai-grid">
-    <div class="ai-visual reveal">
-      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=a%20close%20up%20photograph%20of%20a%20single%20human%20hand%20placing%20a%20warm%20amber%20chess%20piece%20on%20a%20dark%20marble%20board%2C%20soft%20window%20light%2C%20shallow%20depth%20of%20field%2C%20fine%20art%20still%20life%2C%20muted%20tones&image_size=portrait_4_3" alt="AI 决策" />
-      <div class="caption">RuiQi Engine<b>决策，而非展示</b></div>
+    <div class="sb-org">
+      <div class="av">恒</div>
+      <div class="info"><b>恒源精密制造</b><span>中型 · 制造业</span></div>
+      <span class="chev">⌄</span>
     </div>
-    <div class="ai-points">
-      <div class="ai-point reveal">
-        <div class="idx">A1</div>
-        <div>
-          <h3>多源数据融合</h3>
-          <p>打通财务系统、银行流水、发票、合同、人事、业务订单与外部政策库，构建企业专属的经营知识图谱，AI 在统一语境下理解全局。</p>
-        </div>
+    <nav class="sb-nav" id="nav">
+      <div class="sb-group">经营</div>
+      <button class="sb-item active" data-view="cockpit"><span class="ic">◆</span><span>经营驾驶舱</span></button>
+      <button class="sb-item" data-view="ai"><span class="ic">✦</span><span>AI 经营主理人</span><span class="badge amber">3</span></button>
+      <button class="sb-item" data-view="risk"><span class="ic">⚠</span><span>风险预警</span><span class="badge">2</span></button>
+
+      <div class="sb-group">财税法</div>
+      <button class="sb-item" data-view="finance"><span class="ic">¥</span><span>财务管理</span></button>
+      <button class="sb-item" data-view="tax"><span class="ic">%</span><span>税务管理</span></button>
+      <button class="sb-item" data-view="legal"><span class="ic">§</span><span>法务管理</span></button>
+
+      <div class="sb-group">日常管理</div>
+      <button class="sb-item" data-view="hr"><span class="ic">◉</span><span>人事管理</span></button>
+      <button class="sb-item" data-view="business"><span class="ic">◈</span><span>业务管理</span></button>
+
+      <div class="sb-group">资源与情报</div>
+      <button class="sb-item" data-view="capital"><span class="ic">$</span><span>融资中心</span></button>
+      <button class="sb-item" data-view="policy"><span class="ic">★</span><span>政策中心</span><span class="badge moss">5</span></button>
+      <button class="sb-item" data-view="industry"><span class="ic">📡</span><span>行业情报</span></button>
+
+      <div class="sb-group">延伸服务</div>
+      <button class="sb-item" data-view="extend"><span class="ic">⊞</span><span>更多服务</span></button>
+      <button class="sb-item" data-view="settings"><span class="ic">⚙</span><span>设置</span></button>
+    </nav>
+    <div class="sb-foot"><span class="dot"></span> 数据已同步 · 09:42</div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="tb-search">
+        <span class="ico">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </span>
+        <input placeholder="搜索客户、合同、发票、政策…或问 AI" />
+        <span class="kbd">⌘K</span>
       </div>
-      <div class="ai-point reveal d1">
-        <div class="idx">A2</div>
-        <div>
-          <h3>情景化推理</h3>
-          <p>不是泛泛问答。引擎结合企业所处行业、规模、生命周期阶段，给出"如果……那么……"的可执行推演，并标注依据与置信度。</p>
-        </div>
-      </div>
-      <div class="ai-point reveal d2">
-        <div class="idx">A3</div>
-        <div>
-          <h3>主动预警与建议</h3>
-          <p>现金流吃紧前 14 天预警、税负偏离同业时提示、合同条款存疑时拦截。AI 不等你问，先开口。</p>
-        </div>
-      </div>
-      <div class="ai-point reveal d3">
-        <div class="idx">A4</div>
-        <div>
-          <h3>专家回路校准</h3>
-          <p>注册会计师、税务师、律师组成的专家网络在后台持续校准模型输出，关键决策可一键转人工复核，AI 与专业判断并行。</p>
+      <div class="tb-actions">
+        <button class="tb-btn" title="AI 助手">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </button>
+        <button class="tb-btn" title="通知">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="nd"></span>
+        </button>
+        <button class="tb-btn" title="帮助">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+        </button>
+        <span class="tb-date">2026-06-20 周六</span>
+        <div class="tb-user">
+          <div class="av">林</div>
+          <div class="nm">林晓<small>财务负责人</small></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- PILLARS 财税法 -->
-<section class="sec pillars" id="pillars">
-  <div class="sec-label reveal"><span class="num">02 /</span> 三大支柱 <span class="bar"></span></div>
-  <h2 class="sec-title reveal">财务 · 税务 · 法务，<br/><em>三位一体</em> 的专业咨询。</h2>
-  <p class="sec-intro reveal">中小企业最难获取的，是稳定、即时、可负担的专业服务。睿企把三类专家的判断力封装进 AI，再以人工兜底，让每一次决策都有专业背书。</p>
+    <!-- CONTENT -->
+    <div class="content" id="content">
 
-  <div class="pillar-grid">
-    <div class="pillar reveal">
-      <div class="glyph">财</div>
-      <h3>财务咨询管理</h3>
-      <div class="en">Financial Advisory</div>
-      <p>从记账到分析，从报表到决策。AI 自动生成经营分析报告，识别异常波动，给出优化路径。</p>
-      <ul>
-        <li>智能记账与报表自动生成</li>
-        <li>现金流预测与缺口预警</li>
-        <li>多维度经营分析（毛利/周转/杜邦）</li>
-        <li>预算编制与执行差异追踪</li>
-        <li>应收应付账龄与催收建议</li>
-        <li>财务健康度评分与同业对标</li>
-      </ul>
-    </div>
-    <div class="pillar reveal d1">
-      <div class="glyph">税</div>
-      <h3>税务咨询管理</h3>
-      <div class="en">Tax Advisory</div>
-      <p>政策天天变，税负年年算。睿企实时跟踪税收政策，结合企业实际给出合规且优化的税务方案。</p>
-      <ul>
-        <li>增值税 / 企业所得税智能申报</li>
-        <li>税收优惠与减免自动匹配</li>
-        <li>税务风险评估与自查清单</li>
-        <li>个税代扣代算与年终汇算</li>
-        <li>发票智能查验与归档</li>
-        <li>税务筹划方案与专家复核</li>
-      </ul>
-    </div>
-    <div class="pillar reveal d2">
-      <div class="glyph">法</div>
-      <h3>法务咨询管理</h3>
-      <div class="en">Legal Advisory</div>
-      <p>合同、用工、知识产权、股权。AI 审查风险条款，律师在线兜底，让企业少踩坑、少花钱。</p>
-      <ul>
-        <li>合同智能审查与风险标注</li>
-        <li>标准合同模板库（200+ 场景）</li>
-        <li>用工合规与劳动风险预警</li>
-        <li>商标 / 专利 / 著作权管理</li>
-        <li>股权结构与章程设计建议</li>
-        <li>律师在线咨询与文书代拟</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- COCKPIT 经营全览 -->
-<section class="sec cockpit" id="cockpit">
-  <div class="cockpit-head">
-    <div>
-      <div class="sec-label reveal"><span class="num">03 /</span> 经营驾驶舱 <span class="bar"></span></div>
-      <h2 class="sec-title reveal">一屏，<br/>看懂 <em>整个企业</em>。</h2>
-    </div>
-    <p class="sec-intro reveal">把财务、业务、人事、合规、资本的关键指标收敛到一张驾驶舱。AI 每日生成经营简报，异常自动置顶，决策不再依赖零散表格与会议。</p>
-  </div>
-
-  <div class="cockpit-mock reveal">
-    <div class="mock-bar">
-      <span class="d"></span><span class="d"></span><span class="d"></span>
-      <span class="url">ruiqi.app / cockpit / 今日经营</span>
-    </div>
-    <div class="mock-body">
-      <div class="mock-side">
-        <div class="group">经营</div>
-        <a class="active"><span class="ic">◆</span> 经营驾驶舱</a>
-        <a><span class="ic">◇</span> 经营简报</a>
-        <a><span class="ic">◇</span> 风险预警</a>
-        <div class="group">管理</div>
-        <a><span class="ic">◇</span> 财务</a>
-        <a><span class="ic">◇</span> 税务</a>
-        <a><span class="ic">◇</span> 法务</a>
-        <a><span class="ic">◇</span> 人事</a>
-        <a><span class="ic">◇</span> 业务</a>
-        <div class="group">资源</div>
-        <a><span class="ic">◇</span> 融资</a>
-        <a><span class="ic">◇</span> 政策</a>
-        <a><span class="ic">◇</span> 行业</a>
-      </div>
-      <div class="mock-main">
-        <h4>今日经营 · 6 月 20 日</h4>
-        <div class="sub">AI 简报：现金流健康，建议关注应收账款回款节奏 · 1 项政策红利待领取</div>
-        <div class="kpi-row">
-          <div class="kpi"><div class="lab">本月营收</div><div class="val">¥ 4.82M <small>↑ 12.4%</small></div></div>
-          <div class="kpi"><div class="lab">经营现金流</div><div class="val">¥ 1.16M <small>↑ 8.1%</small></div></div>
-          <div class="kpi"><div class="lab">应收账龄</div><div class="val">47 天 <small class="down">↑ 3 天</small></div></div>
-          <div class="kpi"><div class="lab">健康度评分</div><div class="val">86 <small>良好</small></div></div>
-        </div>
-        <div class="chart-box">
-          <div class="ct"><h5>近 12 周营收趋势</h5><span>单位：万元</span></div>
-          <div class="chart">
-            <div class="b" style="height:42%"></div><div class="b" style="height:55%"></div><div class="b" style="height:48%"></div>
-            <div class="b" style="height:62%"></div><div class="b" style="height:58%"></div><div class="b" style="height:70%"></div>
-            <div class="b" style="height:65%"></div><div class="b" style="height:78%"></div><div class="b" style="height:72%"></div>
-            <div class="b" style="height:85%"></div><div class="b" style="height:80%"></div><div class="b" style="height:96%"></div>
+      <!-- ===== COCKPIT ===== -->
+      <section class="view active" id="view-cockpit">
+        <div class="page-head">
+          <div>
+            <h1>经营驾驶舱</h1>
+            <div class="sub">恒源精密制造 · 截至 2026 年 6 月 20 日 · 数据实时同步</div>
+          </div>
+          <div class="acts">
+            <div class="seg"><button class="on">本月</button><button>本季</button><button>本年</button></div>
+            <button class="btn btn-ghost btn-sm">导出简报</button>
+            <button class="btn btn-primary btn-sm">+ 新建分析</button>
           </div>
         </div>
-        <div class="feed">
-          <div class="row"><span class="tag ai">AI 建议</span> <b>应收账款回款放缓</b>，建议对账龄 &gt;60 天客户启动分级催收</div>
-          <div class="row"><span class="tag ok">政策</span> <b>研发费用加计扣除</b>新规已匹配，预计可节税 ¥ 18.4 万</div>
-          <div class="row"><span class="tag warn">预警</span> <b>3 份合同</b>将于 7 日内到期，需评估续签或重新议价</div>
+
+        <div class="briefing">
+          <div class="ai-ic">✦</div>
+          <div class="txt">
+            <div class="lab">AI 经营主理人 · 今日简报</div>
+            <p>本月营收 <b>¥482 万</b>，同比增长 12.4%，经营现金流健康。但 <b>应收账款账龄延长至 47 天</b>，建议对账龄 &gt;60 天的 3 家客户启动分级催收；另检测到 <b>研发费用加计扣除</b>新规已匹配，预计可节税 ¥18.4 万，建议尽快申报。</p>
+          </div>
+          <div class="acts">
+            <button>查看建议详情</button>
+            <button>一键处理</button>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- MANAGEMENT SUITE -->
-<section class="sec suite" id="suite">
-  <div class="sec-label reveal"><span class="num">04 /</span> 管理套件 <span class="bar"></span></div>
-  <h2 class="sec-title reveal">人事 · 财务 · 业务，<br/><em>日常经营</em> 的全部动作。</h2>
-  <p class="sec-intro reveal">驾驶舱负责"看"，管理套件负责"做"。三大模块覆盖企业每天的高频动作，AI 在每个动作背后提供辅助与校验。</p>
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="lab">本月营收</div>
+            <div class="val">¥482<small class="up">↑ 12.4%</small></div>
+            <div class="meta">较上月 ¥429 万</div>
+          </div>
+          <div class="kpi">
+            <div class="lab">经营现金流</div>
+            <div class="val">¥116<small class="up">↑ 8.1%</small></div>
+            <div class="meta">覆盖 2.3 个月支出</div>
+          </div>
+          <div class="kpi">
+            <div class="lab">应收账龄</div>
+            <div class="val">47<small class="down">↑ 3 天</small></div>
+            <div class="meta">同业均值 38 天</div>
+          </div>
+          <div class="kpi">
+            <div class="lab">健康度评分</div>
+            <div class="val">86<small class="up">良好</small></div>
+            <div class="meta">较上月 +4 分</div>
+          </div>
+        </div>
 
-  <div class="suite-list">
-    <div class="suite-row reveal">
-      <div class="n">M1</div>
-      <h3>人事管理<span class="en">Human Resources</span></h3>
-      <p>花名册、考勤排班、薪酬算发、社保公积金、绩效 OKR、培训发展、入离职全流程。AI 辅助算薪、识别用工风险、推荐人才发展路径。</p>
-      <div class="arrow">→</div>
-    </div>
-    <div class="suite-row reveal">
-      <div class="n">M2</div>
-      <h3>财务管理<span class="en">Finance Operations</span></h3>
-      <p>凭证录入、报销审批、资金计划、银企直联、票据管理、固定资产、成本核算。AI 自动识别票据、生成凭证、追踪异常支出。</p>
-      <div class="arrow">→</div>
-    </div>
-    <div class="suite-row reveal">
-      <div class="n">M3</div>
-      <h3>业务管理<span class="en">Business Operations</span></h3>
-      <p>客户与商机、报价与合同、订单与交付、采购与库存、项目与里程碑。AI 预测成单概率、识别交付风险、推荐最优采购时机。</p>
-      <div class="arrow">→</div>
-    </div>
-  </div>
-</section>
+        <div class="cockpit-grid">
+          <div class="card chart-card">
+            <div class="card-h"><h3>营收与现金流趋势</h3><div class="seg"><button class="on">12 周</button><button>12 月</button></div></div>
+            <div class="card-b">
+              <div class="chart-legend">
+                <span><span class="d" style="background:var(--amber)"></span>营收</span>
+                <span><span class="d" style="background:var(--blue)"></span>经营现金流</span>
+              </div>
+              <div class="chart-area">
+                <div class="bar" style="height:42%"><div class="line2" style="height:55%"></div></div>
+                <div class="bar" style="height:55%"><div class="line2" style="height:48%"></div></div>
+                <div class="bar" style="height:48%"><div class="line2" style="height:62%"></div></div>
+                <div class="bar" style="height:62%"><div class="line2" style="height:58%"></div></div>
+                <div class="bar" style="height:58%"><div class="line2" style="height:70%"></div></div>
+                <div class="bar" style="height:70%"><div class="line2" style="height:65%"></div></div>
+                <div class="bar" style="height:65%"><div class="line2" style="height:78%"></div></div>
+                <div class="bar" style="height:78%"><div class="line2" style="height:72%"></div></div>
+                <div class="bar" style="height:72%"><div class="line2" style="height:85%"></div></div>
+                <div class="bar" style="height:85%"><div class="line2" style="height:80%"></div></div>
+                <div class="bar" style="height:80%"><div class="line2" style="height:92%"></div></div>
+                <div class="bar" style="height:96%"><div class="line2" style="height:88%"></div></div>
+              </div>
+            </div>
+          </div>
 
-<!-- CAPITAL & POLICY -->
-<section class="sec capital" id="capital">
-  <div class="sec-label reveal"><span class="num">05 /</span> 资本与政策 <span class="bar"></span></div>
-  <h2 class="sec-title reveal">把 <em>钱与政策</em>，<br/>送到企业门口。</h2>
-  <p class="sec-intro reveal">中小企业最缺的两样东西：钱，和信息。睿企把金融机构的贷款产品、政府的扶持政策、行业的最新动态，按企业画像精准匹配、及时传达。</p>
+          <div class="card">
+            <div class="card-h"><h3>风险与待办</h3><span class="more">全部 →</span></div>
+            <div class="card-b" style="padding-top:6px;padding-bottom:6px">
+              <div class="alert-list">
+                <div class="alert"><span class="dot r"></span><div class="body"><div class="t">应收账款回款放缓</div><div class="d">3 家客户账龄超 60 天，合计 ¥87 万</div></div><span class="tm">2h</span></div>
+                <div class="alert"><span class="dot a"></span><div class="body"><div class="t">3 份合同即将到期</div><div class="d">7 日内到期，需评估续签或重新议价</div></div><span class="tm">5h</span></div>
+                <div class="alert"><span class="dot m"></span><div class="body"><div class="t">研发加计扣除可申报</div><div class="d">预计节税 ¥18.4 万，截止 6/30</div></div><span class="tm">1d</span></div>
+                <div class="alert"><span class="dot a"></span><div class="body"><div class="t">增值税申报待确认</div><div class="d">6 月所属期，截止 6/15</div></div><span class="tm">1d</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  <div class="cap-grid">
-    <div class="cap-feature reveal">
-      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=an%20architectural%20photograph%20of%20a%20modern%20bank%20building%20facade%20with%20vertical%20bronze%20fins%2C%20warm%20late%20afternoon%20light%2C%20clean%20minimal%20composition%2C%20premium%20financial%20editorial&image_size=portrait_4_3" alt="资本与政策" />
-      <div class="ov">
-        <div class="t">Capital & Policy</div>
-        <h3>融资 · 扶持 · 情报<br/>三流合一</h3>
-      </div>
-    </div>
-    <div class="cap-items">
-      <div class="cap-item reveal">
-        <div class="head"><h4>金融贷款产品</h4><span class="freq">实时更新</span></div>
-        <p>对接银行、担保、保理、融资租赁等多类机构，按企业资质与用款场景智能匹配信用贷、抵押贷、订单贷、税银贷等产品，一键比价与预审。</p>
-      </div>
-      <div class="cap-item reveal d1">
-        <div class="head"><h4>政府扶持政策</h4><span class="freq">每日同步</span></div>
-        <p>覆盖补贴、奖励、税收优惠、资质认定、专项基金等政策库，AI 按企业画像匹配可申报项目，推送申报窗口、材料清单与截止时间。</p>
-      </div>
-      <div class="cap-item reveal d2">
-        <div class="head"><h4>主营行业情报</h4><span class="freq">每周速递</span></div>
-        <p>聚焦企业所处行业的政策风向、价格走势、技术动态、竞品动作与上下游变化，AI 提炼"对你意味着什么"，而非信息堆砌。</p>
-      </div>
-    </div>
-  </div>
-</section>
+        <div class="cockpit-row2">
+          <div class="card">
+            <div class="card-h"><h3>业务结构</h3><span class="more">详情 →</span></div>
+            <div class="card-b" style="display:flex;gap:20px;align-items:center">
+              <div class="donut"><div class="ctr"><b>¥482<small style="font-size:11px">万</small></b><small>本月营收</small></div></div>
+              <div class="legend-list">
+                <div class="row"><span class="d" style="background:var(--amber)"></span><span class="n">精密加工</span><span class="v">38%</span></div>
+                <div class="row"><span class="d" style="background:var(--blue)"></span><span class="n">模具制造</span><span class="v">26%</span></div>
+                <div class="row"><span class="d" style="background:var(--moss)"></span><span class="n">来料加工</span><span class="v">20%</span></div>
+                <div class="row"><span class="d" style="background:var(--rust)"></span><span class="n">其他</span><span class="v">16%</span></div>
+              </div>
+            </div>
+          </div>
 
-<!-- EXTENDED SERVICES -->
-<section class="sec extend" id="extend">
-  <div class="sec-label reveal"><span class="num">06 /</span> 延伸服务 <span class="bar"></span></div>
-  <h2 class="sec-title reveal">不止于管理，<br/>更覆盖 <em>经营的边角</em>。</h2>
-  <p class="sec-intro reveal">中小企业的事，往往不在"管理"二字之内。睿企把经营中那些零散却关键的需求，一并纳入同一套系统，让 AI 的覆盖面与企业的真实复杂度对齐。</p>
+          <div class="card">
+            <div class="card-h"><h3>预算执行</h3><span class="more">详情 →</span></div>
+            <div class="card-b">
+              <div class="progress-row"><div class="hd"><b>营收目标</b><span>482 / 600 万</span></div><div class="bar-track"><div class="bar-fill" style="width:80%"></div></div></div>
+              <div class="progress-row"><div class="hd"><b>成本控制</b><span>318 / 360 万</span></div><div class="bar-track"><div class="bar-fill moss" style="width:88%"></div></div></div>
+              <div class="progress-row"><div class="hd"><b>研发投入</b><span>42 / 60 万</span></div><div class="bar-track"><div class="bar-fill blue" style="width:70%"></div></div></div>
+              <div class="progress-row"><div class="hd"><b>市场费用</b><span>28 / 25 万</span></div><div class="bar-track"><div class="bar-fill rust" style="width:100%"></div></div></div>
+            </div>
+          </div>
 
-  <div class="ext-grid">
-    <div class="ext-cell reveal">
-      <div class="ic">i</div>
-      <h4>智能风控预警</h4>
-      <p>财务、法律、市场、舆情四维风险雷达，异常自动分级推送。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">ii</div>
-      <h4>合规日历</h4>
-      <p>税务申报、年报、资质续期、社保结算等节点统一排程，到期提醒。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">iii</div>
-      <h4>供应链协同</h4>
-      <p>连接供应商与客户，订单、对账、发货、结算在线协同。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">iv</div>
-      <h4>客户关系管理</h4>
-      <p>商机漏斗、客户画像、跟进记录、复购预测，销售全链路留痕。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">v</div>
-      <h4>项目管理</h4>
-      <p>任务分解、里程碑、工时、成本、交付物，项目健康度一目了然。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">vi</div>
-      <h4>文档与电子签章</h4>
-      <p>企业文档中枢，合同/制度/证照分类归档，合规电子签章。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">vii</div>
-      <h4>市场情报与竞品</h4>
-      <p>竞品动态、价格监测、舆情追踪，AI 提炼可执行的市场动作。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">viii</div>
-      <h4>员工培训与发展</h4>
-      <p>岗位学习路径、在线课程、能力测评，人才梯队可视化。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">ix</div>
-      <h4>数据可视化报表</h4>
-      <p>自定义看板与报表，一键导出，股东会/银行/政府多版本输出。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">x</div>
-      <h4>进出口贸易管理</h4>
-      <p>报关、外汇、信用证、退税、原产地，外贸全流程辅助。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">xi</div>
-      <h4>智能合同审查</h4>
-      <p>上传合同即获风险标注、条款比对与修改建议，律师可介入复核。</p>
-    </div>
-    <div class="ext-cell reveal">
-      <div class="ic">xii</div>
-      <h4>企业知识库</h4>
-      <p>制度、SOP、案例、问答沉淀为专属知识库，新员工即问即答。</p>
-    </div>
-  </div>
-</section>
+          <div class="card">
+            <div class="card-h"><h3>合规日历</h3><span class="more">全部 →</span></div>
+            <div class="card-b" style="padding-top:6px;padding-bottom:6px">
+              <div class="cal-item"><div class="dt"><div class="d">15</div><div class="m">JUN</div></div><div class="info"><div class="t">增值税申报</div><div class="s">6 月所属期 · 截止</div></div></div>
+              <div class="cal-item"><div class="dt"><div class="d">30</div><div class="m">JUN</div></div><div class="info"><div class="t">研发加计扣除申报</div><div class="s">预计节税 ¥18.4 万</div></div></div>
+              <div class="cal-item"><div class="dt"><div class="d">07</div><div class="m">JUL</div></div><div class="info"><div class="t">社保公积金结算</div><div class="s">Q2 结算</div></div></div>
+              <div class="cal-item"><div class="dt"><div class="d">15</div><div class="m">JUL</div></div><div class="info"><div class="t">企业所得税预缴</div><div class="s">Q2 预缴</div></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- SCENARIOS -->
-<section class="sec scenarios">
-  <div class="sec-label reveal"><span class="num">07 /</span> 适用场景 <span class="bar"></span></div>
-  <h2 class="sec-title reveal">无论你处在 <em>哪个阶段</em>，<br/>睿企都在。</h2>
+      <!-- ===== AI ASSISTANT ===== -->
+      <section class="view" id="view-ai">
+        <div class="page-head">
+          <div><h1>AI 经营主理人</h1><div class="sub">基于企业全量数据的智能决策助手 · 随时追问</div></div>
+        </div>
+        <div class="ai-wrap">
+          <div class="ai-chat">
+            <div class="ai-chat-h">
+              <div class="av">✦</div>
+              <div class="ti"><b>睿企 AI · 经营主理人</b><small><span class="d"></span>在线 · 已加载企业全量数据</small></div>
+            </div>
+            <div class="ai-chat-b" id="chatBody">
+              <div class="msg ai"><div class="av">✦</div><div class="bubble">你好，林晓。我已读取恒源精密制造截至 6 月 20 日的经营数据。今天有 <b>4 项需要你关注的事项</b>，需要我先做今日简报，还是你直接提问？</div></div>
+              <div class="msg me"><div class="av">林</div><div class="bubble">这个月现金流怎么样？下个月会不会有缺口？</div></div>
+              <div class="msg ai"><div class="av">✦</div><div class="bubble">本月经营现金流 <b>¥116 万</b>，较上月增长 8.1%，当前可覆盖 2.3 个月支出，整体健康。<br/><br/>但下个月存在 <b>¥43 万的潜在缺口</b>，主要原因：<br/>① 7 月需预缴企业所得税约 ¥28 万；<br/>② 3 家客户应收账款账龄超 60 天，合计 ¥87 万，按历史回款率预计 7 月仅能收回约 40%。<br/><br/>建议：对这 3 家客户立即启动分级催收，并申请 <b>税银贷</b>作为短期周转（已为你匹配 2 款产品，利率 4.35% 起）。<div class="actions"><button>查看催收方案</button><button>查看贷款产品</button><button>生成现金流预测</button></div></div></div>
+            </div>
+            <div class="ai-sugg">
+              <button>本月有哪些政策可以申报？</button>
+              <button>分析下成本结构</button>
+              <button>3 家逾期客户分别是谁</button>
+              <button>帮我做下半年预算</button>
+            </div>
+            <div class="ai-input">
+              <textarea placeholder="向 AI 经营主理人提问…（可输入 / 唤起快捷指令）"></textarea>
+              <button class="ai-send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
+          </div>
+          <div class="ai-side">
+            <div class="card"><div class="card-b">
+              <h4>快捷场景</h4>
+              <div class="topic"><span class="ic">📊</span><span class="n">经营健康诊断</span><span class="ct">2 min</span></div>
+              <div class="topic"><span class="ic">💰</span><span class="n">税务筹划方案</span><span class="ct">3 min</span></div>
+              <div class="topic"><span class="ic">📋</span><span class="n">合同风险审查</span><span class="ct">1 min</span></div>
+              <div class="topic"><span class="ic">🔮</span><span class="n">现金流预测</span><span class="ct">2 min</span></div>
+              <div class="topic"><span class="ic">🎯</span><span class="n">下半年预算编制</span><span class="ct">5 min</span></div>
+            </div></div>
+            <div class="card"><div class="card-b">
+              <h4>历史对话</h4>
+              <div class="topic"><span class="n">5 月成本异常分析</span></div>
+              <div class="topic"><span class="n">高新企业认定条件</span></div>
+              <div class="topic"><span class="n">供应商议价策略</span></div>
+              <div class="topic"><span class="n">员工股权激励方案</span></div>
+            </div></div>
+          </div>
+        </div>
+      </section>
 
-  <div class="scen-grid">
-    <div class="scen reveal">
-      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=a%20bright%20minimal%20startup%20office%20with%20a%20small%20team%20working%20at%20a%20long%20wooden%20table%2C%20natural%20light%2C%20plants%2C%20warm%20documentary%20photography&image_size=portrait_4_3" alt="初创企业" />
-      <div class="ov">
-        <div class="t">Stage 01</div>
-        <h3>初创与早期</h3>
-        <p>合规起步、股权设计、融资对接、政策申报，把根基搭对。</p>
-      </div>
-    </div>
-    <div class="scen reveal d1">
-      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=a%20medium%20sized%20manufacturing%20workshop%20with%20workers%20and%20machinery%2C%20clean%20industrial%20photography%2C%20warm%20tones%2C%20documentary%20style&image_size=portrait_4_3" alt="成长型企业" />
-      <div class="ov">
-        <div class="t">Stage 02</div>
-        <h3>成长与扩张</h3>
-        <p>规模化用工、多业务线管理、现金流管控、供应链协同。</p>
-      </div>
-    </div>
-    <div class="scen reveal d2">
-      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=an%20elegant%20meeting%20room%20with%20executives%20reviewing%20financial%20charts%20on%20a%20large%20screen%2C%20warm%20amber%20lighting%2C%20premium%20corporate%20photography&image_size=portrait_4_3" alt="成熟型企业" />
-      <div class="ov">
-        <div class="t">Stage 03</div>
-        <h3>成熟与转型</h3>
-        <p>集团化财务、税务筹划、数字化转型、资本运作与并购。</p>
-      </div>
-    </div>
-  </div>
-</section>
+      <!-- ===== FINANCE ===== -->
+      <section class="view" id="view-finance">
+        <div class="page-head">
+          <div><h1>财务管理</h1><div class="sub">记账 · 报表 · 资金 · 票据 · 成本 · AI 辅助分析</div></div>
+          <div class="acts"><button class="btn btn-ghost btn-sm">导入票据</button><button class="btn btn-primary btn-sm">+ 新增凭证</button></div>
+        </div>
+        <div class="mini-ai" style="margin-bottom:16px">
+          <div class="av">✦</div>
+          <div class="txt">AI 财务分析：本月毛利率 <b>34.1%</b>，较上月提升 1.8 个百分点，主要因精密加工业务占比提升。但市场费用超预算 12%，建议复核市场投放 ROI。<span class="ask">→ 让 AI 深入分析</span></div>
+        </div>
+        <div class="kpi-grid" style="margin-bottom:16px">
+          <div class="kpi"><div class="lab">总资产</div><div class="val">¥3,840<small>万</small></div><div class="meta">较年初 +6.2%</div></div>
+          <div class="kpi"><div class="lab">本月净利润</div><div class="val">¥68<small class="up">↑ 15%</small></div><div class="meta">净利率 14.1%</div></div>
+          <div class="kpi"><div class="lab">毛利率</div><div class="val">34.1<small class="up">↑ 1.8%</small></div><div class="meta">同业均值 29%</div></div>
+          <div class="kpi"><div class="lab">资产负债率</div><div class="val">42<small>%</small></div><div class="meta">健康区间</div></div>
+        </div>
+        <div class="cockpit-grid">
+          <div class="card"><div class="card-h"><h3>收支明细</h3><span class="more">导出 →</span></div><div style="overflow-x:auto"><table class="tbl">
+            <thead><tr><th>日期</th><th>摘要</th><th>分类</th><th style="text-align:right">金额</th></tr></thead>
+            <tbody>
+              <tr><td class="num">06-18</td><td class="nm">精密加工款-华联科技</td><td><span class="tag tag-moss">收入</span></td><td class="num pos" style="text-align:right">+¥86,000</td></tr>
+              <tr><td class="num">06-17</td><td class="nm">原材料采购-宝钢</td><td><span class="tag tag-rust">支出</span></td><td class="num neg" style="text-align:right">-¥124,500</td></tr>
+              <tr><td class="num">06-16</td><td class="nm">模具销售-东风零部件</td><td><span class="tag tag-moss">收入</span></td><td class="num pos" style="text-align:right">+¥152,000</td></tr>
+              <tr><td class="num">06-15</td><td class="nm">6 月工资发放</td><td><span class="tag tag-rust">支出</span></td><td class="num neg" style="text-align:right">-¥318,000</td></tr>
+              <tr><td class="num">06-14</td><td class="nm">设备维护费</td><td><span class="tag tag-rust">支出</span></td><td class="num neg" style="text-align:right">-¥18,400</td></tr>
+            </tbody>
+          </table></div></div>
+          <div class="card"><div class="card-h"><h3>应收应付</h3></div><div class="card-b">
+            <div class="progress-row"><div class="hd"><b>应收账款</b><span>¥284 万</span></div><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div></div>
+            <div class="progress-row"><div class="hd"><b>应付账款</b><span>¥196 万</span></div><div class="bar-track"><div class="bar-fill rust" style="width:55%"></div></div></div>
+            <div class="progress-row"><div class="hd"><b>账龄 &lt;30 天</b><span>62%</span></div><div class="bar-track"><div class="bar-fill moss" style="width:62%"></div></div></div>
+            <div class="progress-row"><div class="hd"><b>账龄 30-60 天</b><span>24%</span></div><div class="bar-track"><div class="bar-fill blue" style="width:24%"></div></div></div>
+            <div class="progress-row"><div class="hd"><b>账龄 &gt;60 天</b><span>14%</span></div><div class="bar-track"><div class="bar-fill rust" style="width:14%"></div></div></div>
+          </div></div>
+        </div>
+      </section>
 
-<!-- FINAL CTA -->
-<section class="final" id="final">
-  <div class="final-bg"></div>
-  <div class="final-inner">
-    <h2 class="reveal">把经营的复杂，<br/>交给 <em>睿企</em>。</h2>
-    <p class="reveal d1">30 天免费体验，无需更换现有财务系统。我们的顾问会陪你完成首次数据接入，让 AI 在第一周就开口说话。</p>
-    <div class="final-cta reveal d2">
-      <a href="#" class="btn-primary">
-        预约 1 对 1 演示
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#" class="btn-ghost">下载产品白皮书 →</a>
-    </div>
-  </div>
-</section>
+      <!-- ===== TAX ===== -->
+      <section class="view" id="view-tax">
+        <div class="page-head">
+          <div><h1>税务管理</h1><div class="sub">申报 · 筹划 · 风险 · 优惠匹配 · 发票</div></div>
+          <div class="acts"><button class="btn btn-ghost btn-sm">发票查验</button><button class="btn btn-primary btn-sm">一键申报</button></div>
+        </div>
+        <div class="mini-ai" style="margin-bottom:16px">
+          <div class="av">✦</div>
+          <div class="txt">AI 税务建议：检测到 <b>研发费用加计扣除</b>新规适用，预计可节税 <b>¥18.4 万</b>。另发现 2 张进项发票存在异常，建议核实。<span class="ask">→ 查看筹划方案</span></div>
+        </div>
+        <div class="kpi-grid" style="margin-bottom:16px">
+          <div class="kpi"><div class="lab">本年已缴税额</div><div class="val">¥142<small>万</small></div><div class="meta">综合税负 4.2%</div></div>
+          <div class="kpi"><div class="lab">预计可节税</div><div class="val">¥18.4<small class="up">万</small></div><div class="meta">研发加计扣除</div></div>
+          <div class="kpi"><div class="lab">待申报事项</div><div class="val">3<small>项</small></div><div class="meta">最近 6/15</div></div>
+          <div class="kpi"><div class="lab">税务风险评分</div><div class="val">12<small class="up">低</small></div><div class="meta">满分 100</div></div>
+        </div>
+        <div class="module-grid two">
+          <div class="card"><div class="card-h"><h3>本期申报</h3></div><div class="card-b" style="padding-top:6px;padding-bottom:6px">
+            <div class="li"><div class="ic rust">%</div><div class="info"><div class="t">增值税申报</div><div class="d">6 月所属期 · 截止 6/15</div></div><div class="rt"><span class="tag tag-rust">待申报</span></div></div>
+            <div class="li"><div class="ic amber">¥</div><div class="info"><div class="t">企业所得税预缴</div><div class="d">Q2 预缴 · 截止 7/15</div></div><div class="rt"><span class="tag tag-amber">准备中</span></div></div>
+            <div class="li"><div class="ic blue">i</div><div class="info"><div class="t">个税代扣代缴</div><div class="d">6 月 · 截止 7/7</div></div><div class="rt"><span class="tag tag-blue">自动算</span></div></div>
+          </div></div>
+          <div class="card"><div class="card-h"><h3>税收优惠匹配</h3></div><div class="card-b" style="padding-top:6px;padding-bottom:6px">
+            <div class="li"><div class="ic moss">★</div><div class="info"><div class="t">研发费用加计扣除</div><div class="d">制造业 100% 加计 · 预计节税 ¥18.4 万</div></div><div class="rt"><span class="tag tag-moss">可申报</span></div></div>
+            <div class="li"><div class="ic moss">★</div><div class="info"><div class="t">高新技术企业优惠</div><div class="d">15% 所得税率 · 已认定</div></div><div class="rt"><span class="tag tag-moss">已享受</span></div></div>
+            <div class="li"><div class="ic amber">★</div><div class="info"><div class="t">制造业缓缴</div><div class="d">可申请 Q3 税款缓缴</div></div><div class="rt"><span class="tag tag-amber">待评估</span></div></div>
+          </div></div>
+        </div>
+      </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="foot-grid">
-    <div class="foot-brand">
-      <div class="mark">睿企<em>·</em>RuiQi</div>
-      <p>AI 驱动的中小企业经营操作系统。让每一家中小企业，都拥有一位随时在线的经营主理人。</p>
+      <!-- ===== LEGAL ===== -->
+      <section class="view" id="view-legal">
+        <div class="page-head">
+          <div><h1>法务管理</h1><div class="sub">合同 · 用工 · 知识产权 · 股权 · 律师在线</div></div>
+          <div class="acts"><button class="btn btn-ghost btn-sm">合同模板库</button><button class="btn btn-primary btn-sm">+ 上传审查</button></div>
+        </div>
+        <div class="mini-ai" style="margin-bottom:16px">
+          <div class="av">✦</div>
+          <div class="txt">AI 合同审查：已审查本月 <b>12 份合同</b>，发现 <b>3 份存在风险条款</b>（违约金过高、付款节点不利、知识产权归属不明），已标注修改建议。<span class="ask">→ 查看风险详情</span></div>
+        </div>
+        <div class="kpi-grid" style="margin-bottom:16px">
+          <div class="kpi"><div class="lab">在管合同</div><div class="val">86<small>份</small></div><div class="meta">本月新增 12</div></div>
+          <div class="kpi"><div class="lab">即将到期</div><div class="val">3<small>份</small></div><div class="meta">7 日内</div></div>
+          <div class="kpi"><div class="lab">知识产权</div><div class="val">14<small>项</small></div><div class="meta">专利 8 / 商标 6</div></div>
+          <div class="kpi"><div class="lab">用工风险</div><div class="val">低<small class="up"></small></div><div class="meta">0 项待处理</div></div>
+        </div>
+        <div class="module-grid two">
+          <div class="card"><div class="card-h"><h3>合同审查</h3><span class="more">全部 →</span></div><div style="overflow-x:auto"><table class="tbl">
+            <thead><tr><th>合同名称</th><th>对方</th><th>风险</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td class="nm">精密加工协议</td><td>华联科技</td><td><span class="tag tag-rust">高</span></td><td>待修改</td></tr>
+              <tr><td class="nm">模具采购合同</td><td>东风零部件</td><td><span class="tag tag-amber">中</span></td><td>已修改</td></tr>
+              <tr><td class="nm">厂房租赁合同</td><td>恒基地产</td><td><span class="tag tag-moss">低</span></td><td>已签署</td></tr>
+              <tr><td class="nm">技术服务协议</td><td>智云数据</td><td><span class="tag tag-moss">低</span></td><td>已签署</td></tr>
+            </tbody>
+          </table></div></div>
+          <div class="card"><div class="card-h"><h3>法律咨询</h3></div><div class="card-b" style="padding-top:6px;padding-bottom:6px">
+            <div class="li"><div class="ic blue">§</div><div class="info"><div class="t">劳动合同解除补偿</div><div class="d">律师 30 分钟内回复</div></div><div class="rt"><span class="tag tag-blue">咨询中</span></div></div>
+            <div class="li"><div class="ic amber">§</div><div class="info"><div class="t">商标续展办理</div><div class="d">2 项商标 9 月到期</div></div><div class="rt"><span class="tag tag-amber">待办理</span></div></div>
+            <div class="li"><div class="ic moss">§</div><div class="info"><div class="t">股权激励方案</div><div class="d">已生成草案 v2</div></div><div class="rt"><span class="tag tag-moss">已完成</span></div></div>
+          </div></div>
+        </div>
+      </section>
+
+      <!-- ===== HR ===== -->
+      <section class="view" id="view-hr">
+        <div class="page-head">
+          <div><h1>人事管理</h1><div class="sub">花名册 · 考勤 · 薪酬 · 社保 · 绩效 · 培训</div></div>
+          <div class="acts"><button class="btn btn-ghost btn-sm">算薪</button><button class="btn btn-primary btn-sm">+ 员工入职</button></div>
+        </div>
+        <div class="kpi-grid" style="margin-bottom:16px">
+          <div class="kpi"><div class="lab">在册员工</div><div class="val">128<small>人</small></div><div class="meta">本月入职 3 / 离职 1</div></div>
+          <div class="kpi"><div class="lab">本月薪酬</div><div class="val">¥31.8<small>万</small></div><div class="meta">含社保公积金</div></div>
+          <div class="kpi"><div class="lab">出勤率</div><div class="val">97.2<small>%</small></div><div class="meta">较上月 +1.1%</div></div>
+          <div class="kpi"><div class="lab">人均效能</div><div class="val">¥3.77<small>万</small></div><div class="meta">人均创收</div></div>
+        </div>
+        <div class="module-grid two">
+          <div class="card"><div class="card-h"><h3>员工花名册</h3><span class="more">全部 →</span></div><div class="card-b" style="padding-top:6px;padding-bottom:6px">
+            <div class="emp-row"><div class="av">张</div><div class="info"><div class="n">张伟</div><div class="d">生产部 · 车间主任 · 入职 5 年</div></div><div class="st"><span class="tag tag-moss">在岗</span></div></div>
+            <div class="emp-row"><div class="av">李</div><div class="info"><div class="n">李娜</div><div class="d">财务部 · 会计主管 · 入职 3 年</div></div><div class="st"><span class="tag tag-moss">在岗</span></div></div>
+            <div class="emp-row"><div class="av">王</div><div class="info"><div class="n">王强</div><div class="d">技术部 · 工程师 · 入职 2 年</div></div><div class="st"><span class="tag tag-amber">休假</span></div></div>
+            <div class="emp-row"><div class="av">赵</div><div class="info"><div class="n">赵敏</div><div class="d">销售部 · 经理 · 入职 4 年</div></div><div class="st"><span class="tag tag-moss">在岗</span></div></div>
+          </div></div>
+          <div class="card"><div class="card-h"><h3>本月待办</h3></div><div class="card-b" style="padding-top:6px;padding-bottom:6px">
+            <div class="li"><div class="ic amber">¥</div><div class="info"><div class="t">6 月薪酬核算</div><div class="d">AI 辅助算薪 · 预计 6/28 完成</div></div><div class="rt"><span class="tag tag-amber">进行中</span></div></div>
+            <div class="li"><div class="ic blue">i</div><div class="info"><div class="t">社保基数调整</div><div class="d">7 月执行新基数</div></div><div class="rt"><span class="tag tag-blue">待处理</span></div></div>
+            <div class="li"><div class="ic moss">◉</div><div class="info"><div class="t">Q2 绩效评估</div><div class="d">128 人 · 截止 7/10</div></div><div class="rt"><span class="tag tag-moss">已启动</span></div></div>
+            <div class="li"><div class="ic rust">⚠</div><div class="info"><div class="t">3 份劳动合同续签</div><div class="d">7 月到期</div></div><div class="rt"><span class="tag tag-rust">紧急</span></div></div>
+          </div></div>
+        </div>
+      </section>
+
+      <!-- ===== BUSINESS ===== -->
+      <section class="view" id="view-business">
+        <div class="page-head">
+          <div><h1>业务管理</h1><div class="sub">客户 · 商机 · 订单 · 采购 · 库存 · 项目</div></div>
+          <div class="acts"><button class="btn btn-ghost btn-sm">采购单</button><button class="btn btn-primary btn-sm">+ 新建商机</button></div>
+        </div>
+        <div class="kpi-grid" style="margin-bottom:16px">
+          <div class="kpi"><div class="lab">本月订单</div><div class="val">42<small>单</small></div><div class="meta">↑ 8 单</div></div>
+          <div class="kpi"><div class="lab">在跟商机</div><div class="val">18<small>个</small></div><div class="meta">预计金额 ¥620 万</div></div>
+          <div class="kpi"><div class="lab">库存周转</div><div class="val">6.2<small>次</small></div><div class="meta">较上季 +0.4</div></div>
+          <div class="kpi"><div class="lab">客户复购率</div><div class="val">68<small>%</small></div><div class="meta">行业领先</div></div>
+        </div>
+        <div class="module-grid two">
+          <div class="card"><div class="card-h"><h3>销售漏斗</h3></div><div class="card-b">
+            <div class="progress-row"><div class="hd"><b>线索</b><span>86</span></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+            <div class="progress-row"><div class="hd"><b>初步接触</b><span>42</span></div><div class="bar-track"><div class="bar-fill" style="width:49%"></div></div></div>
+            <div class="progress-row"><div class="hd"><b>方案报价</b><span>24</span></div><div class="bar-track"><div class="bar-fill" style="width:28%"></div></div></div>
+            <div class="progress-row"><div class="hd"><b>商务谈判</b><span>12</span></div><div class="bar-track"><div class="bar-fill" style="width:14%"></div></div></div>
+            <div class="progress-row"><div class="hd"><b>成交</b><span>7</span></div><div class="bar-track"><div class="bar-fill moss" style="width:8%"></div></div></div>
+          </div></div>
+          <div class="card"><div class="card-h"><h3>重点商机</h3><span class="more">全部 →</span></div><div class="card-b" style="padding-top:6px;padding-bottom:6px">
+            <div class="li"><div class="ic moss">◈</div><div class="info"><div class="t">华联科技 · 精密加工年度框架</div><div class="d">预计 ¥180 万 · 成单概率 75%</div></div><div class="rt"><span class="tag tag-moss">谈判中</span></div></div>
+            <div class="li"><div class="ic amber">◈</div><div class="info"><div class="t">东风零部件 · 模具开发</div><div class="d">预计 ¥95 万 · 成单概率 60%</div></div><div class="rt"><span class="tag tag-amber">报价中</span></div></div>
+            <div class="li"><div class="ic blue">◈</div><div class="info"><div class="t">中车集团 · 来料加工</div><div class="d">预计 ¥220 万 · 成单概率 40%</div></div><div class="rt"><span class="tag tag-blue">接触中</span></div></div>
+          </div></div>
+        </div>
+      </section>
+
+      <!-- ===== CAPITAL ===== -->
+      <section class="view" id="view-capital">
+        <div class="page-head">
+          <div><h1>融资中心</h1><div class="sub">AI 按企业资质匹配贷款产品 · 一键比价预审</div></div>
+          <div class="acts"><button class="btn btn-ghost btn-sm">我的申请</button><button class="btn btn-primary btn-sm">融资诊断</button></div>
+        </div>
+        <div class="mini-ai" style="margin-bottom:16px">
+          <div class="av">✦</div>
+          <div class="txt">AI 融资建议：基于企业信用与经营数据，已匹配 <b>6 款可申请产品</b>，综合授信额度约 <b>¥800 万</b>。其中税银贷利率最低（4.35%），适合短期周转。<span class="ask">→ 查看匹配详情</span></div>
+        </div>
+        <div class="module-grid">
+          <div class="card pl-card">
+            <div class="top"><div><h4>税银贷 · 制造业专享</h4><div class="src">建设银行 · 信用贷</div></div><span class="tag tag-moss">推荐</span></div>
+            <div class="desc">依据纳税信用等级授信，无需抵押，随借随还，按日计息。</div>
+            <div class="meta"><span class="tag tag-grey">额度 ¥300 万</span><span class="tag tag-grey">利率 4.35%</span><span class="tag tag-grey">期限 1 年</span></div>
+            <div class="ft"><div class="amt">¥300<small>万</small></div><div class="match">✓ 匹配度 96%</div></div>
+          </div>
+          <div class="card pl-card">
+            <div class="top"><div><h4>订单贷</h4><div class="src">工商银行 · 供应链金融</div></div><span class="tag tag-amber">热门</span></div>
+            <div class="desc">以优质订单为依据放款，覆盖订单执行期资金需求。</div>
+            <div class="meta"><span class="tag tag-grey">额度 ¥200 万</span><span class="tag tag-grey">利率 5.2%</span><span class="tag tag-grey">期限 6 月</span></div>
+            <div class="ft"><div class="amt">¥200<small>万</small></div><div class="match">✓ 匹配度 88%</div></div>
+          </div>
+          <div class="card pl-card">
+            <div class="top"><div><h4>设备抵押贷</h4><div class="src">招商银行 · 抵押贷</div></div><span class="tag tag-blue">额度高</span></div>
+            <div class="desc">以生产设备抵押，额度高、期限长，适合设备升级扩产。</div>
+            <div class="meta"><span class="tag tag-grey">额度 ¥500 万</span><span class="tag tag-grey">利率 5.8%</span><span class="tag tag-grey">期限 3 年</span></div>
+            <div class="ft"><div class="amt">¥500<small>万</small></div><div class="match">✓ 匹配度 82%</div></div>
+          </div>
+          <div class="card pl-card">
+            <div class="top"><div><h4>高新企业信用贷</h4><div class="src">浦发银行 · 信用贷</div></div><span class="tag tag-moss">推荐</span></div>
+            <div class="desc">高新技术企业专属信用贷款，凭资质认定即可申请。</div>
+            <div class="meta"><span class="tag tag-grey">额度 ¥250 万</span><span class="tag tag-grey">利率 4.85%</span><span class="tag tag-grey">期限 2 年</span></div>
+            <div class="ft"><div class="amt">¥250<small>万</small></div><div class="match">✓ 匹配度 90%</div></div>
+          </div>
+          <div class="card pl-card">
+            <div class="top"><div><h4>融资租赁</h4><div class="src">远东租赁 · 设备融资</div></div><span class="tag tag-grey">灵活</span></div>
+            <div class="desc">售后回租或直接租赁，盘活存量设备资产。</div>
+            <div class="meta"><span class="tag tag-grey">额度 ¥400 万</span><span class="tag tag-grey">利率 6.5%</span><span class="tag tag-grey">期限 3 年</span></div>
+            <div class="ft"><div class="amt">¥400<small>万</small></div><div class="match">✓ 匹配度 75%</div></div>
+          </div>
+          <div class="card pl-card">
+            <div class="top"><div><h4>政府担保贷</h4><div class="src">市融资担保公司 · 政策性</div></div><span class="tag tag-amber">政策</span></div>
+            <div class="desc">政府性融资担保，费率低，重点支持制造业中小企业。</div>
+            <div class="meta"><span class="tag tag-grey">额度 ¥300 万</span><span class="tag tag-grey">利率 4.5%</span><span class="tag tag-grey">期限 2 年</span></div>
+            <div class="ft"><div class="amt">¥300<small>万</small></div><div class="match">✓ 匹配度 92%</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== POLICY ===== -->
+      <section class="view" id="view-policy">
+        <div class="page-head">
+          <div><h1>政策中心</h1><div class="sub">补贴 · 奖励 · 税收优惠 · 资质认定 · 专项基金</div></div>
+          <div class="acts"><button class="btn btn-ghost btn-sm">申报记录</button><button class="btn btn-primary btn-sm">政策订阅</button></div>
+        </div>
+        <div class="mini-ai" style="margin-bottom:16px">
+          <div class="av">✦</div>
+          <div class="txt">AI 政策匹配：检测到 <b>5 项政策</b>当前可申报，预计可获补贴/节税合计 <b>¥46.8 万</b>。其中"专精特新"认定申报窗口将于 7 月开启，建议提前准备材料。<span class="ask">→ 生成申报清单</span></div>
+        </div>
+        <div class="module-grid">
+          <div class="card pl-card">
+            <div class="top"><div><h4>研发费用加计扣除</h4><div class="src">财政部 · 税收优惠</div></div><span class="tag tag-moss">可申报</span></div>
+            <div class="desc">制造业企业研发费用 100% 加计扣除，降低应纳税所得额。</div>
+            <div class="meta"><span class="tag tag-grey">节税 ¥18.4 万</span><span class="tag tag-grey">截止 6/30</span></div>
+            <div class="ft"><div class="amt">¥18.4<small>万节税</small></div><div class="match">✓ 匹配度 98%</div></div>
+          </div>
+          <div class="card pl-card">
+            <div class="top"><div><h4>专精特新中小企业认定</h4><div class="src">工信部 · 资质认定</div></div><span class="tag tag-amber">7 月开启</span></div>
+            <div class="desc">获认定后可享一次性奖励及多项政策倾斜，提升企业资质。</div>
+            <div class="meta"><span class="tag tag-grey">奖励 ¥30 万</span><span class="tag tag-grey">7 月申报</span></div>
+            <div class="ft"><div class="amt">¥30<small>万奖励</small></div><div class="match">✓ 匹配度 85%</div></div>
+          </div>
+          <div class="card pl-card">
+            <div class="top"><div><h4>制造业技术改造补贴</h4><div class="src">市工信局 · 专项补贴</div></div><span class="tag tag-moss">可申报</span></div>
+            <div class="desc">设备投资额 10% 补贴，最高 ¥100 万，支持产线升级。</div>
+            <div class="meta"><span class="tag tag-grey">补贴 ¥50 万</span><span class="tag tag-grey">截止 8/15</span></div>
+            <div class="ft"><div class="amt">¥50<small>万补贴</small></div><div class="match">✓ 匹配度 80%</div></div>
+          </div>
+          <div class="card pl-card">
+            <div class="top"><div><h4>稳岗补贴</h4><div class="src">市人社局 · 补贴</div></div><span class="tag tag-moss">可申报</span></div>
+            <div class="desc">上年度未裁员或裁员率低于标准，可返还失业保险费。</div>
+            <div class="meta"><span class="tag tag-grey">补贴 ¥8.4 万</span><span class="tag tag-grey">截止 9/30</span></div>
+            <div class="ft"><div class="amt">¥8.4<small>万补贴</small></div><div class="match">✓ 匹配度 95%</div></div>
+          </div>
+          <div class="card pl-card">
+            <div class="top"><div><h4>数字化转型试点</h4><div class="src">省发改委 · 专项基金</div></div><span class="tag tag-blue">评估中</span></div>
+            <div class="desc">入选试点企业可获数字化改造资金支持与服务包。</div>
+            <div class="meta"><span class="tag tag-grey">资助 ¥40 万</span><span class="tag tag-grey">10 月申报</span></div>
+            <div class="ft"><div class="amt">¥40<small>万资助</small></div><div class="match">○ 匹配度 70%</div></div>
+          </div>
+          <div class="card pl-card">
+            <div class="top"><div><h4>知识产权贯标奖励</h4><div class="src">市知识产权局 · 奖励</div></div><span class="tag tag-grey">待启动</span></div>
+            <div class="desc">通过知识产权管理体系认证，给予一次性奖励。</div>
+            <div class="meta"><span class="tag tag-grey">奖励 ¥5 万</span><span class="tag tag-grey">常年申报</span></div>
+            <div class="ft"><div class="amt">¥5<small>万奖励</small></div><div class="match">○ 匹配度 65%</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== INDUSTRY ===== -->
+      <section class="view" id="view-industry">
+        <div class="page-head">
+          <div><h1>行业情报</h1><div class="sub">精密制造行业 · 政策风向 · 价格走势 · 竞品动态</div></div>
+          <div class="acts"><div class="seg"><button class="on">本周</button><button>本月</button></div></div>
+        </div>
+        <div class="module-grid two">
+          <div class="card"><div class="card-h"><h3>行业要闻</h3><span class="more">全部 →</span></div><div class="card-b" style="padding-top:6px;padding-bottom:6px">
+            <div class="li"><div class="ic amber">📡</div><div class="info"><div class="t">原材料价格：冷轧钢板本周上涨 3.2%</div><div class="d">建议关注库存补充时机 · 6/19</div></div></div>
+            <div class="li"><div class="ic blue">📡</div><div class="info"><div class="t">政策：制造业高质量发展专项基金启动</div><div class="d">最高资助 ¥500 万 · 6/18</div></div></div>
+            <div class="li"><div class="ic moss">📡</div><div class="info"><div class="t">技术：五轴联动数控机床国产化突破</div><div class="d">可能降低设备采购成本 · 6/16</div></div></div>
+            <div class="li"><div class="ic rust">📡</div><div class="info"><div class="t">竞品：海天精工发布新品系列</div><div class="d">主攻中端市场，关注价格策略 · 6/14</div></div></div>
+          </div></div>
+          <div class="card"><div class="card-h"><h3>价格走势 · 冷轧钢板</h3></div><div class="card-b">
+            <div class="chart-legend"><span><span class="d" style="background:var(--amber)"></span>现货价（元/吨）</span></div>
+            <div class="chart-area" style="height:160px">
+              <div class="bar" style="height:60%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:62%"></div>
+              <div class="bar" style="height:58%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:70%"></div>
+              <div class="bar" style="height:68%"></div><div class="bar" style="height:75%"></div><div class="bar" style="height:82%"></div>
+              <div class="bar" style="height:78%"></div><div class="bar" style="height:88%"></div><div class="bar" style="height:92%"></div>
+            </div>
+            <div class="meta" style="font-size:12px;color:var(--text-3);margin-top:10px">当前 ¥4,820/吨 · 较上月 +6.8% · AI 建议：延迟大批量采购</div>
+          </div></div>
+        </div>
+      </section>
+
+      <!-- ===== RISK ===== -->
+      <section class="view" id="view-risk">
+        <div class="page-head">
+          <div><h1>风险预警</h1><div class="sub">财务 · 法律 · 市场 · 舆情 四维雷达</div></div>
+          <div class="acts"><button class="btn btn-ghost btn-sm">风险设置</button></div>
+        </div>
+        <div class="kpi-grid" style="margin-bottom:16px">
+          <div class="kpi"><div class="lab">财务风险</div><div class="val">低<small class="up"></small></div><div class="meta">2 项关注</div></div>
+          <div class="kpi"><div class="lab">法律风险</div><div class="val">中<small class="down"></small></div><div class="meta">3 份合同待改</div></div>
+          <div class="kpi"><div class="lab">市场风险</div><div class="val">中<small></small></div><div class="meta">原料涨价</div></div>
+          <div class="kpi"><div class="lab">舆情风险</div><div class="val">低<small class="up"></small></div><div class="meta">无负面</div></div>
+        </div>
+        <div class="card"><div class="card-h"><h3>风险事件清单</h3></div><div class="card-b" style="padding-top:6px;padding-bottom:6px">
+          <div class="alert"><span class="dot r"></span><div class="body"><div class="t">应收账款账龄延长（财务）</div><div class="d">3 家客户账龄 &gt;60 天，合计 ¥87 万，回款风险上升</div></div><span class="tm">今日</span></div>
+          <div class="alert"><span class="dot r"></span><div class="body"><div class="t">合同违约金条款过高（法律）</div><div class="d">华联科技协议违约金达合同金额 30%，建议 renegotiate 至 10%</div></div><span class="tm">今日</span></div>
+          <div class="alert"><span class="dot a"></span><div class="body"><div class="t">原材料价格上行（市场）</div><div class="d">冷轧钢板月涨 6.8%，影响毛利率约 1.2 个百分点</div></div><span class="tm">2 天</span></div>
+          <div class="alert"><span class="dot a"></span><div class="body"><div class="t">市场费用超预算（财务）</div><div class="d">本月市场费用超支 12%，需复核 ROI</div></div><span class="tm">3 天</span></div>
+        </div></div>
+      </section>
+
+      <!-- ===== EXTEND ===== -->
+      <section class="view" id="view-extend">
+        <div class="page-head">
+          <div><h1>更多服务</h1><div class="sub">覆盖企业经营边角的延伸能力</div></div>
+        </div>
+        <div class="module-grid">
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic amber" style="width:38px;height:38px;border-radius:8px;background:var(--amber-bg);color:var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">i</div><h3 style="font-size:15px;font-weight:600">智能风控预警</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">财务、法律、市场、舆情四维风险雷达，异常自动分级推送。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic blue" style="width:38px;height:38px;border-radius:8px;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">ii</div><h3 style="font-size:15px;font-weight:600">合规日历</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">税务申报、年报、资质续期、社保结算统一排程，到期提醒。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic moss" style="width:38px;height:38px;border-radius:8px;background:var(--moss-bg);color:var(--moss);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">iii</div><h3 style="font-size:15px;font-weight:600">供应链协同</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">连接供应商与客户，订单、对账、发货、结算在线协同。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic amber" style="width:38px;height:38px;border-radius:8px;background:var(--amber-bg);color:var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">iv</div><h3 style="font-size:15px;font-weight:600">客户关系管理</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">商机漏斗、客户画像、跟进记录、复购预测，销售全链路留痕。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic blue" style="width:38px;height:38px;border-radius:8px;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">v</div><h3 style="font-size:15px;font-weight:600">项目管理</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">任务分解、里程碑、工时、成本、交付物，项目健康度可视化。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic moss" style="width:38px;height:38px;border-radius:8px;background:var(--moss-bg);color:var(--moss);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">vi</div><h3 style="font-size:15px;font-weight:600">文档与电子签章</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">企业文档中枢，合同/制度/证照分类归档，合规电子签章。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic rust" style="width:38px;height:38px;border-radius:8px;background:var(--rust-bg);color:var(--rust);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">vii</div><h3 style="font-size:15px;font-weight:600">市场情报与竞品</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">竞品动态、价格监测、舆情追踪，AI 提炼可执行的市场动作。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic amber" style="width:38px;height:38px;border-radius:8px;background:var(--amber-bg);color:var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">viii</div><h3 style="font-size:15px;font-weight:600">员工培训与发展</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">岗位学习路径、在线课程、能力测评，人才梯队可视化。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic blue" style="width:38px;height:38px;border-radius:8px;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">ix</div><h3 style="font-size:15px;font-weight:600">数据可视化报表</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">自定义看板与报表，一键导出股东会/银行/政府多版本。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic moss" style="width:38px;height:38px;border-radius:8px;background:var(--moss-bg);color:var(--moss);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">x</div><h3 style="font-size:15px;font-weight:600">进出口贸易管理</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">报关、外汇、信用证、退税、原产地，外贸全流程辅助。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic rust" style="width:38px;height:38px;border-radius:8px;background:var(--rust-bg);color:var(--rust);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">xi</div><h3 style="font-size:15px;font-weight:600">智能合同审查</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">上传合同即获风险标注、条款比对与修改建议，律师可复核。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+          <div class="card"><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px"><div class="ic amber" style="width:38px;height:38px;border-radius:8px;background:var(--amber-bg);color:var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600">xii</div><h3 style="font-size:15px;font-weight:600">企业知识库</h3></div><p style="font-size:12.5px;color:var(--text-2);line-height:1.6">制度、SOP、案例、问答沉淀为专属知识库，即问即答。</p><button class="btn btn-ghost btn-sm" style="margin-top:12px">进入 →</button></div></div>
+        </div>
+      </section>
+
+      <!-- ===== SETTINGS ===== -->
+      <section class="view" id="view-settings">
+        <div class="page-head"><div><h1>设置</h1><div class="sub">企业信息 · 权限 · 数据接入 · 订阅</div></div></div>
+        <div class="module-grid two">
+          <div class="card"><div class="card-h"><h3>企业信息</h3></div><div class="card-b">
+            <div class="emp-row"><div class="av">恒</div><div class="info"><div class="n">恒源精密制造有限公司</div><div class="d">统一社会信用代码 91330***********X · 制造业 · 中型</div></div></div>
+            <div class="progress-row" style="margin-top:14px"><div class="hd"><b>资料完整度</b><span>82%</span></div><div class="bar-track"><div class="bar-fill" style="width:82%"></div></div></div>
+          </div></div>
+          <div class="card"><div class="card-h"><h3>数据接入</h3></div><div class="card-b" style="padding-top:6px;padding-bottom:6px">
+            <div class="li"><div class="ic moss">✓</div><div class="info"><div class="t">财务系统（金蝶）</div><div class="d">已连接 · 每日同步</div></div></div>
+            <div class="li"><div class="ic moss">✓</div><div class="info"><div class="t">银行流水（建行）</div><div class="d">已连接 · 实时</div></div></div>
+            <div class="li"><div class="ic amber">+</div><div class="info"><div class="t">税务系统</div><div class="d">未连接 · 建议接入</div></div></div>
+          </div></div>
+        </div>
+      </section>
+
     </div>
-    <div class="foot-col">
-      <h5>产品</h5>
-      <a href="#engine">AI 决策引擎</a>
-      <a href="#pillars">财税法咨询</a>
-      <a href="#cockpit">经营驾驶舱</a>
-      <a href="#suite">管理套件</a>
-    </div>
-    <div class="foot-col">
-      <h5>资源</h5>
-      <a href="#capital">融资产品</a>
-      <a href="#capital">政策库</a>
-      <a href="#capital">行业情报</a>
-      <a href="#extend">延伸服务</a>
-    </div>
-    <div class="foot-col">
-      <h5>公司</h5>
-      <a href="#">关于我们</a>
-      <a href="#">客户案例</a>
-      <a href="#">专家网络</a>
-      <a href="#">联系我们</a>
-    </div>
-  </div>
-  <div class="foot-bottom">
-    <span>© 2026 RuiQi Technologies · 睿企科技</span>
-    <span>数据安全等保三级 · ISO 27001 认证</span>
-  </div>
-</footer>
+  </main>
+</div>
 
 <script>
-  // Scroll reveal
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('in');
-        io.unobserve(e.target);
-      }
+  // View switching
+  const nav = document.getElementById('nav');
+  const items = nav.querySelectorAll('.sb-item');
+  const views = document.querySelectorAll('.view');
+  const content = document.getElementById('content');
+  items.forEach(item=>{
+    item.addEventListener('click',()=>{
+      const v = item.dataset.view;
+      items.forEach(i=>i.classList.remove('active'));
+      item.classList.add('active');
+      views.forEach(s=>s.classList.remove('active'));
+      const target = document.getElementById('view-'+v);
+      if(target){ target.classList.add('active'); content.scrollTop=0; }
     });
-  },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
-  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-  // Nav shrink on scroll
-  const nav = document.querySelector('nav');
-  window.addEventListener('scroll',()=>{
-    if(window.scrollY > 40) nav.style.padding = '14px 5vw';
-    else nav.style.padding = '22px 5vw';
   });
+
+  // Segmented control toggle
+  document.querySelectorAll('.seg').forEach(seg=>{
+    seg.querySelectorAll('button').forEach(b=>{
+      b.addEventListener('click',()=>{
+        seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+        b.classList.add('on');
+      });
+    });
+  });
+
+  // AI suggestion chips -> append message
+  const chatBody = document.getElementById('chatBody');
+  const suggBtns = document.querySelectorAll('.ai-sugg button');
+  suggBtns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const q = btn.textContent;
+      const me = document.createElement('div');
+      me.className='msg me';
+      me.innerHTML='<div class="av">林</div><div class="bubble">'+q+'</div>';
+      chatBody.appendChild(me);
+      const ai = document.createElement('div');
+      ai.className='msg ai';
+      ai.innerHTML='<div class="av">✦</div><div class="bubble">已为你调取相关数据并分析，正在生成结论…<br/><br/>基于当前经营数据，我的判断如下：<b>建议优先处理应收账款回款与研发加计扣除申报</b>，这两项可在本月内为企业释放约 ¥100 万现金流。需要我生成详细行动清单吗？<div class="actions"><button>生成清单</button><button>转人工专家</button></div></div>';
+      chatBody.appendChild(ai);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    });
+  });
+
+  // Send message
+  const sendBtn = document.querySelector('.ai-send');
+  const ta = document.querySelector('.ai-input textarea');
+  function send(){
+    const v = ta.value.trim();
+    if(!v) return;
+    const me = document.createElement('div');
+    me.className='msg me';
+    me.innerHTML='<div class="av">林</div><div class="bubble">'+v.replace(/</g,'&lt;')+'</div>';
+    chatBody.appendChild(me);
+    ta.value='';
+    const ai = document.createElement('div');
+    ai.className='msg ai';
+    ai.innerHTML='<div class="av">✦</div><div class="bubble">好的，我结合企业全量数据来回答这个问题。正在分析…<br/><br/>已生成分析结论，<b>相关数据与建议已就绪</b>。你可以点击下方操作进一步处理。<div class="actions"><button>查看详情</button><button>导出报告</button></div></div>';
+    chatBody.appendChild(ai);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  sendBtn.addEventListener('click',send);
+  ta.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
 </script>
 </body>
 </html>
