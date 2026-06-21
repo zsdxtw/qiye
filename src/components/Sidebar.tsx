@@ -19,6 +19,7 @@ import {
   Settings,
   ChevronLeft,
   Building2,
+  ShoppingBag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -45,6 +46,7 @@ const navGroups = [
     items: [
       { path: "/hr", label: "人力资源管家", icon: Users },
       { path: "/supply-chain", label: "供应链进销存", icon: Package },
+      { path: "/mall", label: "企业内部商城", icon: ShoppingBag },
       { path: "/marketing", label: "营销获客中心", icon: Megaphone },
       { path: "/legal", label: "法律合规中心", icon: Scale },
       { path: "/policy", label: "政策服务大厅", icon: Landmark },

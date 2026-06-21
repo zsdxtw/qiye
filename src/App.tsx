@@ -16,6 +16,7 @@ import Legal from "@/pages/Legal";
 import Policy from "@/pages/Policy";
 import FinanceService from "@/pages/FinanceService";
 import Settings from "@/pages/Settings";
+import Mall from "@/pages/Mall";
 
 export default function App() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="/legal" element={<Legal />} />
           <Route path="/policy" element={<Policy />} />
           <Route path="/finance-service" element={<FinanceService />} />
+          <Route path="/mall" element={<Mall />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/settings/members" element={<Settings />} />
           <Route path="/settings/subscription" element={<Settings />} />
